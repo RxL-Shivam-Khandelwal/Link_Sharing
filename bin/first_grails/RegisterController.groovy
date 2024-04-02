@@ -18,10 +18,14 @@ class RegisterController {
     def topicCount = Topic.where {
         user.id == userId
     }.count()
-
+    def subscription_Topic = Topic.where {
+       user.id == userId
+     }   
+     def all_Topics= Topic.list();
+     session.all_Topics = all_Topics;      
+    session.subscription_Topic = subscription_Topic;   
     render(view: "../Frontend/dashboard", model: [subscriptionCount: subscriptionCount, topicCount: topicCount])
 }
-
 
     def create_user() {
         try {

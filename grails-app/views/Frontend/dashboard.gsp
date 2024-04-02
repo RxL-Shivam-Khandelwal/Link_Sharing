@@ -73,92 +73,57 @@
                     <p>Subscription</p>
                     <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
                 </div>
-                <div class="Border1" style="border: 2px solid black;">
-                    <div class="DSubcontent">
-                        <div class="userCard" style="border: 0cap;">
-                            <div class="userImg">
-                    <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg"  height="90px" width="90px">
-                            </div>
-                            <div class="userData">
-                                <h2>Uday Pratap Singh</h2>
-                                <div class="userS">
-                                    <div class="DId">
-                                        <p>@uday</p>
-                                        <a href="#">Unsubscribed</a>
-                                    </div>
-                                    <div class="S">
-                                        <p>Subscription</p>
-                                        <p></p>
-                                    </div>
-                                    <div class="T">
-                                        <p>Topic</p>
-                                        <p>${topicCount}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+<g:if test="${session.subscription_Topic}">
+    <g:each in="${session.subscription_Topic}" var="StopicData">
+        <div class="Border1" style="border: 2px solid black;">
+            <div class="DSubcontent">
+                <div class="userCard" style="border: 0cap;">
+                    <div class="userImg">
+                        <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg" height="90px" width="90px">
                     </div>
-                    <div class="SubInfo">
-                        <select id="dropdown-menu">
-                            <option value="" disabled selected>Serious</option>
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
-                        </select>
-                        <select id="dropdown-menu">
-                            <option value="" disabled selected>Private</option>
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
-                        </select>
-                         <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">
-                         <img src="${assetPath(src: 'link.svg')}" alt="link" >
-                         <img src="${assetPath(src: 'trash-fill.svg')}" alt="trash-fill">
-                    </div>
-                </div>
-                <div class="Border1" style="border: 2px solid black;">
-                    <div class="DSubcontent">
-                        <div class="userCard" style="border: 0cap;">
-                            <div class="userImg">
-                    <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg"  height="90px" width="90px">
+                    <div class="userData">
+                        <h2>${StopicData?.name}</h2>
+                        <div class="userS">
+                            <div class="DId">
+                                <p>${session?.user?.username}</p>
+                                <a href="#">Unsubscribed</a>
                             </div>
-                            <div class="userData">
-                                <h2>Uday Pratap Singh</h2>
-                                <div class="userS">
-                                    <div class="DId">
-                                        <p>@uday</p>
-                                        <a href="#">Unsubscribed</a>
-                                    </div>
-                                    <div class="S">
-                                        <p>Subscription</p>
-                                        <p>50</p>
-                                    </div>
-                                    <div class="T">
-                                        <p>Topics</p>
-                                        <p>50</p>
-                                    </div>
-                                </div>
+                            <div class="S">
+                                <p>Subscription</p>
+                                <p>0</p>
+                            </div>
+                            <div class="T">
+                                <p>Topic</p>
+                                <p>0</p>
                             </div>
                         </div>
                     </div>
-                    <div class="SubInfo">
-                        <select id="dropdown-menu">
-                            <option value="" disabled selected>Serious</option>
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
-                        </select>
-                        <select id="dropdown-menu">
-                            <option value="" disabled selected>Private</option>
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
-                        </select>
-                         <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">
-                         <img src="${assetPath(src: 'link.svg')}" alt="link" >
-                         <img src="${assetPath(src: 'trash-fill.svg')}" alt="trash-fill">
-                    </div>
                 </div>
+            </div>
+            <div class="SubInfo">
+                <select id="dropdown-menu">
+                    <option value="" disabled selected>Serious</option>
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                    <option value="option3">Option 3</option>
+                </select>
+                <select id="dropdown-menu">
+                    <option value="" disabled selected>Private</option>
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                    <option value="option3">Option 3</option>
+                </select>
+                <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">
+                <img src="${assetPath(src: 'link.svg')}" alt="link">
+                <img src="${assetPath(src: 'trash-fill.svg')}" alt="trash-fill">
+            </div>
+        </div>
+    </g:each>
+</g:if>
+<g:else>
+    <p>No subscriptions</p>
+</g:else>
+
             </div>
 
 
@@ -167,17 +132,20 @@
                     <p>Trending Topics</p>
                     <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
                 </div>
+                <g:if test="${session?.all_Topics}">
+                <g:each in="${session?.all_Topics}"  var="topicData">
                 <div class="Border1" style="border: 2px solid black;">
                     <div class="DSubcontent">
                         <div class="userCard" style="border: 0cap;">
                             <div class="userImg">
                     <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg"  height="90px" width="90px">
                             </div>
+                            
                             <div class="userData">
-                                <h2>Uday Pratap Singh</h2>
+                                <h2>${topicData?.name}</h2>
                                 <div class="userS">
                                     <div class="DId">
-                                        <p>@uday</p>
+                                        <p>${session?.topicUserMap[topicData?.name]}</p>
                                         <a href="#">Unsubscribed</a>
                                     </div>
                                     <div class="S">
@@ -190,6 +158,7 @@
                                     </div>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                     <div class="SubInfo">
@@ -210,49 +179,12 @@
                          <img src="${assetPath(src: 'trash-fill.svg')}" alt="trash-fill">
                     </div>
                 </div>
-                <div class="Border1" style="border: 2px solid black;">
-                    <div class="DSubcontent">
-                        <div class="userCard" style="border: 0cap;">
-                            <div class="userImg">
-                    <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg"  height="90px" width="90px">
-                            </div>
-                            <div class="userData">
-                                <h2>Uday Pratap Singh</h2>
-                                <div class="userS">
-                                    <div class="DId">
-                                        <p>@uday</p>
-                                        <a href="#">Unsubscribed</a>
-                                    </div>
-                                    <div class="S">
-                                        <p>Subscription</p>
-                                        <p>50</p>
-                                    </div>
-                                    <div class="T">
-                                        <p>Topics</p>
-                                        <p>50</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="SubInfo">
-                        <select id="dropdown-menu">
-                            <option value="" disabled selected>Serious</option>
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
-                        </select>
-                        <select id="dropdown-menu">
-                            <option value="" disabled selected>Private</option>
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
-                        </select>
-                         <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">
-                         <img src="${assetPath(src: 'link.svg')}" alt="link" >
-                         <img src="${assetPath(src: 'trash-fill.svg')}" alt="trash-fill">
-                    </div>
-                </div>
+                </g:each>
+                </g:if>
+                <g:else>
+                   <p>No Trending Topic</p>
+                   </g:else>
+
             </div>
         </div>
         <div class="rightD">

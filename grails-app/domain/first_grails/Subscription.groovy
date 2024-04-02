@@ -4,10 +4,12 @@ import first_grails.Topic
 class Subscription {
    Topic topic;
    Users user;
-   enum seriousness{
-    serious,very_serious,casual
+   Seriousness seriousness;
+   enum Seriousness{
+    Serious,
+    Very_serious,
+    Casual
    }
-   Date dateCreated;
     static constraints = {
         // topic(unique:['user'])
         // seriousness(nullable:false)
