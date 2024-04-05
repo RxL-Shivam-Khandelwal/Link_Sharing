@@ -2,13 +2,14 @@ package first_grails
 
 class Resources {
   String description;
-  Users createdBy;
+  Users user;
   Topic topic;
-  Date dateCreated;
-  Date lastUpdated;
+  String url;
+  byte[]  documentResource;
+
     static constraints = {
-      // description(blank:false)
+        url(nullable:true)
+        documentResource(nullable:true);
     }
-    static belongsTo = [topic:Topic, user:Users, readingItem : ReadingItem];
-    static hasMany = [linkResources: LinkResource, documentResources : DocumentResource];
+    static belongsTo = [topic:Topic, user:Users];
 }

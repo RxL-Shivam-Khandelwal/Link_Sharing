@@ -6,7 +6,7 @@ Users user;
 Boolean isRead;
 
     static constraints = {
-        // resource(unique:['user']);
+        
     }
     static belongsTo = [user: Users];
 }

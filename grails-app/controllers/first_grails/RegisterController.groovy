@@ -10,7 +10,7 @@ class RegisterController {
         render " Due to some error, account not created."
     }
  def dashboard(Long userId) {
-    def user = Users.get(userId)
+    def user = Users.finById(userId)
     def subscriptionCount = Subscription.where {
         user.id == userId;
     }.count()
@@ -21,10 +21,15 @@ class RegisterController {
     def subscription_Topic = Topic.where {
        user.id == userId
      }   
-     def all_Topics= Topic.list();
-     session.all_Topics = all_Topics;      
+     def topics= Topic.list();
+     if(topics==null){
+        println  "hello";
+     }else{
+        topics.each{it-> println it;}
+     }
+     session.user = user;     
     session.subscription_Topic = subscription_Topic;   
-    render(view: "../Frontend/dashboard", model: [subscriptionCount: subscriptionCount, topicCount: topicCount])
+    render(view: "../Frontend/dashboard", model: [subscriptionCount: subscriptionCount, topicCount: topicCount,all_Topics:topics])
 }
 
     def create_user() {

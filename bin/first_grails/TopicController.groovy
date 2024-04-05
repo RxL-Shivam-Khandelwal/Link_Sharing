@@ -15,21 +15,36 @@ class TopicController {
             // as user has created a topic, it means it should also be added to its subscriptions.
            // trying to add the subscriptions to the user Subscription list
             def user= Users.get(userId);
-           
-            println topic;
+
             topic.save(flush:true, failOnError: true);
             Subscription new_subs= new Subscription();
-                        println topic;
+            println topic;
             new_subs.topic = topic;
-            new_subs.user = user;
+            new_subs.user = user;         //user created the topic therefore user should be added as it is.
             new_subs.seriousness = "Serious";
             new_subs.save(flush:true, failOnError:true);
-           println topic;
+          
+              println "value: ${topic}";
+        // //     // find all the subscription of the user.(first fetch all the topicId from the subscription table by matching userId, then from topic table match those topicId from the Topic table to get all the topics.)
+        // def total_subscriptions = Subscription.findAllByUser(Users.get(userId))
 
-             def subscription_Topic = Topic.where {
-                 (user.id == userId)
-                  }
-            println "topic : ${topic}";
+        // // Extract topic ids from subscriptions
+        // def topicIds = total_subscriptions.collect { it.topic.id }
+
+        // // Find topics based on the extracted topic ids
+        // def subscription_Topic = Topic.findAllByIdInList(topicIds)
+
+
+        def subscription_Topic =  Subscription.findAllByUser(user);
+
+
+
+        
+            //    def subscription_Topic = Subscription.where {
+            //        user.id == userId;
+            //    }
+
+            println subscription_Topic;
             flash.message = "Topic created successfully!"
            
              
@@ -41,18 +56,12 @@ class TopicController {
                    user.id == userId;
                }.count()
 
-                def all_Topics= Topic.list();      // List of all the topics.
-                def topicUserMap = [:];
-                all_Topics.each { ctopic ->
-                  def user_name = Users.get(ctopic.userId).username;
-                  topicUserMap[ctopic.name] = user_name;  
-                }
+                def topics= Topic.list(); 
+                def res = Resources.list();
+
                 session.subscription_Topic = subscription_Topic;
-                session.topicUserMap=topicUserMap;
                 session.user= user;
-               session.topicCount = topicCount;    
-               session.all_Topics = all_Topics;
-            render (view: "../Frontend/dashboard", model: [subscriptionCount: subscriptionCount, topicCount: topicCount]);   
+            render (view: "../Frontend/dashboard", model: [subscriptionCount: subscriptionCount, topicCount: topicCount, all_Topics: topics, resource: res]);   
         }catch(Exception e){
             render "Topic not created + ${e}";
         }

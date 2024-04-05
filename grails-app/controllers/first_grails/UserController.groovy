@@ -9,6 +9,7 @@ class UserController {
         // Fetch user details based on userId
         def user = Users.get(userId)
         println user;
+        // Long posts= Resources.findAllByTopic()
 
         if (user) {
             // Return user details as JSON response

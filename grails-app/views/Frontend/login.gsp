@@ -155,7 +155,7 @@
                 </div>
                 <div class="form-group">
                     <input type="password" name="password" class="form-control" placeholder="Your Password *" value="" />
-                </div>
+                </div>password
                 <div class="form-group">
                     <input type="submit" class="btnSubmit" value="Login" />
                 </div>

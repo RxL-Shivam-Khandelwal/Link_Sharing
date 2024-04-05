@@ -23,10 +23,10 @@
             <span class="close-icon">&#10005;</span>
         </div>
         <div class="clogo">
-           <div> <img src="${assetPath(src: 'chat-fill.svg')}" alt="chat-fill" onclick="showCard(1)"></div>
-         <div>   <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" onclick="showCard(2)">  </div>
-          <div>  <img src="${assetPath(src: 'link.svg')}" alt="link" onclick="showCard(3)">  </div>
-          <div>  <img src="${assetPath(src: 'file-earmark-fill.svg')}" alt="file-earmark-fill" onclick="showCard(4)">  </div>
+           <div class="logo-container" onmouseover="changeColor(this)"> <img src="${assetPath(src: 'chat-fill.svg')}" alt="chat-fill" onclick="showCard(1)"></div>
+         <div class="logo-container" onmouseover="changeColor(this)">   <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" onclick="showCard(2)">  </div>
+          <div class="logo-container" onmouseover="changeColor(this)">  <img src="${assetPath(src: 'link.svg')}" alt="link" onclick="showCard(3)">  </div>
+          <div class="logo-container" onmouseover="changeColor(this)">  <img src="${assetPath(src: 'file-earmark-fill.svg')}" alt="file-earmark-fill" onclick="showCard(4)">  </div>
         </div>
         <div class="dprofile">
             <img src="${assetPath(src: 'person-fill.svg')}" alt="person-fill" style="height: 30px; width: 30px; padding-top: 6px;">  
@@ -39,7 +39,7 @@
     <g:link controller="user">User</g:link>
     <g:link controller="topic">Topic</g:link>
     <g:link controller="post">Post</g:link>
-    <g:link controller="logout">Logout</g:link>
+    <g:link controller="Logout">Logout</g:link>
 </div>
 
             </div>
@@ -73,8 +73,10 @@
                     <p>Subscription</p>
                     <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
                 </div>
-<g:if test="${session.subscription_Topic}">
-    <g:each in="${session.subscription_Topic}" var="StopicData">
+<g:if test="${session?.subscription_Topic}">
+
+    <g:each in="${session?.subscription_Topic}" var="StopicData">
+
         <div class="Border1" style="border: 2px solid black;">
             <div class="DSubcontent">
                 <div class="userCard" style="border: 0cap;">
@@ -82,10 +84,10 @@
                         <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg" height="90px" width="90px">
                     </div>
                     <div class="userData">
-                        <h2>${StopicData?.name}</h2>
+                        <h2>${StopicData?.topic?.name}</h2>
                         <div class="userS">
                             <div class="DId">
-                                <p>${session?.user?.username}</p>
+                                <p>${StopicData?.topic?.user?.username}</p>
                                 <a href="#">Unsubscribed</a>
                             </div>
                             <div class="S">
@@ -132,8 +134,8 @@
                     <p>Trending Topics</p>
                     <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
                 </div>
-                <g:if test="${session?.all_Topics}">
-                <g:each in="${session?.all_Topics}"  var="topicData">
+                <g:if test="${all_Topics!= null}">
+                <g:each in="${all_Topics}"  var="topicData">
                 <div class="Border1" style="border: 2px solid black;">
                     <div class="DSubcontent">
                         <div class="userCard" style="border: 0cap;">
@@ -145,15 +147,22 @@
                                 <h2>${topicData?.name}</h2>
                                 <div class="userS">
                                     <div class="DId">
-                                        <p>${session?.topicUserMap[topicData?.name]}</p>
-                                        <a href="#">Unsubscribed</a>
+                                        <%-- <p>${session?.topicUserMap[topicData?.name]}</p> --%>
+                                        <p>${topicData?.user?.username} </p>
+
+                                        <g:if test="${Subscription?.findByTopicAndUser(topicData,session.user)!=null}">
+                                        <g:link controller="SubandUnsub" action="unsubscribe" params="[topicId: topicData.id, cuser: session.user.id]">unsubscribe</g:link>
+                                      </g:if>  
+                                      <g:else>
+                                          <g:link controller="SubandUnsub" action="subscribe" params="[topicId: topicData.id, cuser: session.user.id]">subscribe</g:link>
+                                        </g:else>                             
                                     </div>
                                     <div class="S">
                                         <p>Subscription</p>
                                         <p>50</p>
                                     </div>
                                     <div class="T">
-                                        <p>Topics</p>
+                                        <p>Post</p>
                                         <p>50</p>
                                     </div>
                                 </div>
@@ -192,45 +201,18 @@
                 <div class="Recent_share">
                     <h4 style="padding: 4px;">Recent Share</h4>
                 </div>
+            <g:if test="${resource!=null}">
+            <g:each in="${resource}"  var ="res">
                 <div class="card1 ">
                     <div class="image">
                         <img src="https://louisville.edu/enrollmentmanagement/images/person-icon/image" alt="p1">
                     </div>
                     <div class="content">
                         <div class="poster_info">
-                            <span class="name_id">Shivam Khandelwal Email@gmail.com</span>
-                            <span class="topic"> Grails</span>
+                            <span class="name_id">${res?.topic?.user?.username} |  ${res?.topic?.user?.email}</span>
+                            <span class="topic"> ${res?.topic?.name}</span>
                         </div>
-                        <div class="post_content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur
-                            magni temporibus nulla mollitia fugit optio corporis repudiandae porro animi aliquid
-                        </div>
-                        <div class="poster_info">
-                            <div class="clogo">
-                                    <img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
-                                    <img src="${assetPath(src: 'twitter.svg')}" alt="twitter">
-                                    <img src="${assetPath(src: 'instagram.svg')}" alt="instagram">
-                            </div>
-                            <span class="topic">
-                                <a href="#">Download</a>
-                                <a href="#">View Full Site</a>
-                                <a href="#"> Mark as read</a>
-                                <a href="#">View post</a>
-                            </span>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="card1">
-                    <div class="image">
-                        <img src="https://louisville.edu/enrollmentmanagement/images/person-icon/image" alt="p1">
-                    </div>
-                    <div class="content">
-                        <div class="poster_info">
-                            <span class="name_id">Shivam Khandelwal Email@gmail.com</span>
-                            <span class="topic"> Grails</span>
-                        </div>
-                        <div class="post_content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur
-                            magni temporibus nulla mollitia fugit optio corporis repudiandae porro animi aliquid
+                        <div class="post_content">Description : ${res.description}
                         </div>
                         <div class="poster_info">
                             <div class="clogo">
@@ -248,47 +230,50 @@
                     </div>
 
                 </div>
+            </g:each>
+            </g:if>
+            <g:else>
+            <p>No resource created</p>
+                </g:else>
+
             </div>
+           
             <div class="share_l pop_up " id="card1">
                 <div class="share_heading">
                     <h3>Share Link</h3>
                 </div>
+                <g:form controller="LinkResource" action="CreateLink"> 
+                 <g:hiddenField name="userId" value="${session.userId}"/>
+
                 <div class="share_info"  >
                     <div class="share_link">
                         <label for="link">
                             <h5>Link* :</h5>
                         </label>
-                        <input type="text" name="link" id="slink" size="45">
+                        <input type="text" name="url" id="slink" size="45">
                     </div>
                     <div class="share_link">
                         <label for="Description">
                             <h5>Description* :</h5>
                         </label>
-                        <textarea rows="7" cols="45">
-
+                        <textarea rows="7" cols="45" name=description>
                             </textarea>
                     </div>
                     <div class="share_link">
                         <label for="Topic">
                             <h5>Topic* :</h5>
                         </label>
-                        <div class="dropdown dropdownw">
-                            <button class="dropbtn dashDropdown">Linux
-                                <img src="/Img/caret-down-fill.svg" alt="">
-                            </button>
-                            <div class="dropdown-content">
-                                <a href="#">Grails</a>
-                                <a href="#">Groovy</a>
-                                <a href="#">Java</a>
-                            </div>
-                        </div>
+                       <input type="text" name="topic" id="slink" size="45">
                     </div>
                     <div class="pop_btn">
-                        <button> Share</button>
+                        <button type="submit"> Share</button>
                         <button id="cancelButton"> Cancel</button>
                     </div>
                 </div>
+                  </g:form>
             </div>
+
+      
             <div class="share_l pop_up " id="card2">
                 <div class="share_heading">
                     <h3>Share Document</h3>
@@ -417,5 +402,18 @@
         .catch(error => {
             console.error('Data is not extracted, Error:', error);
         });
+
+  // change the div colour
+// JavaScript function to change the background color of the parent div when the mouse hovers over the child image
+function changeColor(element) {
+    const logoContainers = document.querySelectorAll('.logo-container');
+    
+    logoContainers.forEach(container => {
+        container.classList.remove('hovered'); // Remove the 'hovered' class from all logo containers
+    });
+
+    element.classList.add('hovered'); // Add 'hovered' class to the parent div of the hovered image
+}
+
 </script>
 </html>

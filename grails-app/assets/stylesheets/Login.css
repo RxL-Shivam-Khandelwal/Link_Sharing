@@ -332,3 +332,11 @@
   cursor: pointer; /* Change cursor to pointer on hover */
   filter: brightness(150%); /* Increase brightness on hover */
 }
+
+.logo-container {
+  transition: background-color 0.3s; /* Smooth transition for background color */
+}
+
+.logo-container.hovered {
+  background-color: green; /* Change background color to green when hovered */
+}
