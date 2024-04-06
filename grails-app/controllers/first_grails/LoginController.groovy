@@ -19,17 +19,13 @@ class LoginController {
                   def topicCount = Topic.where {
                       user.id == userId
                   }.count()
-                  def topics= Topic.list();
-                   def subscription_Topic = Subscription.where {
-                      (user.id == userId)
-                  }          
-                  session.subscription_Topic = subscription_Topic;
+                //   def topics= Topic.list();
+                // def sub_topic = Subscription.findAllByUser(user);
                   session.user= user;
                   session.user_id = userId;
-                //   session.all_Topics = all_Topics;
                   session.subscriptionCount=subscriptionCount;
                   session.topicCount = topicCount;
-            render(template: '/register/setLocalStorage', model: [userId: userId, all_Topics: topics])
+            render(template: '/register/setLocalStorage', model: [userId: userId])
             // render (view: "../Frontend/dashboard",model: [subscriptionCount: subscriptionCount, topicCount: topicCount])
         } else {
             // redirect(controller: "register", action: "index")

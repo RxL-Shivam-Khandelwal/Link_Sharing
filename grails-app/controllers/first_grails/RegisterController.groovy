@@ -10,7 +10,11 @@ class RegisterController {
         render " Due to some error, account not created."
     }
  def dashboard(Long userId) {
-    def user = Users.finById(userId)
+    def user = Users.findById(userId)
+        def curr_user = user;
+
+          println "cur_user :   ${curr_user} :    ${userId}"
+
     def subscriptionCount = Subscription.where {
         user.id == userId;
     }.count()
@@ -18,18 +22,12 @@ class RegisterController {
     def topicCount = Topic.where {
         user.id == userId
     }.count()
-    def subscription_Topic = Topic.where {
-       user.id == userId
-     }   
+     def sub_topic = Subscription.findAllByUser(user);
      def topics= Topic.list();
-     if(topics==null){
-        println  "hello";
-     }else{
-        topics.each{it-> println it;}
-     }
-     session.user = user;     
-    session.subscription_Topic = subscription_Topic;   
-    render(view: "../Frontend/dashboard", model: [subscriptionCount: subscriptionCount, topicCount: topicCount,all_Topics:topics])
+     def res= Resources.list();
+     session.user = user;  
+ 
+    render(view: "../Frontend/dashboard", model: [subscriptionCount: subscriptionCount, topicCount: topicCount,all_Topics:topics,resource: res,subscription_Topic: sub_topic, curr_user:user])
 }
 
     def create_user() {

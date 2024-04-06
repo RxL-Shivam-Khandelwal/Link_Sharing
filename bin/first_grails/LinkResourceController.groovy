@@ -11,12 +11,13 @@ class LinkResourceController {
             // println "hello: ${params.userId}";
           Topic ctopic = Topic.findByName(params.topic);
           Users curr_user = Users.findById(session.user.id);
-          println "topic is : ${ctopic}";
+          println "topic is : ${curr_user.username}";
           Resources new_res = new Resources(description:params.description,user: curr_user,topic : ctopic, url: params.url);
         new_res.save(flush:true, failOnError:true);
-                def res = Resources.list();
-                def topics = Topic.list();
-                render(view:"../Frontend/dashboard.gsp", model:[resource : res, all_Topics :topics]);
+
+                Long userId= curr_user.id;
+                redirect(controller: "Register", action:"dashboard", params:[userId:userId]);
+
 
           }
           catch(Exception e){

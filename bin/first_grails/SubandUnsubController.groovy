@@ -25,20 +25,9 @@ class SubandUnsubController {
             new_subs.save(flush:true, failOnError:true);
             def userId= session.user_id;
 
-        //     // find all the subscription of the user.(first fetch all the topicId from the subscription table by matching userId, then from topic table match those topicId from the Topic table to get all the topics.)
-        // def total_subscriptions = Subscription.findAllByUser(Users.get(userId))
-
-        // // Extract topic ids from subscriptions
-        // def topicIds = total_subscriptions.collect { it.topic.id }
-
-        // // Find topics based on the extracted topic ids
-        // def subscription_Topic = Topic.findAllByIdInList(topicIds);
-        // def subscription_Topic = Subscription.findAllByUser(Users.get(userId))
-        def subscription_Topic =  Subscription.findAllByUser(curr_user);
-         def topics = Topic.list();
-        session.subscription_Topic = subscription_Topic;
-
-         render (view: "../Frontend/dashboard",model:[all_Topics : topics ]);
+        redirect(controller: "Register", action:"dashboard", params:[userId:userId]);
+         
+        //  render (view: "../Frontend/dashboard",model:[all_Topics : topics, resource: res,subscription_Topic: sub_topic]);
            
     }
 
@@ -58,18 +47,7 @@ class SubandUnsubController {
         } else {
             flash.message = "Subscription not found."
         }
-        // def total_subscriptions = Subscription.findAllByUser(curr_user)
 
-        // // Extract topic ids from subscriptions
-        // def topicIds = total_subscriptions.collect { it.topic.id }
-
-        // // Find topics based on the extracted topic ids
-         // def subscription_Topic = Topic.findAllByIdInList(topicIds);
-
-        def subscription_Topic =  Subscription.findAllByUser(curr_user);
-        session.subscription_Topic = subscription_Topic;
-                 def topics = Topic.list();
-
-         render (view: "../Frontend/dashboard",model:[all_Topics : topics ]);
+            redirect(controller: "Register", action:"dashboard", params:[userId:userId]);
     }
 }

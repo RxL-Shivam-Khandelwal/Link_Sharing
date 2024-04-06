@@ -5,4 +5,37 @@ class ProfileController {
     def index() {
         render (view : "../Frontend/edit_profile")
      }
+
+     def change_pass(){
+            
+            Users user = Users.findById(session.user_id);
+           user.password = params.password;     
+            
+    if (user.save(flush: true)) {
+        // Invalidate the session
+        session.invalidate()
+        render(view: "../Frontend/login")
+    } else {
+        // Handle errors if any
+        flash.message = "Error updating password"
+        render(view: "../Frontend/login")
+    }
+     }
+
+     def change_profile(){
+        Users user = Users.findById(session.user_id);
+         user.username= params.username;
+         user.firstName= params.firstName;
+         user.lastName = params.lastName;
+         user.photo = params.photo;
+
+    if (user.save(flush: true)) {
+        // Invalidate the session
+        session.invalidate()
+    } else {
+        // Handle errors if any
+        flash.message = "Error updating password"
+    }
+    render(view: "../Frontend/login")
+     }
 }

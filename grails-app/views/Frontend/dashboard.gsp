@@ -1,3 +1,7 @@
+
+<%@ page import="first_grails.Resources" %>
+<%@ page import="first_grails.Subscription" %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -73,9 +77,9 @@
                     <p>Subscription</p>
                     <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
                 </div>
-<g:if test="${session?.subscription_Topic}">
+<g:if test="${subscription_Topic}">
 
-    <g:each in="${session?.subscription_Topic}" var="StopicData">
+    <g:each in="${subscription_Topic}" var="StopicData">
 
         <div class="Border1" style="border: 2px solid black;">
             <div class="DSubcontent">
@@ -147,23 +151,29 @@
                                 <h2>${topicData?.name}</h2>
                                 <div class="userS">
                                     <div class="DId">
-                                        <%-- <p>${session?.topicUserMap[topicData?.name]}</p> --%>
-                                        <p>${topicData?.user?.username} </p>
+                                     <p>  ${topicData?.user.username} </p>
 
-                                        <g:if test="${Subscription?.findByTopicAndUser(topicData,session.user)!=null}">
-                                        <g:link controller="SubandUnsub" action="unsubscribe" params="[topicId: topicData.id, cuser: session.user.id]">unsubscribe</g:link>
+                    <g:if test="${Subscription?.findByTopicAndUser(topicData,session.user)!=null}">
+                                        <g:link controller="SubandUnsub" action="unsubscribe" params="[topicId: topicData.id, cuser: curr_user.id]">unsubscribe</g:link>
                                       </g:if>  
-                                      <g:else>
-                                          <g:link controller="SubandUnsub" action="subscribe" params="[topicId: topicData.id, cuser: session.user.id]">subscribe</g:link>
-                                        </g:else>                             
+                                      <g:else>                                       
+                                          <g:link controller="SubandUnsub" action="subscribe" params="[topicId: topicData.id, cuser: curr_user.id]">subscribe</g:link>
+                                        </g:else> 
+                                                
                                     </div>
                                     <div class="S">
                                         <p>Subscription</p>
-                                        <p>50</p>
+                                        <p>${topicData?.subscriptions?.size()}</p>
                                     </div>
                                     <div class="T">
                                         <p>Post</p>
-                                        <p>50</p>
+                                        <g:if test="${topicData != null}">
+                                            <p>${topicData?.resources?.size()}</p>
+                                            </g:if>
+                                            <g:else>
+                                            <p> 0 </p>
+                                            </g:else>
+                                        <%-- <p>${resources.where{topic==topicData}.count()}</p> --%>
                                     </div>
                                 </div>
                             </div>
@@ -209,7 +219,7 @@
                     </div>
                     <div class="content">
                         <div class="poster_info">
-                            <span class="name_id">${res?.topic?.user?.username} |  ${res?.topic?.user?.email}</span>
+                            <span class="name_id">${res?.user?.username} |  ${res?.user?.email}</span>
                             <span class="topic"> ${res?.topic?.name}</span>
                         </div>
                         <div class="post_content">Description : ${res.description}

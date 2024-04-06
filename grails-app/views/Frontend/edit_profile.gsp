@@ -50,8 +50,8 @@
                     <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg"  height="90px" width="90px">
             </div>
             <div class="userData">
-                <h2>Uday Pratap Singh</h2>
-                <p>@uday</p>
+                <h2 id="userName">Loading Name..</h2>
+                <p id="userEmail"> User Email...</p>
                 <div class="userS">
                     <div class="S">
                         <p>Subscription</p>
@@ -119,50 +119,56 @@
 
         <div class="Profile">
             <div class="Profile1"><h4>Profile</h4></div>
+            <g:form id="profile_update"  controller="Profile" action="change_profile">
             <div class="cProfile">
                  <div class="name">
                     <p>First name*</p>
-                    <input type="text" id="fname" name="firstname" placeholder="Your name.." style="margin-right: 3%;">
+                    <input type="text" id="fname" name="firstName" placeholder="Your name.." style="margin-right: 3%;" value="${session.user.firstName}">
                  </div>
                  <div class="name">
                     <p>Last name*</p>
-                    <input type="text" id="lname" name="Last name" placeholder="Your Last name.." style="margin-right: 3%;">
+                    <input type="text" id="lname" name="lastName" placeholder="Your Last name.." style="margin-right: 3%;"value="${session.user.lastName}">
                  </div>
                  <div class="name">
                     <p>User name*</p>
-                    <input type="text" id="user_name" name="User name" placeholder="Your User name.." style="margin-right: 3%;">
+                    <input type="text" id="user_name" name="username" placeholder="Your User name.." style="margin-right: 3%;" value="${session.user.username}">
                  </div>
                  <div class="name">
                     <p>Image</p>
                     <div class="form-group">
-                        <input type="file" id="imageInput" accept="image/png, image/jpeg">
+                        <input type="file" id="imageInput" accept="image/png, image/jpeg" value="${session?.user?.photo}" name="photo" >
                         <img id="previewImage" alt="Preview Image" style="display: none;">
                     </div>
                  </div>
                  <div class="name">
                     <p></p>
-                    <button style="margin-right: 30%;  ">Update</button>
+                    <button style="margin-right: 30%; " type="submit">Update</button>
                  </div>
             </div>
+            </g:form>
         </div>
 
 
         <div class="Profile" style="margin-top: 4%;">
-            <div class="Profile1"><h4>Profile</h4></div>
-            <div class="cProfile">
-                 <div class="name">
-                    <p>Password*</p>
-                    <input type="text" id="pass" name="Password" placeholder="Your Password.." style="margin-right: 3%;">
-                 </div>
-                 <div class="name">
-                    <p>Conform Password*</p>
-                    <input type="text" id="cpass" name="Conform Password" placeholder="Your Conform Password.." style="margin-right: 3%;">
-                 </div>
-                 <div class="name">
-                    <p></p>
-                    <button style="margin-right: 30%; margin-bottom: 3%; ">Update</button>
-                 </div>
-            </div>
+            <div class="Profile1"><h4>Change Password</h4></div>
+<g:form id="passwordForm" controller="Profile" action="change_pass">
+    <div class="cProfile">
+        <div class="name">
+            <p>Password*</p>
+            <input type="password" id="pass" name="password" placeholder="Your Password.." style="margin-right: 3%;">
+        </div>
+        <div class="name">
+            <p>Confirm Password*</p>
+            <input type="password" id="cpass" name="Confirm_Password" placeholder="Your Confirm Password.." style="margin-right: 3%;">
+            <p id="passwordError" style="color: red; display: none;">Passwords do not match.</p>
+        </div>
+        <div class="name">
+            <p></p>
+            <button id="updateButton" style="margin-right: 30%; margin-bottom: 3%;">Update</button>
+        </div>
+    </div>
+</g:form>
+
         </div>
     </div>
 </div>
@@ -174,4 +180,51 @@
 
 </body>
 <asset:javascript src="script.js"/>
+
+<script>
+ 
+ var userId = localStorage.getItem('userId');
+
+ fetch('${createLink(controller: "User", action:"details")}?userId=' + userId)
+     .then(response =>response.json())
+     .then(user =>{
+        document.getElementById('userName').textContent = user.username;
+        document.getElementById('userEmail').textContent = user.email;
+     })
+     .catch(error =>{
+        console.error('Data is not extracted, Error', error);
+     });
+
+
+
+ const passInput = document.getElementById('pass');
+    const cpassInput = document.getElementById('cpass');
+    const updateButton = document.getElementById('updateButton');
+    const passwordForm = document.getElementById('passwordForm');
+    const passwordError = document.getElementById('passwordError');
+
+    // Function to check if passwords match
+    function checkPasswordMatch() {
+        if (passInput.value !== cpassInput.value) {
+            passwordError.style.display = 'block';
+            updateButton.disabled = true;
+        } else {
+            passwordError.style.display = 'none';
+            updateButton.disabled = false;
+        }
+    }
+
+    // Add event listener to confirm password input
+    cpassInput.addEventListener('input', checkPasswordMatch);
+
+    // Add event listener to Update button
+    updateButton.addEventListener('click', function() {
+        if (passInput.value === cpassInput.value) {
+            // Submit the form if passwords match
+            passwordForm.submit();
+        }
+    });
+
+
+</script >
 </html>
