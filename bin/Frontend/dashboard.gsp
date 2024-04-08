@@ -234,7 +234,7 @@
                                 <a href="#">Download</a>
                                 <a href="#">View Full Site</a>
                                 <a href="#"> Mark as read</a>
-                                <a href="#">View post</a>
+                                <g:link controller="Post" action="show" params="[resId: res.id]">View post</g:link>
                             </span>
                         </div>
                     </div>

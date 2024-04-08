@@ -11,3 +11,4 @@ class ResourceRating {
     }
     static belongsTo = [user:Users,resource:Resources];
 }
+

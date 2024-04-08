@@ -1,4 +1,7 @@
 package first_grails
+import org.hibernate.criterion.Order
+import org.hibernate.criterion.CriteriaSpecification
+import org.hibernate.criterion.*
 
 class RegisterController {
 
@@ -23,7 +26,26 @@ class RegisterController {
         user.id == userId
     }.count()
      def sub_topic = Subscription.findAllByUser(user);
-     def topics= Topic.list();
+     def criteria = Topic.createCriteria();
+// def topics = criteria.list {
+//     // Perform a subquery to count the number of subscriptions for each topic
+//     projections {
+//         property("id")
+//         countDistinct("subscriptions.id")
+//     }
+
+//     // Group by topic id
+//     groupProperty("id")
+
+//     // Order by the count of subscriptions in descending order
+//     order(Projections.countDistinct("subscriptions.id"), "desc")
+
+//     // Transform the result to Topic objects
+//     resultTransformer(org.hibernate.criterion.Transformers.aliasToBean(Topic))
+// }
+  
+   def topics =  Topic.list();
+     //  def topics= Topic.list();
      def res= Resources.list();
      session.user = user;  
  

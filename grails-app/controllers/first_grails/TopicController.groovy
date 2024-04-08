@@ -1,5 +1,6 @@
 package first_grails
 
+
 class TopicController {
 
     def index() { 

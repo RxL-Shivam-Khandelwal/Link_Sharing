@@ -130,6 +130,8 @@
             <div class="col-md-5 login-form-2">
                 <div class="login-logo">
                     <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt=""/>
+                   <%-- <img src="${assetPath(src: 'https://image.ibb.co/n7oTvU/logo_white.png')}" alt="instagram"> --%>
+
                 </div>
                 <h2 style="padding-bottom: 10px;">Registration Form</h2>
 <g:form name="register" controller="register" action="create_user" enctype="multipart/form-data">
