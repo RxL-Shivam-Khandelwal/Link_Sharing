@@ -4,9 +4,9 @@ class PostController {
 
     def index() { }
 
-    def show(Long resId){
+    def show(Long resId , Float avgRating){
 
-            println "value isdofdsfdsif " + resId;
+            println "value isdofdsfdsif " + avgRating;
             Resources resource = Resources.findById(resId);
             Users user = Users.findById(session.user.id);
             ResourceRating r= ResourceRating.findByUserAndResource(user, resource);
@@ -14,8 +14,14 @@ class PostController {
            if(r!=null){
               rating = r.score;
            }
-          println "rating is : " + rating;
-         render(view:"../Frontend/post", model:[resId:resId, post_rating : rating]);
+             println avgRating;
+             def topics =  Topic.list();
+              def curr_user = session.user;
+              Float av_rating = 0.0;
+
+                 av_rating= calculateAverageRatingForResource(resource);
+
+         render(view:"../Frontend/post", model:[resId:resId, post_rating : rating, avgRating:av_rating, all_Topics: topics,curr_user: curr_user]);
     }
 
     def save(){
@@ -24,20 +30,48 @@ class PostController {
          Resources resource= Resources.findById(resId);
          Users user = session.user;
          ResourceRating r= ResourceRating.findByUserAndResource(user, resource);
+         ResourceRating curr_res_rating= new ResourceRating();
+
          if(r!=null){
             r.score = rating;
-            r.save();
-         redirect(action: "show", params: [resId: resId]);
+            r.save(flush:true, failOnError:true);
          }
          else{
-         ResourceRating curr_res_rating= new ResourceRating();
          curr_res_rating.resource= resource;
          curr_res_rating.user= user;
          curr_res_rating.score= rating;
-          println "rating is : " + rating + "score is :" + curr_res_rating.score;
          curr_res_rating.save(flush:true, failOnError:true);
-         redirect(action: "show", params: [resId: resId]);
+
+         // resource.save(flush: true)
          }
+         if(r!=null){curr_res_rating=r;}
+            // calculation of resource rating.
+        def resourceId = curr_res_rating.resource.id
+        //  println "resourceId is :" + resourceId;
+    def rating_resource = Resources.get(resourceId)
+    Float avgRating = calculateAverageRatingForResource(rating_resource);
+         rating_resource.avgRating = avgRating
+         rating_resource.save(flush:true, failOnError:true);
+       println "resourceId is :" + avgRating;
+
+         redirect(action: "show", params: [resId: resId,avgRating: avgRating]);
+    }
+
+      private Float calculateAverageRatingForResource(Resources resource) {
+        def ratings = ResourceRating.findAllByResource(resource)
+        def totalScore = 0
+
+        // Calculate total score of all ratings for the resource
+        ratings.each {
+            totalScore += it.score
+        }
+
+        // Calculate average rating if there are ratings, otherwise return 0.0
+        if (ratings.size() > 0) {
+            return totalScore / ratings.size()
+        } else {
+            return 0.0
+        }
     }
          
        

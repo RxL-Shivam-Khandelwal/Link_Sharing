@@ -1,3 +1,5 @@
+<%@ page import="first_grails.Subscription" %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -44,8 +46,6 @@
     <g:link controller="Logout">Logout</g:link>
 </div>
 
-  <div>  resource id: ${resId}  </div>
-
             </div>
         </div>
     </div>
@@ -67,7 +67,7 @@
                             <div class="rating">
                                 <div class="lft_half" style="justify-content: center;">
                                   <div class="userid">  @abcd </div>
-                                   <div  class="avg_rating">   Average Rating: 4  </div>
+                                   <div  class="avg_rating">   Average Rating: ${avgRating}  </div>
                                 </div>
                                 <div class="rgt_half">
                                     <div class="date">2:45 PM 22 FEB 2014</div>
@@ -120,6 +120,7 @@
                 <p>Trending Topics</p>
                 <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
             </div>
+                <g:each in="${all_Topics}"  var="topicData">
             <div class="Border1" style="border: 2px solid black;">
                 <div class="DSubcontent">
                     <div class="userCard" style="border: 0cap;">
@@ -129,19 +130,24 @@
 
                         </div>
                         <div class="userData">
-                            <h2>Uday Pratap Singh</h2>
+                            <h2>${topicData?.name}</h2>
                             <div class="userS">
                                 <div class="DId">
-                                    <p>@uday</p>
-                                    <a href="#">Unsubscribed</a>
+                                    <p>${topicData?.user.username}</p>
+                    <g:if test="${Subscription?.findByTopicAndUser(topicData,session.user)!=null}">
+                                        <g:link controller="SubandUnsub" action="unsubscribe" params="[topicId: topicData.id, cuser: curr_user.id]">unsubscribe</g:link>
+                                      </g:if>  
+                                      <g:else>                                       
+                                          <g:link controller="SubandUnsub" action="subscribe" params="[topicId: topicData.id, cuser: curr_user.id]">subscribe</g:link>
+                                        </g:else> 
                                 </div>
                                 <div class="S">
                                     <p>Subscription</p>
-                                    <p>50</p>
+                                    <p>${topicData?.subscriptions?.size()}</p>
                                 </div>
                                 <div class="T">
                                     <p>Topics</p>
-                                    <p>50</p>
+                                    <p>${topicData?.resources?.size()}</p>
                                 </div>
                             </div>
                         </div>
@@ -166,6 +172,7 @@
 
                 </div>
             </div>
+            </g:each>
         </div>
     </div>
 

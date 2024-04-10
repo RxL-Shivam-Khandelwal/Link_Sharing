@@ -11,6 +11,10 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="${assetPath(src: 'Login.css')}" type="text/css">
     <link rel="stylesheet" href="${assetPath(src: 'dash.css')}" type="text/css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -27,10 +31,168 @@
             <span class="close-icon">&#10005;</span>
         </div>
         <div class="clogo">
-           <div class="logo-container" onmouseover="changeColor(this)"> <img src="${assetPath(src: 'chat-fill.svg')}" alt="chat-fill" onclick="showCard(1)"></div>
+           <%-- <div class="logo-container" onmouseover="changeColor(this)"> <img src="${assetPath(src: 'chat-fill.svg')}" alt="chat-fill" onclick="showCard(1)"></div>
          <div class="logo-container" onmouseover="changeColor(this)">   <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" onclick="showCard(2)">  </div>
           <div class="logo-container" onmouseover="changeColor(this)">  <img src="${assetPath(src: 'link.svg')}" alt="link" onclick="showCard(3)">  </div>
-          <div class="logo-container" onmouseover="changeColor(this)">  <img src="${assetPath(src: 'file-earmark-fill.svg')}" alt="file-earmark-fill" onclick="showCard(4)">  </div>
+          <div class="logo-container" onmouseover="changeColor(this)">  <img src="${assetPath(src: 'file-earmark-fill.svg')}" alt="file-earmark-fill" onclick="showCard(4)">  </div> --%>
+            <button type="button" class="btn "  data-toggle="modal" data-target="#exampleModalTopic" data-whatever="@mdo"><img src="${assetPath(src: 'chat-fill.svg')}" alt="chat-fill" ></button>
+            <button type="button" class="btn " data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">  <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" >
+            </button>
+            <button type="button" class="btn" data-toggle="modal" data-target="#exampleModalLinkR" data-whatever="@getbootstrap"> <img src="${assetPath(src: 'link.svg')}" alt="link">
+            </button>
+            <button type="button" class="btn" data-toggle="modal" data-target="#exampleModalDocumentR" data-whatever="@getbootstrap"> <img src="${assetPath(src: 'file-earmark-fill.svg')}" alt="file-earmark-fill"> 
+            </button>  
+             <div class="modal fade" id="exampleModalTopic" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Create Topic</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+              <g:form controller="Topic" action="create_Topic"> 
+                 <g:hiddenField name="userId" value="${session.userId}"/>  
+                  <div class="modal-body"> 
+                      <div class="form-group">
+                        <label for="recipient-name" class="col-form-label"> Topic Name :</label>
+                        <input type="text" class="form-control" id="recipient-name" name="name">
+                      </div>
+                      <div class="form-group">
+                        <label for="message-text" class="col-form-label">Visibility:</label>
+                          <select name="visibility" id="visibility" class="dropdown dropdownw">
+                         <option value="Public">Public</option>
+                         <option value="Private">Private</option>
+                        </select>
+                      </div>  
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button class="btn btn-primary" type="submit">Send </button>
+                  </div>
+                   </g:form>
+                </div>
+              </div>
+            </div>
+     
+            <div class="modal fade" id="exampleModalDocumentR" tabindex="-1" role="dialog" aria-labelledby="exampleModalDocumentR" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalDocumentR">Share Document</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+              <g:form controller="LinkResource" action="CreateLink"> 
+                 <g:hiddenField name="userId" value="${session.userId}"/>  
+                <div class="share_info"  >
+                    <div class="share_link">
+                        <label for="link">
+                            <h5>Document*</h5>
+                        </label>
+                        <div class="browse_file" style="margin-left: 85px" >
+                            <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt" name="document"  size="35">
+                        </div>
+                    </div>
+                    <div class="share_link">
+                        <label for="Description">
+                            <h5>Description* :</h5>
+                        </label>
+                        <textarea rows="3" cols="28">
+
+                            </textarea>
+                    </div>
+                    <div class="share_link">
+                        <label for="Topic">
+                            <h5>Topic* :</h5>
+                        </label>
+                        <div class="dropdown dropdownw">
+                            <button class="dropbtn dashDropdown">Linux
+                                <img src="/Img/caret-down-fill.svg" alt="">
+                            </button>
+                            <div class="dropdown-content">
+                                <a href="#">Grails</a>
+                                <a href="#">Groovy</a>
+                                <a href="#">Java</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pop_btn">
+                        <button> Share</button>
+                        <button id="cancelButton"> Cancel</button>
+                    </div>
+                </div>
+                   </g:form>
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="exampleModalLinkR" tabindex="-1" role="dialog" aria-labelledby="exampleModalLinkR" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLinkR">New message</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+              <g:form controller="LinkResource" action="CreateLink"> 
+                 <g:hiddenField name="userId" value="${session.userId}"/>  
+                  <div class="modal-body"> 
+                      <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">url* :</label>
+                        <input type="text" class="form-control" id="recipient-name" name="url">
+                      </div>
+                      <div class="form-group">
+                        <label for="message-text" class="col-form-label">Description:</label>
+                        <textarea class="form-control" id="message-text" name=description></textarea>
+                      </div>  
+                      <div class="form-group">
+                        <label for="message-text" class="col-form-label">Topic:</label>
+                        <input type="text" class="form-control" id="recipient-name" name="topic">
+                      </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button class="btn btn-primary" type="submit">Send message</button>
+                  </div>
+                   </g:form>
+                </div>
+              </div>
+            </div>
+                     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+              <g:form controller="LinkResource" action="CreateLink"> 
+                 <g:hiddenField name="userId" value="${session.userId}"/>  
+                  <div class="modal-body"> 
+                      <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">url* :</label>
+                        <input type="text" class="form-control" id="recipient-name" name="url">
+                      </div>
+                      <div class="form-group">
+                        <label for="message-text" class="col-form-label">Description:</label>
+                        <textarea class="form-control" id="message-text" name=description></textarea>
+                      </div>  
+                      <div class="form-group">
+                        <label for="message-text" class="col-form-label">Topic:</label>
+                        <input type="text" class="form-control" id="recipient-name" name="topic">
+                      </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button class="btn btn-primary" type="submit">Send message</button>
+                  </div>
+                   </g:form>
+                </div>
+              </div>
+            </div>
         </div>
         <div class="dprofile">
             <img src="${assetPath(src: 'person-fill.svg')}" alt="person-fill" style="height: 30px; width: 30px; padding-top: 6px;">  
@@ -53,7 +215,7 @@
     <div class="Dash">
 
         <div class="leftD">
-            <div class="userCard">
+            <div class="userCard" id="userCard">
                 <div class="userImg">
                     <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg"  height="90px" width="90px">
                 </div>
@@ -96,11 +258,11 @@
                             </div>
                             <div class="S">
                                 <p>Subscription</p>
-                                <p>0</p>
+                                <p>${StopicData?.topic?.subscriptions?.size()}</p>
                             </div>
                             <div class="T">
-                                <p>Topic</p>
-                                <p>0</p>
+                                <p>Post</p>
+                                <p>${StopicData?.topic?.resources?.size()}</p>
                             </div>
                         </div>
                     </div>
@@ -148,7 +310,9 @@
                             </div>
                             
                             <div class="userData">
-                                <h2>${topicData?.name}</h2>
+                                <g:link controller= "Topic_show" action="topic" params="[topicId: topicData.id]"> 
+                                  <h2>${topicData?.name}</h2>
+                                </g:link>
                                 <div class="userS">
                                     <div class="DId">
                                      <p>  ${topicData?.user.username} </p>
@@ -173,7 +337,6 @@
                                             <g:else>
                                             <p> 0 </p>
                                             </g:else>
-                                        <%-- <p>${resources.where{topic==topicData}.count()}</p> --%>
                                     </div>
                                 </div>
                             </div>
@@ -211,8 +374,9 @@
                 <div class="Recent_share">
                     <h4 style="padding: 4px;">Recent Share</h4>
                 </div>
-            <g:if test="${resource!=null}">
+            <g:if test="${resource != null && !resource.empty}">
             <g:each in="${resource}"  var ="res">
+%{--            <g:if test="${res.isRead ==false}">--}%
                 <div class="card1 ">
                     <div class="image">
                         <img src="https://louisville.edu/enrollmentmanagement/images/person-icon/image" alt="p1">
@@ -224,7 +388,7 @@
                         </div>
                         <div class="post_content">Description : ${res.description}
                         </div>
-                        <div class="poster_info">
+                        <div class="poster_info setting_margin">
                             <div class="clogo">
                                     <img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
                                     <img src="${assetPath(src: 'twitter.svg')}" alt="twitter">
@@ -233,18 +397,19 @@
                             <span class="topic">
                                 <a href="#">Download</a>
                                 <a href="#">View Full Site</a>
-                                <a href="#"> Mark as read</a>
+                                <g:link controller ="Register" action="is_read" params="[resId:res.id]"> Mark as read </g:link>
                                 <g:link controller="Post" action="show" params="[resId: res.id]">View post</g:link>
                             </span>
                         </div>
                     </div>
 
                 </div>
+%{--                </g:if>--}%
             </g:each>
             </g:if>
             <g:else>
             <p>No resource created</p>
-                </g:else>
+             </g:else>
 
             </div>
            
@@ -260,7 +425,7 @@
                         <label for="link">
                             <h5>Link* :</h5>
                         </label>
-                        <input type="text" name="url" id="slink" size="45">
+                        <input type="text" name="url" id="slink" size="45" class="link_div">
                     </div>
                     <div class="share_link">
                         <label for="Description">
@@ -295,7 +460,7 @@
                         </label>
                         <div class="browse_file">
                             <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt" name="document"  size="35">
-                            <!-- <button id="browseButton">Browse</button> -->
+                            
                         </div>
                     </div>
                     <div class="share_link">
@@ -424,6 +589,19 @@ function changeColor(element) {
 
     element.classList.add('hovered'); // Add 'hovered' class to the parent div of the hovered image
 }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var textarea = document.querySelector('.share_link textarea');
+        textarea.addEventListener('click', function () {
+            // Set the cursor position to the beginning of the textarea
+            textarea.selectionStart = textarea.selectionEnd = 0;
+        });
+    });
+
+        document.getElementById('userCard').addEventListener('click', function() {
+        // Redirect to user profile page
+        window.location.href = "${createLink(controller: 'UserProfile', action: 'show', id: userCard)}";
+    });
 
 </script>
 </html>

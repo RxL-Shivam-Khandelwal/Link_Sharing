@@ -13,11 +13,9 @@ class RegisterController {
         render " Due to some error, account not created."
     }
  def dashboard(Long userId) {
+
     def user = Users.findById(userId)
         def curr_user = user;
-
-          println "cur_user :   ${curr_user} :    ${userId}"
-
     def subscriptionCount = Subscription.where {
         user.id == userId;
     }.count()
@@ -26,30 +24,25 @@ class RegisterController {
         user.id == userId
     }.count()
      def sub_topic = Subscription.findAllByUser(user);
-     def criteria = Topic.createCriteria();
-// def topics = criteria.list {
-//     // Perform a subquery to count the number of subscriptions for each topic
-//     projections {
-//         property("id")
-//         countDistinct("subscriptions.id")
-//     }
 
-//     // Group by topic id
-//     groupProperty("id")
-
-//     // Order by the count of subscriptions in descending order
-//     order(Projections.countDistinct("subscriptions.id"), "desc")
-
-//     // Transform the result to Topic objects
-//     resultTransformer(org.hibernate.criterion.Transformers.aliasToBean(Topic))
-// }
-  
    def topics =  Topic.list();
-     //  def topics= Topic.list();
-     def res= Resources.list();
      session.user = user;  
- 
-    render(view: "../Frontend/dashboard", model: [subscriptionCount: subscriptionCount, topicCount: topicCount,all_Topics:topics,resource: res,subscription_Topic: sub_topic, curr_user:user])
+     def l = []
+     def all_resource = Resources.list();
+     all_resource.each { resource ->
+
+                def readingItemlist = ReadingItem.findAllByResource(resource);
+         Boolean flag=0;
+         readingItemlist.each{it->
+                if(it.user==session.user && it.isRead){
+                    flag=1;
+                }
+         }
+         if(!flag){
+             l.add(resource);
+         }
+     }
+    render(view: "../Frontend/dashboard", model: [subscriptionCount: subscriptionCount, topicCount: topicCount,all_Topics:topics,resource: l,subscription_Topic: sub_topic, curr_user:user])
 }
 
     def create_user() {
@@ -65,5 +58,22 @@ class RegisterController {
               println e;
              render (view: "create", model: [errors: e])
         }
+    }
+
+    def is_read(){
+
+        Resources res= Resources.findById(params.resId);
+        Users user= Users.findById(session.user_id);
+        ReadingItem item = ReadingItem.findByUserAndResource(user,res);
+        if(item!=null){
+        item.isRead = true;
+        item.save(flush: true, failOnError: true);
+        }else{
+          ReadingItem r_item = new ReadingItem(resource:res, user:user,isRead:true);
+          r_item.save(flush:true, failOnError:true);
+        }
+        Long userId = session.user.id;
+         redirect(action:"dashboard", params: [userId: userId]);
+
     }
 }

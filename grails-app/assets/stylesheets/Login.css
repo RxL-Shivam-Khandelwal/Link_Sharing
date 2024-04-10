@@ -66,8 +66,7 @@
 }
 .topics{
     margin-left: 10%;
-    margin-right: 10%;
-    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2)
+    margin-right: 5%
 }
 
 .card1{
@@ -92,8 +91,11 @@
     justify-content: space-between;
     width: 90%;
     margin: 0 auto;
+    margin-bottom: 7px;
 }
-
+.setting_margin{
+  margin-top: 50px;
+}
 .content{
     width: 100%;
 }
@@ -339,4 +341,15 @@
 
 .logo-container.hovered {
   background-color: green; /* Change background color to green when hovered */
+}
+
+
+
+.share_link{
+  margin-right: 5%;
+}
+
+.link_div{
+
+  margin-right: 20px;
 }

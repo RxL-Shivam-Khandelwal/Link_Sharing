@@ -8,5 +8,5 @@ Boolean isRead;
     static constraints = {
         
     }
-    static belongsTo = [user: Users];
+    static belongsTo = [user: Users, resource: Resources];
 }

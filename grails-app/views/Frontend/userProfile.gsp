@@ -215,7 +215,7 @@
     <div class="Dash">
 
         <div class="leftD">
-            <div class="userCard" id="userCard">
+            <div class="userCard">
                 <div class="userImg">
                     <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg"  height="90px" width="90px">
                 </div>
@@ -300,7 +300,7 @@
                     <p>Trending Topics</p>
                     <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
                 </div>
-                <g:if test="${all_Topics!= null}">
+                <g:if test="${all_Topics!= null && all_Topics.size()!=0}">
                 <g:each in="${all_Topics}"  var="topicData">
                 <div class="Border1" style="border: 2px solid black;">
                     <div class="DSubcontent">
@@ -413,148 +413,9 @@
 
             </div>
            
-            <div class="share_l pop_up " id="card1">
-                <div class="share_heading">
-                    <h3>Share Link</h3>
-                </div>
-                <g:form controller="LinkResource" action="CreateLink"> 
-                 <g:hiddenField name="userId" value="${session.userId}"/>
 
-                <div class="share_info"  >
-                    <div class="share_link">
-                        <label for="link">
-                            <h5>Link* :</h5>
-                        </label>
-                        <input type="text" name="url" id="slink" size="45" class="link_div">
-                    </div>
-                    <div class="share_link">
-                        <label for="Description">
-                            <h5>Description* :</h5>
-                        </label>
-                        <textarea rows="7" cols="45" name=description>
-                            </textarea>
-                    </div>
-                    <div class="share_link">
-                        <label for="Topic">
-                            <h5>Topic* :</h5>
-                        </label>
-                       <input type="text" name="topic" id="slink" size="45">
-                    </div>
-                    <div class="pop_btn">
-                        <button type="submit"> Share</button>
-                        <button id="cancelButton"> Cancel</button>
-                    </div>
-                </div>
-                  </g:form>
-            </div>
 
-      
-            <div class="share_l pop_up " id="card2">
-                <div class="share_heading">
-                    <h3>Share Document</h3>
-                </div>
-                <div class="share_info"  >
-                    <div class="share_link">
-                        <label for="link">
-                            <h5>Document* :</h5>
-                        </label>
-                        <div class="browse_file">
-                            <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt" name="document"  size="35">
-                            
-                        </div>
-                    </div>
-                    <div class="share_link">
-                        <label for="Description">
-                            <h5>Description* :</h5>
-                        </label>
-                        <textarea rows="7" cols="45">
 
-                            </textarea>
-                    </div>
-                    <div class="share_link">
-                        <label for="Topic">
-                            <h5>Topic* :</h5>
-                        </label>
-                        <div class="dropdown dropdownw">
-                            <button class="dropbtn dashDropdown">Linux
-                                <img src="/Img/caret-down-fill.svg" alt="">
-                            </button>
-                            <div class="dropdown-content">
-                                <a href="#">Grails</a>
-                                <a href="#">Groovy</a>
-                                <a href="#">Java</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pop_btn">
-                        <button> Share</button>
-                        <button id="cancelButton"> Cancel</button>
-                    </div>
-                </div>
-            </div>
-<g:form controller="Topic" action="create_Topic">
-    <!-- Form content -->
-    <div class="share_l pop_up" id="card3">
-        <div class="share_heading">
-            <h3>Create Topic</h3>
-        </div>
-        <div class="share_info">
-            <div class="share_link">
-                <label for="link">
-                    <h5>Name* :</h5>
-                </label>
-                <g:textField name="name" id="slink" size="45"/>
-            </div>
-            <div class="share_link">
-                <label for="Topic">
-                    <h5>Visibility* :</h5>
-                </label>
-                         <select name="visibility" id="visibility" class="dropdown dropdownw">
-                         <option value="Public">Public</option>
-                         <option value="Private">Private</option>
-                        </select>
-            </div>
-       <!-- Hidden input field to include user_id -->
-            <g:hiddenField name="user" value="${session.user_id}"/>
-            <div class="pop_btn">
-                <g:submitButton name="save" class="saveButton" value="Save"/>
-                <button type="button" id="cancelButton">Cancel</button>
-            </div>
-        </div>
-    </div>
-</g:form>
-
-            <div class="share_l pop_up " id="card4">
-                <div class="share_heading">
-                    <h3>Send invitation</h3>
-                </div>
-                <div class="share_info"  >
-                    <div class="share_link">
-                        <label for="link">
-                            <h5>Email* :</h5>
-                        </label>
-                        <input type="text" name="link" id="slink" size="45">
-                    </div>
-                    <div class="share_link">
-                        <label for="Topic">
-                            <h5>Topic* :</h5>
-                        </label>
-                        <div class="dropdown dropdownw">
-                            <button class="dropbtn dashDropdown">Topic
-                                <img src="/Img/caret-down-fill.svg" alt="">
-                            </button>
-                            <div class="dropdown-content">
-                                <a href="#">Option 1</a>
-                                <a href="#">Option 2</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pop_btn">
-                        <button> Save</button>
-                        <button id="cancelButton"> Cancel</button>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -596,11 +457,6 @@ function changeColor(element) {
             // Set the cursor position to the beginning of the textarea
             textarea.selectionStart = textarea.selectionEnd = 0;
         });
-    });
-
-        document.getElementById('userCard').addEventListener('click', function() {
-        // Redirect to user profile page
-        window.location.href = "${createLink(controller: 'UserProfile', action: 'show', id: userCard)}";
     });
 
 </script>
