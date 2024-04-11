@@ -16,7 +16,11 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </head>
-
+<style> 
+.hidden{
+    display: none;
+  }
+</style>
 <body>
 <asset:javascript src="dashboard.js"/>
     <div class="navbar" style="justify-content: space-evenly;">
@@ -92,31 +96,21 @@
                             <h5>Document*</h5>
                         </label>
                         <div class="browse_file" style="margin-left: 85px" >
-                            <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt" name="document"  size="35">
+                            <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt" name="documentResource"  size="35">
                         </div>
                     </div>
                     <div class="share_link">
                         <label for="Description">
                             <h5>Description* :</h5>
                         </label>
-                        <textarea rows="3" cols="28">
-
+                        <textarea rows="3" cols="28" name="description">
                             </textarea>
                     </div>
                     <div class="share_link">
                         <label for="Topic">
                             <h5>Topic* :</h5>
                         </label>
-                        <div class="dropdown dropdownw">
-                            <button class="dropbtn dashDropdown">Linux
-                                <img src="/Img/caret-down-fill.svg" alt="">
-                            </button>
-                            <div class="dropdown-content">
-                                <a href="#">Grails</a>
-                                <a href="#">Groovy</a>
-                                <a href="#">Java</a>
-                            </div>
-                        </div>
+                       <input type="text" id="topicInput" name="topic">
                     </div>
                     <div class="pop_btn">
                         <button> Share</button>
@@ -301,6 +295,7 @@
                     <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
                 </div>
                 <g:if test="${all_Topics!= null}">
+                <g:set var="num" value="${1}" />
                 <g:each in="${all_Topics}"  var="topicData">
                 <div class="Border1" style="border: 2px solid black;">
                     <div class="DSubcontent">
@@ -313,11 +308,18 @@
                                 <g:link controller= "Topic_show" action="topic" params="[topicId: topicData.id]"> 
                                   <h2>${topicData?.name}</h2>
                                 </g:link>
+                                    <g:form id="${num++}" class="hidden">
+                                    <g:if test="${topicData.user == session.user }">
+                                   <input type="text" placeholder="Enter New Topic Name">
+                                   <button type="submit" class="btn">Save</button>
+                                   <button id="cancelBtn" type="button" class="btn">Cancel</button>
+                                   </g:if>
+                                 </g:form>                  
                                 <div class="userS">
                                     <div class="DId">
                                      <p>  ${topicData?.user.username} </p>
 
-                    <g:if test="${Subscription?.findByTopicAndUser(topicData,session.user)!=null}">
+                                     <g:if test="${Subscription?.findByTopicAndUser(topicData,session.user)!=null}">
                                         <g:link controller="SubandUnsub" action="unsubscribe" params="[topicId: topicData.id, cuser: curr_user.id]">unsubscribe</g:link>
                                       </g:if>  
                                       <g:else>                                       
@@ -356,9 +358,11 @@
                             <option value="option2">Option 2</option>
                             <option value="option3">Option 3</option>
                         </select>
+                        <g:if test="${topicData.user == session.user }">
                          <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">
-                         <img src="${assetPath(src: 'link.svg')}" alt="link" >
+                       <button id="showFormBtn" type="button" class="btn" onclick="showForm(${num})"> <img src="${assetPath(src: 'pencil-square.svg')}" alt="edit" >   </button>
                          <img src="${assetPath(src: 'trash-fill.svg')}" alt="trash-fill">
+                         </g:if>
                     </div>
                 </div>
                 </g:each>
@@ -396,7 +400,7 @@
                             </div>
                             <span class="topic">
                                 <a href="#">Download</a>
-                                <a href="#">View Full Site</a>
+                                <a href = "${createLink(absolute:true, uri:"${res.url}")}" target="_blank">View Full Site</a>
                                 <g:link controller ="Register" action="is_read" params="[resId:res.id]"> Mark as read </g:link>
                                 <g:link controller="Post" action="show" params="[resId: res.id]">View post</g:link>
                             </span>
@@ -413,7 +417,7 @@
 
             </div>
            
-            <div class="share_l pop_up " id="card1">
+            <%-- <div class="share_l pop_up " id="card1">
                 <div class="share_heading">
                     <h3>Share Link</h3>
                 </div>
@@ -446,8 +450,8 @@
                     </div>
                 </div>
                   </g:form>
-            </div>
-
+            </div> --%>
+<%-- 
       
             <div class="share_l pop_up " id="card2">
                 <div class="share_heading">
@@ -491,8 +495,8 @@
                         <button id="cancelButton"> Cancel</button>
                     </div>
                 </div>
-            </div>
-<g:form controller="Topic" action="create_Topic">
+            </div> --%>
+<%-- <g:form controller="Topic" action="create_Topic">
     <!-- Form content -->
     <div class="share_l pop_up" id="card3">
         <div class="share_heading">
@@ -522,8 +526,8 @@
             </div>
         </div>
     </div>
-</g:form>
-
+</g:form> --%>
+<%-- 
             <div class="share_l pop_up " id="card4">
                 <div class="share_heading">
                     <h3>Send invitation</h3>
@@ -554,7 +558,7 @@
                         <button id="cancelButton"> Cancel</button>
                     </div>
                 </div>
-            </div>
+            </div> --%>
         </div>
     </div>
 
@@ -603,5 +607,42 @@ function changeColor(element) {
         window.location.href = "${createLink(controller: 'UserProfile', action: 'show', id: userCard)}";
     });
 
-</script>
+
+// document.addEventListener("DOMContentLoaded", function() {
+//     var showFormBtn = document.getElementById("showFormBtn");
+//     var myForm = document.getElementById("myForm");
+
+//     if (showFormBtn && myForm) {
+//         showFormBtn.addEventListener("click", function() {
+//             myForm.classList.remove("hidden");
+//         });
+
+//         var cancelBtn = document.getElementById("cancelBtn");
+//         if (cancelBtn) {
+//             cancelBtn.addEventListener("click", function() {
+//                 myForm.classList.add("hidden");
+//             });
+//         }
+//     } else {
+//         console.error("One or more elements not found.");
+//     }
+// });
+  function showForm(formId) {
+         console.log("Form element with ID '" + formId-1 + "' not found.");
+
+    var form = document.getElementById(formId-1);
+    if (form) {
+      if (form.classList.contains("hidden")) {
+        form.classList.remove("hidden");
+      }
+    } else {
+      console.error("Form element with ID '" + formId-1 + "' not found.");
+    }
+  }
+
+  function hideForm() {
+    var form = document.getElementById('yourFormId'); // Replace 'yourFormId' with the actual ID of your form
+    form.classList.add("hidden");
+  }
+// </script>
 </html>

@@ -4,6 +4,8 @@ class LogoutController {
 
     def index() {
         session.invalidate();
-        render (view : "../Frontend/login");
+        def resource = Resources.list();
+        render (view : "../Frontend/login", model:[resource:resource]);
+
      }
 }

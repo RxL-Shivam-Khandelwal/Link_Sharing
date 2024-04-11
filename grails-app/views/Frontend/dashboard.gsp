@@ -15,8 +15,14 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-</head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+</head>
+<style> 
+.hidden{
+    display: none;
+  }
+</style>
 <body>
 <asset:javascript src="dashboard.js"/>
     <div class="navbar" style="justify-content: space-evenly;">
@@ -92,31 +98,21 @@
                             <h5>Document*</h5>
                         </label>
                         <div class="browse_file" style="margin-left: 85px" >
-                            <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt" name="document"  size="35">
+                            <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt" name="documentResource"  size="35">
                         </div>
                     </div>
                     <div class="share_link">
                         <label for="Description">
                             <h5>Description* :</h5>
                         </label>
-                        <textarea rows="3" cols="28">
-
+                        <textarea rows="3" cols="28" name="description">
                             </textarea>
                     </div>
                     <div class="share_link">
                         <label for="Topic">
                             <h5>Topic* :</h5>
                         </label>
-                        <div class="dropdown dropdownw">
-                            <button class="dropbtn dashDropdown">Linux
-                                <img src="/Img/caret-down-fill.svg" alt="">
-                            </button>
-                            <div class="dropdown-content">
-                                <a href="#">Grails</a>
-                                <a href="#">Groovy</a>
-                                <a href="#">Java</a>
-                            </div>
-                        </div>
+                       <input type="text" id="topicInput" name="topic">
                     </div>
                     <div class="pop_btn">
                         <button> Share</button>
@@ -220,8 +216,8 @@
                     <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg"  height="90px" width="90px">
                 </div>
                 <div class="userData">
-                    <h2 id="userName">Loading Name...</h2>
-                    <p id="userEmail">Loading Email Id...</p>
+                    <h2 id="userName">${curr_user?.firstName}</h2>
+                    <p id="userEmail">${curr_user?.email}</p>
                     <div class="userS">
                         <div class="S">
                             <p>Subscription</p>
@@ -269,18 +265,17 @@
                 </div>
             </div>
             <div class="SubInfo">
-                <select id="dropdown-menu">
-                    <option value="" disabled selected>Serious</option>
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
-                </select>
-                <select id="dropdown-menu">
-                    <option value="" disabled selected>Private</option>
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
-                </select>
+
+                <g:select id="seriournessSub_${StopicData.id}" from="['Serious', 'Casual','Very_serious']" name="selectedSeriousness"
+                          value="${StopicData.seriousness}"
+                          onchange="sendSeriournessToController(this.value, ${StopicData.id})"
+                          style="height: 30px; width: 140px;" />
+                <g:if test="${StopicData.topic.user == session.user}">
+                <g:select id="visiblitySub_${StopicData.topic.id}" from="['Public', 'Private']" name="selectedVisibility"
+                          value="${StopicData.topic.visibility}"
+                          onchange="sendDataToController(this.value, ${StopicData.topic.id})"
+                          style="height: 30px; width: 140px;" />
+                </g:if>
                 <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">
                 <img src="${assetPath(src: 'link.svg')}" alt="link">
                 <img src="${assetPath(src: 'trash-fill.svg')}" alt="trash-fill">
@@ -301,6 +296,7 @@
                     <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
                 </div>
                 <g:if test="${all_Topics!= null}">
+                <g:set var="num" value="${1}" />
                 <g:each in="${all_Topics}"  var="topicData">
                 <div class="Border1" style="border: 2px solid black;">
                     <div class="DSubcontent">
@@ -313,11 +309,19 @@
                                 <g:link controller= "Topic_show" action="topic" params="[topicId: topicData.id]"> 
                                   <h2>${topicData?.name}</h2>
                                 </g:link>
+                                <g:form id="myForm${num++}" name="myForm${num++}"  class="hidden" controller="Register"  action="change_topic_name" >
+                                    <g:hiddenField name="topicId" value="${topicData.id}"/>
+                                    <g:if test="${topicData.user == session.user }">
+                                   <input type="text" placeholder="Enter New Topic Name" name="new_topic_name">
+                                   <button type="submit" class="btn">Save</button>
+                                   <button id="cancelBtn" type="button" class="btn" onclick="showForm('myForm${num - 1}')">Cancel</button>
+                                   </g:if>
+                                 </g:form>                  
                                 <div class="userS">
                                     <div class="DId">
                                      <p>  ${topicData?.user.username} </p>
 
-                    <g:if test="${Subscription?.findByTopicAndUser(topicData,session.user)!=null}">
+                                     <g:if test="${Subscription?.findByTopicAndUser(topicData,session.user)!=null}">
                                         <g:link controller="SubandUnsub" action="unsubscribe" params="[topicId: topicData.id, cuser: curr_user.id]">unsubscribe</g:link>
                                       </g:if>  
                                       <g:else>                                       
@@ -344,21 +348,25 @@
                         </div>
                     </div>
                     <div class="SubInfo">
-                        <select id="dropdown-menu">
-                            <option value="" disabled selected>Serious</option>
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
-                        </select>
-                        <select id="dropdown-menu">
-                            <option value="" disabled selected>Private</option>
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
-                        </select>
+                        <g:set var="Subscriber" value="${Subscription.findByUserAndTopic(session.user,topicData)}" />
+
+                        <g:if test="${Subscriber  &&  session.user == topicData.user}">
+                        <g:select id="seriournessSub_${topicData.id}" from="['Serious', 'Casual','Very_serious']" name="selectedSeriousness"
+                                  value="${Subscriber.seriousness}"
+                                  onchange="sendSeriournessToController(this.value, ${Subscriber.id})"
+                                  style="height: 30px; width: 140px;" />
+                        </g:if>
+                        <g:if test="${topicData.user == session.user}">
+                            <g:select id="visiblitySub_${topicData.id}" from="['Public', 'Private']" name="selectedVisibility"
+                                      value="${topicData.visibility}"
+                                      onchange="sendDataToController(this.value, ${topicData.id})"
+                                      style="height: 30px; width: 140px;" />
+                        </g:if>
+                        <g:if test="${topicData.user == session.user }">
                          <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">
-                         <img src="${assetPath(src: 'link.svg')}" alt="link" >
+                       <button id="showFormBtn" type="button" class="btn" onclick="showForm('myForm${num - 1}')"> <img src="${assetPath(src: 'pencil-square.svg')}" alt="edit" >   </button>
                          <img src="${assetPath(src: 'trash-fill.svg')}" alt="trash-fill">
+                         </g:if>
                     </div>
                 </div>
                 </g:each>
@@ -396,7 +404,7 @@
                             </div>
                             <span class="topic">
                                 <a href="#">Download</a>
-                                <a href="#">View Full Site</a>
+                                <a href = "${createLink(absolute:true, uri:"${res.url}")}" target="_blank">View Full Site</a>
                                 <g:link controller ="Register" action="is_read" params="[resId:res.id]"> Mark as read </g:link>
                                 <g:link controller="Post" action="show" params="[resId: res.id]">View post</g:link>
                             </span>
@@ -413,117 +421,9 @@
 
             </div>
            
-            <div class="share_l pop_up " id="card1">
-                <div class="share_heading">
-                    <h3>Share Link</h3>
-                </div>
-                <g:form controller="LinkResource" action="CreateLink"> 
-                 <g:hiddenField name="userId" value="${session.userId}"/>
 
-                <div class="share_info"  >
-                    <div class="share_link">
-                        <label for="link">
-                            <h5>Link* :</h5>
-                        </label>
-                        <input type="text" name="url" id="slink" size="45" class="link_div">
-                    </div>
-                    <div class="share_link">
-                        <label for="Description">
-                            <h5>Description* :</h5>
-                        </label>
-                        <textarea rows="7" cols="45" name=description>
-                            </textarea>
-                    </div>
-                    <div class="share_link">
-                        <label for="Topic">
-                            <h5>Topic* :</h5>
-                        </label>
-                       <input type="text" name="topic" id="slink" size="45">
-                    </div>
-                    <div class="pop_btn">
-                        <button type="submit"> Share</button>
-                        <button id="cancelButton"> Cancel</button>
-                    </div>
-                </div>
-                  </g:form>
-            </div>
 
-      
-            <div class="share_l pop_up " id="card2">
-                <div class="share_heading">
-                    <h3>Share Document</h3>
-                </div>
-                <div class="share_info"  >
-                    <div class="share_link">
-                        <label for="link">
-                            <h5>Document* :</h5>
-                        </label>
-                        <div class="browse_file">
-                            <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt" name="document"  size="35">
-                            
-                        </div>
-                    </div>
-                    <div class="share_link">
-                        <label for="Description">
-                            <h5>Description* :</h5>
-                        </label>
-                        <textarea rows="7" cols="45">
-
-                            </textarea>
-                    </div>
-                    <div class="share_link">
-                        <label for="Topic">
-                            <h5>Topic* :</h5>
-                        </label>
-                        <div class="dropdown dropdownw">
-                            <button class="dropbtn dashDropdown">Linux
-                                <img src="/Img/caret-down-fill.svg" alt="">
-                            </button>
-                            <div class="dropdown-content">
-                                <a href="#">Grails</a>
-                                <a href="#">Groovy</a>
-                                <a href="#">Java</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pop_btn">
-                        <button> Share</button>
-                        <button id="cancelButton"> Cancel</button>
-                    </div>
-                </div>
-            </div>
-<g:form controller="Topic" action="create_Topic">
-    <!-- Form content -->
-    <div class="share_l pop_up" id="card3">
-        <div class="share_heading">
-            <h3>Create Topic</h3>
-        </div>
-        <div class="share_info">
-            <div class="share_link">
-                <label for="link">
-                    <h5>Name* :</h5>
-                </label>
-                <g:textField name="name" id="slink" size="45"/>
-            </div>
-            <div class="share_link">
-                <label for="Topic">
-                    <h5>Visibility* :</h5>
-                </label>
-                         <select name="visibility" id="visibility" class="dropdown dropdownw">
-                         <option value="Public">Public</option>
-                         <option value="Private">Private</option>
-                        </select>
-            </div>
-       <!-- Hidden input field to include user_id -->
-            <g:hiddenField name="user" value="${session.user_id}"/>
-            <div class="pop_btn">
-                <g:submitButton name="save" class="saveButton" value="Save"/>
-                <button type="button" id="cancelButton">Cancel</button>
-            </div>
-        </div>
-    </div>
-</g:form>
-
+<%-- 
             <div class="share_l pop_up " id="card4">
                 <div class="share_heading">
                     <h3>Send invitation</h3>
@@ -554,7 +454,7 @@
                         <button id="cancelButton"> Cancel</button>
                     </div>
                 </div>
-            </div>
+            </div> --%>
         </div>
     </div>
 
@@ -563,20 +463,20 @@
 <script>
     // Check if userId is stored in localStorage
     var userId = localStorage.getItem('userId');
-    console.log("helloWorld, userId is: " , userId);
-    // AJAX request to fetch user details
-    fetch('${createLink(controller: "User", action: "details")}?userId=' + userId)
-        .then(response => response.json())
-        .then(user => {
-            // Update UI with user details
-            console.log(user.username);
-            console.log("user email id : ", user.email);
-            document.getElementById('userName').textContent = user.username;
-            document.getElementById('userEmail').textContent = user.email;
-        })
-        .catch(error => {
-            console.error('Data is not extracted, Error:', error);
-        });
+    %{--console.log("helloWorld, userId is: " , userId);--}%
+    %{--// AJAX request to fetch user details--}%
+    %{--fetch('${createLink(controller: "User", action: "details")}?userId=' + userId)--}%
+    %{--    .then(response => response.json())--}%
+    %{--    .then(user => {--}%
+    %{--        // Update UI with user details--}%
+    %{--        console.log(user.username);--}%
+    %{--        console.log("user email id : ", user.email);--}%
+    %{--        document.getElementById('userName').textContent = user.username;--}%
+    %{--        document.getElementById('userEmail').textContent = user.email;--}%
+    %{--    })--}%
+    %{--    .catch(error => {--}%
+    %{--        console.error('Data is not extracted, Error:', error);--}%
+    %{--    });--}%
 
   // change the div colour
 // JavaScript function to change the background color of the parent div when the mouse hovers over the child image
@@ -603,5 +503,69 @@ function changeColor(element) {
         window.location.href = "${createLink(controller: 'UserProfile', action: 'show', id: userCard)}";
     });
 
-</script>
+
+  // function showForm(formId) {
+  //        console.log("formId is :" + formId-1);
+  //
+  //   var form = document.getElementById(formId-1);
+  //   if (form) {
+  //     if (form.classList.contains("hidden")) {
+  //       form.classList.remove("hidden");
+  //     }
+  //   } else {
+  //     console.error("Form element with ID '" + formId-1 + "' not found.");
+  //   }
+  // }
+  //   window.onload = function showForm(formId) {
+  //       var form = document.getElementById(formId);
+  //       if (form) {
+  //           form.classList.toggle("hidden");
+  //       } else {
+  //           console.error("Form element with ID '" + formId + "' not found.");
+  //       }
+  //   }
+    function showForm(formName) {
+        var form = document.forms[formName];
+        if (form) {
+            form.classList.toggle("hidden");
+        } else {
+            console.error("Form element with name '" + formName + "' not found.");
+        }
+    }
+  // function hideForm(formName) {
+  //   var form = document.getElementById(formId);
+  //   form.classList.add("hidden");
+  // }
+    function sendDataToController(selectedVisibility, topicId) {
+        $.ajax({
+            url: "${createLink(controller: 'Register', action: 'change_topic_mode')}",
+            type: "POST",
+            data: { selectedVisibility: selectedVisibility, topicId: topicId },
+            success: function(response) {
+                // Handle success response
+                console.log(response);
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                console.error(error);
+            }
+        });
+    }
+
+    function sendSeriournessToController(selectedSeriousness, StopicId) {
+        $.ajax({
+            url: "${createLink(controller: 'Register', action: 'change_seriousness')}",
+            type: "POST",
+            data: { selectedSeriousness: selectedSeriousness, StopicId: StopicId },
+            success: function(response) {
+                // Handle success response
+                console.log(response);
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                console.error(error);
+            }
+        });
+    }
+     </script>
 </html>

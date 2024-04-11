@@ -396,7 +396,7 @@
                             </div>
                             <span class="topic">
                                 <a href="#">Download</a>
-                                <a href="#">View Full Site</a>
+                                <a href = "${createLink(absolute:true, uri:"${res.url}")}" target="_blank">View Full Site</a>
                                 <g:link controller ="Register" action="is_read" params="[resId:res.id]"> Mark as read </g:link>
                                 <g:link controller="Post" action="show" params="[resId: res.id]">View post</g:link>
                             </span>

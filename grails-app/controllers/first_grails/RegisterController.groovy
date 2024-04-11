@@ -76,4 +76,31 @@ class RegisterController {
          redirect(action:"dashboard", params: [userId: userId]);
 
     }
+
+    def change_topic_name(){
+         def topic_name = params.new_topic_name;
+        Topic curr_topic = Topic.findById(params.topicId);
+        curr_topic.name = topic_name;
+        curr_topic.save(flush:true, failOnError:true);
+        Long userId= session.user.id;
+        redirect(action: "dashboard",params: [userId:userId] );
+
+    }
+
+    def change_topic_mode(){
+        Topic curr_topic = Topic.findById(params.topicId);
+        curr_topic.visibility = params.selectedVisibility;
+        curr_topic.save(flush:true);
+        Long userId= session.user.id;
+        redirect(action:"dashboard",params: [userId: userId]);
+    }
+
+    def change_seriousness(){
+        Subscription curr_sub = Subscription.findById(params.StopicId);
+        curr_sub.seriousness = params.selectedSeriousness;
+        curr_sub.save(flush:true);
+        println params;
+        Long userId= session.user.id;
+        redirect(action:"dashboard",params: [userId: userId]);
+    }
 }
