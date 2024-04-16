@@ -1,7 +1,7 @@
 
 <%@ page import="first_grails.Resources" %>
 <%@ page import="first_grails.Subscription" %>
-
+<%@  page import="first_grails.Topic" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,6 +15,8 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 <style> 
 .hidden{
@@ -25,9 +27,8 @@
 <asset:javascript src="dashboard.js"/>
     <div class="navbar" style="justify-content: space-evenly;">
         <div>
-            <a href="#" class="nav-link">
-                <h3>Link Sharing</h3>
-            </a>
+
+               <g:link controller="register"  action="dashboard"> <h3>Link Sharing</h3>  </g:link>
         </div>
         <div class="search-container">
             <span class="search-icon">&#128269;</span>
@@ -196,7 +197,7 @@
                 </button>
 <div class="dropdown-content">
     <g:link controller="Profile">Profile</g:link>
-    <g:link controller="user">User</g:link>
+    <g:link controller="admin">Users</g:link>
     <g:link controller="topic">Topic</g:link>
     <g:link controller="post">Post</g:link>
     <g:link controller="Logout">Logout</g:link>
@@ -206,6 +207,7 @@
         </div>
     </div>
 
+
     <div class="Dash">
 
         <div class="leftD">
@@ -214,8 +216,8 @@
                     <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg"  height="90px" width="90px">
                 </div>
                 <div class="userData">
-                    <h2 id="userName">Loading Name...</h2>
-                    <p id="userEmail">Loading Email Id...</p>
+                    <h2 id="userName">${curr_user?.firstName}</h2>
+                    <p id="userEmail">${curr_user?.email}</p>
                     <div class="userS">
                         <div class="S">
                             <p>Subscription</p>
@@ -234,9 +236,9 @@
                     <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
                 </div>
 <g:if test="${subscription_Topic}">
-
+    <g:set var="num" value="${1}" />
     <g:each in="${subscription_Topic}" var="StopicData">
-
+        <g:if test="${!StopicData.topic.isdeleted}">
         <div class="Border1" style="border: 2px solid black;">
             <div class="DSubcontent">
                 <div class="userCard" style="border: 0cap;">
@@ -244,11 +246,20 @@
                         <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg" height="90px" width="90px">
                     </div>
                     <div class="userData">
+
                         <h2>${StopicData?.topic?.name}</h2>
+                        <g:form id="myFormS${num++}" name="myFormS${num++}"  class="hidden" controller="Register"  action="change_topic_name" >
+                            <g:hiddenField name="topicId" value="${StopicData.topic.id}"/>
+                            <g:if test="${StopicData.topic.user == session.user }">
+                                <input type="text" placeholder="Enter New Topic Name" name="new_topic_name">
+                                <button type="submit" class="btn">Save</button>
+                                <button id="cancelBtn" type="button" class="btn" onclick="showForm('myFormS${num - 1}')">Cancel</button>
+                            </g:if>
+                        </g:form>
                         <div class="userS">
                             <div class="DId">
                                 <p>${StopicData?.topic?.user?.username}</p>
-                                <a href="#">Unsubscribed</a>
+                                <g:link controller="SubandUnsub" action="unsubscribe" params="[topicId: StopicData.topic.id, cuser: curr_user.id]">unsubscribe</g:link>
                             </div>
                             <div class="S">
                                 <p>Subscription</p>
@@ -256,30 +267,54 @@
                             </div>
                             <div class="T">
                                 <p>Post</p>
-                                <p>${StopicData?.topic?.resources?.size()}</p>
+                                <p>${Resources.findAllByTopicAndIsdeleted(StopicData.topic,false).size()}</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="SubInfo">
-                <select id="dropdown-menu">
-                    <option value="" disabled selected>Serious</option>
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
-                </select>
-                <select id="dropdown-menu">
-                    <option value="" disabled selected>Private</option>
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
-                </select>
-                <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">
-                <img src="${assetPath(src: 'link.svg')}" alt="link">
-                <img src="${assetPath(src: 'trash-fill.svg')}" alt="trash-fill">
+
+                <g:select id="seriournessSub_${StopicData.id}" from="['Serious', 'Casual','Very_serious']" name="selectedSeriousness"
+                          value="${StopicData.seriousness}"
+                          onchange="sendSeriournessToController(this.value, ${StopicData.id})"
+                          style="height: 30px; width: 140px;" />
+                <g:if test="${StopicData.topic.user == session.user}">
+                <g:select id="visiblitySub_${StopicData.topic.id}" from="['Public', 'Private']" name="selectedVisibility"
+                          value="${StopicData.topic.visibility}"
+                          onchange="sendDataToController(this.value, ${StopicData.topic.id})"
+                          style="height: 30px; width: 140px;" />
+                </g:if>
+                <g:if test="${StopicData.topic.user == session.user }">
+                    <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">
+                    <div class="modal fade" id="exampleModalDeletetopic${StopicData.topic.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to delete Title?
+                                </div>
+                                <g:form controller="register" action="toDelete" params="${[id:StopicData.topic.id]}">
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                        <button type="submit" class="btn btn-primary">Yes</button>
+                                    </div>
+                                </g:form>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="showFormBtn" type="button" class="btn" onclick="showForm('myFormS${num - 1}')" style="padding: 0px"> <img src="${assetPath(src: 'pencil-square.svg')}" alt="edit" >   </button>
+                    <button type="button" class="btn" data-toggle="modal" data-target="#exampleModalDeletetopic${StopicData.topic.id}" style="padding: 0px">
+                        <img src="${assetPath(src: 'trash-fill.svg')}" alt="trash-fill">    </button>
+                </g:if>
             </div>
         </div>
+        </g:if>
     </g:each>
 </g:if>
 <g:else>
@@ -297,8 +332,10 @@
                 <g:if test="${all_Topics!= null}">
                 <g:set var="num" value="${1}" />
                 <g:each in="${all_Topics}"  var="topicData">
+                    <g:if test="${topicData.isdeleted==null || !topicData.isdeleted}">
                 <div class="Border1" style="border: 2px solid black;">
                     <div class="DSubcontent">
+
                         <div class="userCard" style="border: 0cap;">
                             <div class="userImg">
                     <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg"  height="90px" width="90px">
@@ -306,13 +343,14 @@
                             
                             <div class="userData">
                                 <g:link controller= "Topic_show" action="topic" params="[topicId: topicData.id]"> 
-                                  <h2>${topicData?.name}</h2>
+                                  <h2>${topicData?.name} </h2>
                                 </g:link>
-                                    <g:form id="${num++}" class="hidden">
+                                <g:form id="myForm${num++}" name="myForm${num++}"  class="hidden" controller="Register"  action="change_topic_name" >
+                                    <g:hiddenField name="topicId" value="${topicData.id}"/>
                                     <g:if test="${topicData.user == session.user }">
-                                   <input type="text" placeholder="Enter New Topic Name">
+                                   <input type="text" placeholder="Enter New Topic Name" name="new_topic_name">
                                    <button type="submit" class="btn">Save</button>
-                                   <button id="cancelBtn" type="button" class="btn">Cancel</button>
+                                   <button id="cancelBtn" type="button" class="btn" onclick="showForm('myForm${num - 1}')">Cancel</button>
                                    </g:if>
                                  </g:form>                  
                                 <div class="userS">
@@ -321,7 +359,7 @@
 
                                      <g:if test="${Subscription?.findByTopicAndUser(topicData,session.user)!=null}">
                                         <g:link controller="SubandUnsub" action="unsubscribe" params="[topicId: topicData.id, cuser: curr_user.id]">unsubscribe</g:link>
-                                      </g:if>  
+                                      </g:if>
                                       <g:else>                                       
                                           <g:link controller="SubandUnsub" action="subscribe" params="[topicId: topicData.id, cuser: curr_user.id]">subscribe</g:link>
                                         </g:else> 
@@ -334,7 +372,7 @@
                                     <div class="T">
                                         <p>Post</p>
                                         <g:if test="${topicData != null}">
-                                            <p>${topicData?.resources?.size()}</p>
+                                            <p>${Resources.findAllByTopicAndIsdeleted(topicData,false).size()}</p>
                                             </g:if>
                                             <g:else>
                                             <p> 0 </p>
@@ -346,25 +384,51 @@
                         </div>
                     </div>
                     <div class="SubInfo">
-                        <select id="dropdown-menu">
-                            <option value="" disabled selected>Serious</option>
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
-                        </select>
-                        <select id="dropdown-menu">
-                            <option value="" disabled selected>Private</option>
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
-                        </select>
+                        <g:set var="Subscriber" value="${Subscription.findByUserAndTopic(session.user,topicData)}" />
+
+                        <g:if test="${Subscriber  &&  session.user == topicData.user}">
+                        <g:select id="seriournessSub_${topicData.id}" from="['Serious', 'Casual','Very_serious']" name="selectedSeriousness"
+                                  value="${Subscriber.seriousness}"
+                                  onchange="sendSeriournessToController(this.value, ${Subscriber.id})"
+                                  style="height: 30px; width: 140px;" />
+                        </g:if>
+                        <g:if test="${topicData.user == session.user}">
+                            <g:select id="visiblitySub_${topicData.id}" from="['Public', 'Private']" name="selectedVisibility"
+                                      value="${topicData.visibility}"
+                                      onchange="sendDataToController(this.value, ${topicData.id})"
+                                      style="height: 30px; width: 140px;" />
+                        </g:if>
                         <g:if test="${topicData.user == session.user }">
                          <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">
-                       <button id="showFormBtn" type="button" class="btn" onclick="showForm(${num})"> <img src="${assetPath(src: 'pencil-square.svg')}" alt="edit" >   </button>
-                         <img src="${assetPath(src: 'trash-fill.svg')}" alt="trash-fill">
+                            <div class="modal fade" id="exampleModalDelete${topicData.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to delete Title?
+                                        </div>
+                                        <g:form controller="register" action="toDelete" params="${[id:topicData.id]}">
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                                <button type="submit" class="btn btn-primary">Yes</button>
+                                            </div>
+                                        </g:form>
+                                    </div>
+                                </div>
+                            </div>
+                       <button id="showFormBtn" type="button" class="btn" onclick="showForm('myForm${num - 1}')" style="padding: 0px"> <img src="${assetPath(src: 'pencil-square.svg')}" alt="edit" >   </button>
+                            <button type="button" class="btn" data-toggle="modal" data-target="#exampleModalDelete${topicData.id}" style="padding: 0px">
+                                <img src="${assetPath(src: 'trash-fill.svg')}" alt="trash-fill">    </button>
                          </g:if>
+
                     </div>
                 </div>
+                    </g:if>
                 </g:each>
                 </g:if>
                 <g:else>
@@ -380,7 +444,7 @@
                 </div>
             <g:if test="${resource != null && !resource.empty}">
             <g:each in="${resource}"  var ="res">
-%{--            <g:if test="${res.isRead ==false}">--}%
+            <g:if test="${(res.isdeleted==null) || (!res.isdeleted)}">
                 <div class="card1 ">
                     <div class="image">
                         <img src="https://louisville.edu/enrollmentmanagement/images/person-icon/image" alt="p1">
@@ -408,7 +472,7 @@
                     </div>
 
                 </div>
-%{--                </g:if>--}%
+            </g:if>
             </g:each>
             </g:if>
             <g:else>
@@ -417,116 +481,8 @@
 
             </div>
            
-            <%-- <div class="share_l pop_up " id="card1">
-                <div class="share_heading">
-                    <h3>Share Link</h3>
-                </div>
-                <g:form controller="LinkResource" action="CreateLink"> 
-                 <g:hiddenField name="userId" value="${session.userId}"/>
 
-                <div class="share_info"  >
-                    <div class="share_link">
-                        <label for="link">
-                            <h5>Link* :</h5>
-                        </label>
-                        <input type="text" name="url" id="slink" size="45" class="link_div">
-                    </div>
-                    <div class="share_link">
-                        <label for="Description">
-                            <h5>Description* :</h5>
-                        </label>
-                        <textarea rows="7" cols="45" name=description>
-                            </textarea>
-                    </div>
-                    <div class="share_link">
-                        <label for="Topic">
-                            <h5>Topic* :</h5>
-                        </label>
-                       <input type="text" name="topic" id="slink" size="45">
-                    </div>
-                    <div class="pop_btn">
-                        <button type="submit"> Share</button>
-                        <button id="cancelButton"> Cancel</button>
-                    </div>
-                </div>
-                  </g:form>
-            </div> --%>
-<%-- 
-      
-            <div class="share_l pop_up " id="card2">
-                <div class="share_heading">
-                    <h3>Share Document</h3>
-                </div>
-                <div class="share_info"  >
-                    <div class="share_link">
-                        <label for="link">
-                            <h5>Document* :</h5>
-                        </label>
-                        <div class="browse_file">
-                            <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt" name="document"  size="35">
-                            
-                        </div>
-                    </div>
-                    <div class="share_link">
-                        <label for="Description">
-                            <h5>Description* :</h5>
-                        </label>
-                        <textarea rows="7" cols="45">
 
-                            </textarea>
-                    </div>
-                    <div class="share_link">
-                        <label for="Topic">
-                            <h5>Topic* :</h5>
-                        </label>
-                        <div class="dropdown dropdownw">
-                            <button class="dropbtn dashDropdown">Linux
-                                <img src="/Img/caret-down-fill.svg" alt="">
-                            </button>
-                            <div class="dropdown-content">
-                                <a href="#">Grails</a>
-                                <a href="#">Groovy</a>
-                                <a href="#">Java</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pop_btn">
-                        <button> Share</button>
-                        <button id="cancelButton"> Cancel</button>
-                    </div>
-                </div>
-            </div> --%>
-<%-- <g:form controller="Topic" action="create_Topic">
-    <!-- Form content -->
-    <div class="share_l pop_up" id="card3">
-        <div class="share_heading">
-            <h3>Create Topic</h3>
-        </div>
-        <div class="share_info">
-            <div class="share_link">
-                <label for="link">
-                    <h5>Name* :</h5>
-                </label>
-                <g:textField name="name" id="slink" size="45"/>
-            </div>
-            <div class="share_link">
-                <label for="Topic">
-                    <h5>Visibility* :</h5>
-                </label>
-                         <select name="visibility" id="visibility" class="dropdown dropdownw">
-                         <option value="Public">Public</option>
-                         <option value="Private">Private</option>
-                        </select>
-            </div>
-       <!-- Hidden input field to include user_id -->
-            <g:hiddenField name="user" value="${session.user_id}"/>
-            <div class="pop_btn">
-                <g:submitButton name="save" class="saveButton" value="Save"/>
-                <button type="button" id="cancelButton">Cancel</button>
-            </div>
-        </div>
-    </div>
-</g:form> --%>
 <%-- 
             <div class="share_l pop_up " id="card4">
                 <div class="share_heading">
@@ -567,20 +523,20 @@
 <script>
     // Check if userId is stored in localStorage
     var userId = localStorage.getItem('userId');
-    console.log("helloWorld, userId is: " , userId);
-    // AJAX request to fetch user details
-    fetch('${createLink(controller: "User", action: "details")}?userId=' + userId)
-        .then(response => response.json())
-        .then(user => {
-            // Update UI with user details
-            console.log(user.username);
-            console.log("user email id : ", user.email);
-            document.getElementById('userName').textContent = user.username;
-            document.getElementById('userEmail').textContent = user.email;
-        })
-        .catch(error => {
-            console.error('Data is not extracted, Error:', error);
-        });
+    %{--console.log("helloWorld, userId is: " , userId);--}%
+    %{--// AJAX request to fetch user details--}%
+    %{--fetch('${createLink(controller: "User", action: "details")}?userId=' + userId)--}%
+    %{--    .then(response => response.json())--}%
+    %{--    .then(user => {--}%
+    %{--        // Update UI with user details--}%
+    %{--        console.log(user.username);--}%
+    %{--        console.log("user email id : ", user.email);--}%
+    %{--        document.getElementById('userName').textContent = user.username;--}%
+    %{--        document.getElementById('userEmail').textContent = user.email;--}%
+    %{--    })--}%
+    %{--    .catch(error => {--}%
+    %{--        console.error('Data is not extracted, Error:', error);--}%
+    %{--    });--}%
 
   // change the div colour
 // JavaScript function to change the background color of the parent div when the mouse hovers over the child image
@@ -608,41 +564,68 @@ function changeColor(element) {
     });
 
 
-// document.addEventListener("DOMContentLoaded", function() {
-//     var showFormBtn = document.getElementById("showFormBtn");
-//     var myForm = document.getElementById("myForm");
-
-//     if (showFormBtn && myForm) {
-//         showFormBtn.addEventListener("click", function() {
-//             myForm.classList.remove("hidden");
-//         });
-
-//         var cancelBtn = document.getElementById("cancelBtn");
-//         if (cancelBtn) {
-//             cancelBtn.addEventListener("click", function() {
-//                 myForm.classList.add("hidden");
-//             });
-//         }
-//     } else {
-//         console.error("One or more elements not found.");
-//     }
-// });
-  function showForm(formId) {
-         console.log("Form element with ID '" + formId-1 + "' not found.");
-
-    var form = document.getElementById(formId-1);
-    if (form) {
-      if (form.classList.contains("hidden")) {
-        form.classList.remove("hidden");
-      }
-    } else {
-      console.error("Form element with ID '" + formId-1 + "' not found.");
+  // function showForm(formId) {
+  //        console.log("formId is :" + formId-1);
+  //
+  //   var form = document.getElementById(formId-1);
+  //   if (form) {
+  //     if (form.classList.contains("hidden")) {
+  //       form.classList.remove("hidden");
+  //     }
+  //   } else {
+  //     console.error("Form element with ID '" + formId-1 + "' not found.");
+  //   }
+  // }
+  //   window.onload = function showForm(formId) {
+  //       var form = document.getElementById(formId);
+  //       if (form) {
+  //           form.classList.toggle("hidden");
+  //       } else {
+  //           console.error("Form element with ID '" + formId + "' not found.");
+  //       }
+  //   }
+    function showForm(formName) {
+        var form = document.forms[formName];
+        if (form) {
+            form.classList.toggle("hidden");
+        } else {
+            console.error("Form element with name '" + formName + "' not found.");
+        }
     }
-  }
+  // function hideForm(formName) {
+  //   var form = document.getElementById(formId);
+  //   form.classList.add("hidden");
+  // }
+    function sendDataToController(selectedVisibility, topicId) {
+        $.ajax({
+            url: "${createLink(controller: 'Register', action: 'change_topic_mode')}",
+            type: "POST",
+            data: { selectedVisibility: selectedVisibility, topicId: topicId },
+            success: function(response) {
+                // Handle success response
+                console.log(response);
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                console.error(error);
+            }
+        });
+    }
 
-  function hideForm() {
-    var form = document.getElementById('yourFormId'); // Replace 'yourFormId' with the actual ID of your form
-    form.classList.add("hidden");
-  }
-// </script>
+    function sendSeriournessToController(selectedSeriousness, StopicId) {
+        $.ajax({
+            url: "${createLink(controller: 'Register', action: 'change_seriousness')}",
+            type: "POST",
+            data: { selectedSeriousness: selectedSeriousness, StopicId: StopicId },
+            success: function(response) {
+                // Handle success response
+                console.log(response);
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                console.error(error);
+            }
+        });
+    }
+     </script>
 </html>

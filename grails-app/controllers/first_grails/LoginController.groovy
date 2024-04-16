@@ -23,8 +23,6 @@ class LoginController {
                 // def sub_topic = Subscription.findAllByUser(user);
                   session.user= user;
                   session.user_id = userId;
-                  session.subscriptionCount=subscriptionCount;
-                  session.topicCount = topicCount;
             render(template: '/register/setLocalStorage', model: [userId: userId])
             // render (view: "../Frontend/dashboard",model: [subscriptionCount: subscriptionCount, topicCount: topicCount])
         } else {

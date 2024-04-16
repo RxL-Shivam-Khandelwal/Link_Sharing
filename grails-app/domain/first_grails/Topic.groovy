@@ -4,9 +4,10 @@ class Topic {
     String name
     Users user
     Visibility visibility // Using enum name as property type
-
+    Boolean isdeleted=0;
     static constraints = {
         // name(blank:false, unique:['user']);
+        isdeleted(nullable: true, defaultValue:false);
     }
 
     static belongsTo = [user: Users]
@@ -17,3 +18,4 @@ class Topic {
         Private
     }
 }
+

@@ -5,8 +5,7 @@ import org.hibernate.criterion.*
 
 class RegisterController {
 
-    def index() { 
-        render "Data Saved";
+    def index() {
     }
 
     def error(){
@@ -17,31 +16,45 @@ class RegisterController {
     def user = Users.findById(userId)
         def curr_user = user;
     def subscriptionCount = Subscription.where {
-        user.id == userId;
+        (user.id == userId  && topic.isdeleted == false)
     }.count()
 
     def topicCount = Topic.where {
-        user.id == userId
+        user.id == userId   && isdeleted==false
     }.count()
      def sub_topic = Subscription.findAllByUser(user);
 
    def topics =  Topic.list();
+
      session.user = user;  
      def l = []
-     def all_resource = Resources.list();
-     all_resource.each { resource ->
 
-                def readingItemlist = ReadingItem.findAllByResource(resource);
-         Boolean flag=0;
-         readingItemlist.each{it->
-                if(it.user==session.user && it.isRead){
-                    flag=1;
-                }
-         }
-         if(!flag){
-             l.add(resource);
+
+     def new_posts= [];
+     topics.each{ it->
+         if(Subscription.findByTopicAndUser(it,session.user) && it.resources.size()){
+            //  new_posts.add([it.resources]);
+             def reso = it.resources;
+             reso.each{ it1->
+                  new_posts.add([it1]);
+             }
          }
      }
+     println  new_posts;
+     new_posts.each{  resource->
+         def readingItemlist = ReadingItem.findAllByResource(resource);
+         Boolean flag=0;
+         readingItemlist.each{it->
+             if(it.user==session.user && it.isRead){
+                 flag=1;
+             }
+         }
+         if(!flag){
+             l.add([resource]);
+         }
+     }
+     l = l.flatten();
+     println l;
     render(view: "../Frontend/dashboard", model: [subscriptionCount: subscriptionCount, topicCount: topicCount,all_Topics:topics,resource: l,subscription_Topic: sub_topic, curr_user:user])
 }
 
@@ -75,5 +88,48 @@ class RegisterController {
         Long userId = session.user.id;
          redirect(action:"dashboard", params: [userId: userId]);
 
+    }
+
+    def change_topic_name(){
+         def topic_name = params.new_topic_name;
+        Topic curr_topic = Topic.findById(params.topicId);
+        curr_topic.name = topic_name;
+        curr_topic.save(flush:true, failOnError:true);
+        Long userId= session.user.id;
+        redirect(action: "dashboard",params: [userId:userId] );
+
+    }
+
+    def change_topic_mode(){
+        Topic curr_topic = Topic.findById(params.topicId);
+        curr_topic.visibility = params.selectedVisibility;
+        curr_topic.save(flush:true);
+        Long userId= session.user.id;
+        redirect(action:"dashboard",params: [userId: userId]);
+    }
+
+    def change_seriousness(){
+        Subscription curr_sub = Subscription.findById(params.StopicId);
+        curr_sub.seriousness = params.selectedSeriousness;
+        curr_sub.save(flush:true);
+        println params;
+        Long userId= session.user.id;
+        redirect(action:"dashboard",params: [userId: userId]);
+    }
+
+    def toDelete(){
+        Topic topic = Topic.findById(params.id);
+
+        println "topic id that has deleted:" + topic.id;
+
+      def res=  Resources.findAllByTopic(topic);
+        res.each{ it->
+            it.isdeleted =1;
+        }
+        Resources.saveAll(res);
+        topic.isdeleted=true;
+        topic.save(flush:true);
+        Long userId= session.user.id;
+        redirect(action: "dashboard",params: [userId: userId] );
     }
 }

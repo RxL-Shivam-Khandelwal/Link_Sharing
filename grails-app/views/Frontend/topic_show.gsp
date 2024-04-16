@@ -68,11 +68,11 @@
                                     </div>
                                     <div class="S">
                                         <p>Subscription</p>
-                                        <p>${topic_Show_Map?.topic_owner?.subscriptions?.size()}</p>
+                                        <p>${topic_Show_Map?.curr_topic?.subscriptions?.size()}</p>
                                     </div>
                                     <div class="T">
-                                        <p>Topics</p>
-                                        <p>${topic_Show_Map?.topic_owner?.topics?.size()}</p>
+                                        <p>Posts</p>
+                                        <p>${topic_Show_Map?.topic_posts?.size()}</p>
                                     </div>
                                 </div>
                             </div>
@@ -112,7 +112,7 @@
                             <img src="${assetPath(src: 'person-circle.svg')}" alt="instagram" height="90px" width="90px">
                             </div>
                             <div class="userData">
-                                <h2>${subscribers?.topic?.name}</h2>
+                                <h2>${subscribers?.user?.firstName}</h2>
                                 <div class="userS">
                                     <div class="DId">
                                         <p>@${subscribers?.user?.username}</p>

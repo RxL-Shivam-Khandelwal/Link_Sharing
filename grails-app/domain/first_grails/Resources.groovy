@@ -6,13 +6,15 @@ class Resources {
   Topic topic;
   String url;
   byte[]  documentResource;
-transient Float avgRating
-
+    Boolean isdeleted=0;
+    Date dateCreated;
+    Date lastUpdated;
     static constraints = {
         url(nullable:true)
         documentResource(nullable:true);
+        isdeleted(nullable: true, defaultValue: false);
     }
     static belongsTo = [topic:Topic, user:Users];
-    static hasMany = [readingItems: ReadingItem];
+    static hasMany = [readingItems: ReadingItem, resourceRating: ResourceRating];
 
 }

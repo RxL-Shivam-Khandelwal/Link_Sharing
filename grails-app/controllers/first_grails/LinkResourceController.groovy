@@ -28,5 +28,16 @@ class LinkResourceController {
           }
 
 
-    } 
+    }
+
+
+    def UpdateLink(){
+
+            Resources res = Resources.findById(params.res_id);
+             res.url = params.url;
+             res.description = params.description;
+             res.save(flush:true);
+
+        redirect(controller: "Post", action: "show", params: [resId:res.id, avg_rating:0.0]);
+    }
 }

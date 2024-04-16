@@ -90,19 +90,22 @@
     font-family: "Poppins", sans-serif;
   } */
 
-.card {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    max-width: 10rem;
-    background: #fff;
-    margin: 0 1rem;
-    /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    width: 100%;
-    border-radius: 0.5rem; */
-  }
-   
+/*.card {*/
+/*    display: flex; !important;*/
+/*    align-items: center;   !important;*/
+/*    text-align: center;  !important;*/
+/*    justify-content: center;  !important;*/
+/*    max-width: 10rem;  !important;*/
+/*    background: #fff;   !important;*/
+/*    margin: 0 1rem;  !important;*/
+/*    !* box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);*/
+/*    width: 100%;*/
+/*    border-radius: 0.5rem; *!*/
+/*  }*/
+/*   */
+.card{
+    flex-direction: row;
+}
   .star {
     font-size: 3vh;
     cursor: pointer;

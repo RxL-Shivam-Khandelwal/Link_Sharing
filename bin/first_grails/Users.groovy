@@ -9,7 +9,7 @@ class Users {
     String lastName
     byte[] photo 
     Boolean admin
-    Boolean active
+    Boolean active = true;
 
     static mapping = {
         photo sqlType: 'blob' // Specify column type as BLOB

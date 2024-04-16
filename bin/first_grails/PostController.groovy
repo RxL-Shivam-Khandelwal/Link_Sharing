@@ -21,7 +21,7 @@ class PostController {
 
                  av_rating= calculateAverageRatingForResource(resource);
 
-         render(view:"../Frontend/post", model:[resId:resId, post_rating : rating, avgRating:av_rating, all_Topics: topics,curr_user: curr_user]);
+         render(view:"../Frontend/post", model:[resId:resId, post_rating : rating, avgRating:av_rating, all_Topics: topics,curr_user: curr_user, curr_resource: resource]);
     }
 
     def save(){
@@ -73,7 +73,16 @@ class PostController {
             return 0.0
         }
     }
-         
+
+      def delete_post(){
+
+          Resources res = Resources.findById(params.id);
+          res.isdeleted=1;
+          res.save(flush:true);
+          Long userId = session.user.id;
+          println "post is deleted:" + res.isdeleted;
+          redirect(controller:"Register", action:"dashboard", params: [userId: userId]);
+      }
        
     }
 
