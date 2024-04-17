@@ -10,6 +10,8 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 
 <body>
@@ -34,43 +36,10 @@
                     <div class="Recent_share">
                         <h4 style="padding: 4px;">Recent Share</h4>
                     </div>
-                    <g:if test="${resource != null && !resource.empty}">
-                        <g:each in="${resource}"  var ="res">
-                            <g:if test="${!res.isdeleted}">
-                            <div class="card1 ">
-                                <div class="image">
-                                    <img src="https://louisville.edu/enrollmentmanagement/images/person-icon/image" alt="p1">
-                                </div>
-                                <div class="content">
-                                    <div class="poster_info">
-                                        <%
-                                            def currentTime = new Date()
-                                        %>
+                    <div id="recent_share">
+<g:render template="/templates/recentShares" model="[resource: resource, currentPage: currentPage, totalRecords: totalRecords, maxPerPage: maxPerPage]" />
+                    </div>
 
-                                        <span class="name_id">${res?.user?.username} |  ${res?.user?.email} | ${(new Date().time - res.lastUpdated.time) / 60000} minutes</span>
-                                        <span class="topic"> ${res?.topic?.name}</span>
-                                    </div>
-                                    <div class="post_content">Description : ${res.description}
-                                    </div>
-                                    <div class="poster_info setting_margin">
-                                        <div class="clogo">
-                                            <img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
-                                            <img src="${assetPath(src: 'twitter.svg')}" alt="twitter">
-                                            <img src="${assetPath(src: 'instagram.svg')}" alt="instagram">
-                                        </div>
-                                        <span class="topic">
-                                            <g:link controller="Post" action="show" params="[resId: res.id]">View post</g:link>
-                                        </span>
-                                    </div>
-                                </div>
-
-                            </div>
-                            </g:if>
-                        </g:each>
-                    </g:if>
-                    <g:else>
-                        <p>No resource created</p>
-                    </g:else>
                 </div>
                 <div class="topics">
                     <div class="top_topics">
@@ -87,40 +56,9 @@
                             </div>
                         </div>
                     </div>
-<g:if test="${res_shares != null && !res_shares.empty}">
-    <g:each in="${res_shares}"  var ="res">
-        <g:if test="${!res.isdeleted}">
-            <div class="card1 ">
-                <div class="image">
-                    <img src="https://louisville.edu/enrollmentmanagement/images/person-icon/image" alt="p1">
-                </div>
-                <div class="content">
-                    <div class="poster_info">
-                        <%
-                            def currentTime = new Date()
-                        %>
-
-                        <span class="name_id">${res?.user?.username} |  ${res?.user?.email} | ${(new Date().time - res.lastUpdated.time) / 60000} minutes</span>
-                        <span class="topic"> ${res?.topic?.name}</span>
+                    <div id="top_Posts">
+                    <g:render template="/templates/topPosts" model="[resourceP: resource, currentPageP: currentPage, totalRecordsP: totalRecords, maxPerPageP: maxPerPage]" />
                     </div>
-                    <div class="post_content">Description : ${res.description}
-                    </div>
-                    <div class="poster_info setting_margin">
-                        <div class="clogo">
-                            <img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
-                            <img src="${assetPath(src: 'twitter.svg')}" alt="twitter">
-                            <img src="${assetPath(src: 'instagram.svg')}" alt="instagram">
-                        </div>
-                        <span class="topic">
-                            <g:link controller="Post" action="show" params="[resId: res.id]">View post</g:link>
-                        </span>
-                    </div>
-                </div>
-
-            </div>
-        </g:if>
-    </g:each>
-</g:if>
                 </div>
             </div>
             <div class="col-md-5 login-form-2">

@@ -5,6 +5,8 @@ class Subscription {
    Topic topic;
    Users user;
    Seriousness seriousness;
+    Date lastUpdated;
+    Date dateCreated;
    enum Seriousness{
     Serious,
     Very_serious,

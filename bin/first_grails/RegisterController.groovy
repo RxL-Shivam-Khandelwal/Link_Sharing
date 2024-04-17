@@ -12,7 +12,9 @@ class RegisterController {
         render " Due to some error, account not created."
     }
  def dashboard(Long userId) {
-
+   if(session.user == null){
+       render(template: "/templates/errorHandling")
+   }else{
     def user = Users.findById(userId)
         def curr_user = user;
     def subscriptionCount = Subscription.where {
@@ -26,7 +28,7 @@ class RegisterController {
 
    def topics =  Topic.list();
 
-     session.user = user;  
+     session.user = user;
      def l = []
 
 
@@ -54,8 +56,8 @@ class RegisterController {
          }
      }
      l = l.flatten();
-     println l;
     render(view: "../Frontend/dashboard", model: [subscriptionCount: subscriptionCount, topicCount: topicCount,all_Topics:topics,resource: l,subscription_Topic: sub_topic, curr_user:user])
+       }
 }
 
     def create_user() {
@@ -86,8 +88,7 @@ class RegisterController {
           r_item.save(flush:true, failOnError:true);
         }
         Long userId = session.user.id;
-         redirect(action:"dashboard", params: [userId: userId]);
-
+        redirect(action:"dashboard", params: [userId: userId]);
     }
 
     def change_topic_name(){

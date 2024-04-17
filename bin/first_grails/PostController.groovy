@@ -8,20 +8,23 @@ class PostController {
 
             println "value isdofdsfdsif " + avgRating;
             Resources resource = Resources.findById(resId);
-            Users user = Users.findById(session.user.id);
-            ResourceRating r= ResourceRating.findByUserAndResource(user, resource);
             def rating = 0;
-           if(r!=null){
-              rating = r.score;
-           }
-             println avgRating;
-             def topics =  Topic.list();
-              def curr_user = session.user;
-              Float av_rating = 0.0;
-
-                 av_rating= calculateAverageRatingForResource(resource);
-
-         render(view:"../Frontend/post", model:[resId:resId, post_rating : rating, avgRating:av_rating, all_Topics: topics,curr_user: curr_user, curr_resource: resource]);
+            Float av_rating = 0.0;
+           av_rating= calculateAverageRatingForResource(resource);
+           def topics =  Topic.list();
+             if(session.user  == null){
+                 render(view:"../Frontend/post", model: [resId:resId, post_rating : rating,avgRating:av_rating,all_Topics: topics,curr_resource: resource])
+             }else {
+                 println "user is " + session.user;
+                 Users user = Users.findById(session.user.id);
+                 ResourceRating r = ResourceRating.findByUserAndResource(user, resource);
+                 if (r != null) {
+                     rating = r.score;
+                 }
+                 println avgRating;
+                 def curr_user = session.user;
+                 render(view: "../Frontend/post", model: [resId: resId, post_rating: rating, avgRating: av_rating, all_Topics: topics, curr_user: curr_user, curr_resource: resource]);
+             }
     }
 
     def save(){

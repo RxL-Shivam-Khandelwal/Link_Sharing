@@ -15,7 +15,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>  
 
 </head>
 <style> 
@@ -25,10 +25,10 @@
 </style>
 <body>
 <asset:javascript src="dashboard.js"/>
+<g:if test="${session.user}">
     <div class="navbar" style="justify-content: space-evenly;">
         <div>
-
-               <g:link controller="register"  action="dashboard"> <h3>Link Sharing</h3>  </g:link>
+            <g:link controller="register"  action="dashboard"> <h3>Link Sharing</h3>  </g:link>
         </div>
         <div class="search-container">
             <span class="search-icon">&#128269;</span>
@@ -518,8 +518,12 @@
         </div>
     </div>
 
-</body>
 
+</g:if>
+<g:else>
+<g:render template="/templates/errorHandling"/>
+</g:else>
+</body>
 <script>
     // Check if userId is stored in localStorage
     var userId = localStorage.getItem('userId');

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="${assetPath(src: 'edit_profile.css')}" type="text/css">
 </head>
 <body>
-
+<g:if test="${session.user}">
     <div class="navbar" style="justify-content: space-evenly;">
         <div>
             <a href="#" class="nav-link">
@@ -184,7 +184,11 @@
 
 
 
+</g:if>
+<g:else>
+    <g:render template="/templates/errorHandling"/>
 
+</g:else>
 
 </body>
 <asset:javascript src="script.js"/>

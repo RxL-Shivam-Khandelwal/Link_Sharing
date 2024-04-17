@@ -18,7 +18,11 @@
 
 
 </head>
-
+<style>
+    .lft_half{
+        padding-left: 11px
+    }
+</style>
 <body>
     <div class="navbar" style="justify-content: space-evenly;">
         <div>
@@ -55,6 +59,7 @@
         </div>
     </div>
     <div class="window">
+        <g:if test="session?.user">
         <div class="modal fade" id="exampleModalLinkRes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLinkR" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -89,7 +94,7 @@
                 </div>
             </div>
         </div>
-
+        </g:if>
         <div class="leftside">
                 <div class="topics">
                     <div class="Recent_share">
@@ -106,11 +111,12 @@
                             </div>
                             <div class="rating">
                                 <div class="lft_half" style="justify-content: center;">
-                                  <div class="userid">  @${curr_resource.user.username}</div>
+                                  <div class="userid" style="margin-top:1px ">  @${curr_resource.user.username}</div>
                                    <div  class="avg_rating">   Average Rating: ${avgRating}  </div>
                                 </div>
                                 <div class="rgt_half">
                                     <div class="date">${curr_resource.lastUpdated}</div>
+   <g:if test="${session.user}">
     <div class="card star_rating">
 
         <span onclick="callMultipleFunctions(1)"
@@ -132,10 +138,12 @@
               Rating is: 0/5
           </h3>
     </div>
+   </g:if>
                                 </div>
                             </div>
-                            <div class="post_content">${curr_resource.description}
+                            <div class="post_content">Description:  ${curr_resource.description}
                             </div>
+                            <g:if test="${session.user}">
                             <div class="poster_info">
                                 <div class="clogo">
                                     <img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
@@ -169,6 +177,7 @@
                                 <a href="#">Download</a>
                                 <a href="#">View full site</a>
                             </div>
+                            </g:if>
                         </div>
 
                     </div>
@@ -197,12 +206,14 @@
                             <div class="userS">
                                 <div class="DId">
                                     <p>${topicData?.user.username}</p>
+                                    <g:if test="${curr_user?.id}">
                     <g:if test="${Subscription?.findByTopicAndUser(topicData,session.user)!=null}">
                                         <g:link controller="SubandUnsub" action="unsubscribe" params="[topicId: topicData.id, cuser: curr_user.id]">unsubscribe</g:link>
                                       </g:if>  
                                       <g:else>                                       
                                           <g:link controller="SubandUnsub" action="subscribe" params="[topicId: topicData.id, cuser: curr_user.id]">subscribe</g:link>
-                                        </g:else> 
+                                        </g:else>
+                                    </g:if>
                                 </div>
                                 <div class="S">
                                     <p>Subscription</p>

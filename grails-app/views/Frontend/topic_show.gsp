@@ -7,6 +7,7 @@
     <title>Topic Show</title>
     <link rel="stylesheet" href="${assetPath(src: 'Login.css')}" type="text/css">
     <link rel="stylesheet" href="${assetPath(src: 'topic_show.css')}" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
 
@@ -103,40 +104,9 @@
                     <p>Users: "${topic_Show_Map?.curr_topic?.name}"</p>
                     <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
                 </div>
-            <g:if  test="${!topic_Show_Map.topic_subscribers.empty }">  
-            <g:each in="${topic_Show_Map.topic_subscribers}" var="subscribers">
-                <div class="Border1" style="border: 2px solid black;">
-                    <div class="DSubcontent">
-                        <div class="userCard" style="border: 0cap;">
-                            <div class="userImg">
-                            <img src="${assetPath(src: 'person-circle.svg')}" alt="instagram" height="90px" width="90px">
-                            </div>
-                            <div class="userData">
-                                <h2>${subscribers?.user?.firstName}</h2>
-                                <div class="userS">
-                                    <div class="DId">
-                                        <p>@${subscribers?.user?.username}</p>
-                                        <a href="#">Unsubscribed</a>
-                                    </div>
-                                    <div class="S">
-                                        <p>Subscription</p>
-                                        <p>${subscribers?.user?.subscriptions?.size()}</p>
-                                    </div>
-                                    <div class="T">
-                                        <p>Topics</p>
-                                        <p>${subscribers?.user?.topics?.size()}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div id="subscribersListing"> 
+<g:render template="/templates/subscribedUsers" model="[topic_Show_Map: topic_Show_Map, currentPage: currentPage, totalRecords: totalRecords, maxPerPage: maxPerPage]" />
                 </div>
-                </g:each>
-            </g:if>
-            <g:else>
-               <p> No user subscribed to the topic </p>
-            </g:else>
-
             </div>
         </div>
 
@@ -146,41 +116,10 @@
                 <div class="Recent_share">
                     <h5>Recent Share</h5>
                 </div>
-                <g:if test="${!topic_Show_Map.topic_posts.empty }">
-                <g:each in="${topic_Show_Map.topic_posts}" var="posts">
-                <div class="card1">
-                    <div class="image">
-                        <img src="https://louisville.edu/enrollmentmanagement/images/person-icon/image" alt="p1">
-                    </div>
-                    <div class="content ">
-                        <div class="poster_info mrgn">
-                            <span class="name_id">${posts?.user?.firstName} | ${posts?.user?.email}</span>
-                            <span class="topic"> ${posts?.topic?.name}</span>
-                        </div>
-
-                        <div class="post_content mrgn">${posts.description}
-                        </div>
-                        <div class="poster_info ">
-                            <div class="clogo">
-                                    <img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
-                                    <img src="${assetPath(src: 'twitter.svg')}" alt="twitter">
-                                    <img src="${assetPath(src: 'instagram.svg')}" alt="instagram">
-                            </div>
-                            <a href="#">Delete</a>
-                            <a href="#">Edit</a>
-                            <a href="#">Download</a>
-                            <a href="#">View full site</a>
-                        </div>
-                    </div>
-
+                <div id="23topicPosts">
+                <g:render template="/templates/topicPosts" model="[topic_Show_MapP: topic_Show_Map, currentPageP: currentPage, totalRecords_Posts: totalRecords_Posts, maxPerPageP: maxPerPage]" />
                 </div>
-                </g:each>
-                </g:if>
-                <g:else>
-                 <p> No posts  </p>
-                </g:else>
             </div>
-
 
         </div>
     </div>

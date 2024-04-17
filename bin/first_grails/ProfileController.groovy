@@ -3,9 +3,13 @@ package first_grails
 class ProfileController {
 
     def index() {
-        def sub = Subscription.list();
-        Users user = Users.findById(session.user.id);
-        render (view : "../Frontend/edit_profile", model:[subscriptions: sub, user: user]);
+         if(session.user ==null){
+             render(template: "/templates/errorHandling");
+         }else {
+             def sub = Subscription.list();
+             Users user = Users.findById(session.user.id);
+             render(view: "../Frontend/edit_profile", model: [subscriptions: sub, user: user]);
+         }
      }
 
      def change_pass(){
