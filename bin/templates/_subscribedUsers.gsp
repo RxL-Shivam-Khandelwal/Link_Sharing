@@ -4,7 +4,7 @@
                     <div class="DSubcontent">
                         <div class="userCard" style="border: 0cap;">
                             <div class="userImg">
-                            <img src="${assetPath(src: 'person-circle.svg')}" alt="instagram" height="90px" width="90px">
+                                <img src="${topic_Show_Map.subscribers_with_photo[subscribers]}" height="90px" width="90px" alt="user_image">
                             </div>
                             <div class="userData">
                                 <h2>${subscribers?.user.firstName}</h2>

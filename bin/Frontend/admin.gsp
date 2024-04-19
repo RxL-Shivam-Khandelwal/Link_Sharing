@@ -42,9 +42,7 @@ tr:nth-child(even) {
 <body>
 <div class="navbar" style="justify-content: space-evenly;">
     <div>
-        <a href="#" class="nav-link">
-            <h3>Link Sharing</h3>
-        </a>
+        <g:link controller="register"  action="dashboard"> <h3>Link Sharing</h3>  </g:link>
     </div>
     <div class="search-container">
         <span class="search-icon">&#128269;</span>

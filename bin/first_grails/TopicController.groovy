@@ -17,7 +17,7 @@ class TopicController {
             Topic topic= new Topic(name:params.name, user:user,visibility:params.visibility);
             // as user has created a topic, it means it should also be added to its subscriptions.
            // trying to add the subscriptions to the user Subscription list
-   
+
             topic.save(flush:true, failOnError: true);
             Subscription new_subs= new Subscription();
             println "userId in topic controller: ${userId}";

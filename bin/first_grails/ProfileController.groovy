@@ -33,8 +33,8 @@ class ProfileController {
          user.username= params.username;
          user.firstName= params.firstName;
          user.lastName = params.lastName;
-         user.photo = params.photo;
-
+         def Uphoto = (params.photo).getBytes();
+         user.photo = Uphoto;
     if (user.save(flush: true)) {
         // Invalidate the session
         session.invalidate()

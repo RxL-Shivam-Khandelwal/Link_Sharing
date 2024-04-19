@@ -13,9 +13,7 @@
 <g:if test="${session.user}">
     <div class="navbar" style="justify-content: space-evenly;">
         <div>
-            <a href="#" class="nav-link">
-                <h3>Link Sharing</h3>
-            </a>
+            <g:link controller="register"  action="dashboard"> <h3>Link Sharing</h3>  </g:link>
         </div>
         <div class="search-container">
             <span class="search-icon">&#128269;</span>
@@ -139,7 +137,7 @@
 
         <div class="Profile">
             <div class="Profile1"><h4>Profile</h4></div>
-            <g:form id="profile_update"  controller="Profile" action="change_profile">
+            <g:form id="profile_update"  controller="Profile" action="change_profile" enctype="multipart/form-data">
             <div class="cProfile">
                  <div class="name">
                     <p>First name*</p>
@@ -155,10 +153,11 @@
                  </div>
                  <div class="name">
                     <p>Image</p>
-                    <div class="form-group">
-                        <input type="file" id="imageInput" accept="image/png, image/jpeg" value="${session?.user?.photo}" name="photo" >
-                        <img id="previewImage" alt="Preview Image" style="display: none;">
-                    </div>
+                     <div class="form-group">
+                         <label for="imageInput">Profile Picture</label>
+                         <g:field type="file" id="imageInput" name="photo" accept="image/png, image/jpeg"/>
+                         <img id="previewImage" alt="Preview Image" style="display: none;">
+                     </div>
                  </div>
                  <div class="name">
                     <p></p>

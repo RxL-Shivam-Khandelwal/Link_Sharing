@@ -1,3 +1,4 @@
+<%@  page import="first_grails.Users" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,9 +15,7 @@
 <body>
     <div class="navbar" style="justify-content: space-evenly;">
         <div>
-            <a href="#" class="nav-link">
-                <h3>Link Sharing</h3>
-            </a>
+            <g:link controller="register"  action="dashboard"> <h3>Link Sharing</h3>  </g:link>
         </div>
         <div class="search-container">
             <span class="search-icon">&#128269;</span>
@@ -58,7 +57,8 @@
                     <div class="DSubcontent">
                         <div class="userCard" style="border: 0cap;">
                             <div class="userImg">
-                            <img src="${assetPath(src: 'person-circle.svg')}" alt="instagram" height="90px" width="90px">
+%{--                            <img src="${assetPath(src: 'person-circle.svg')}" alt="instagram" height="90px" width="90px">--}%
+                                <img src=${user_img} height="90px" width="90px" alt="user_image">
                             </div>
                             <div class="userData">
                                 <h2>${topic_Show_Map?.curr_topic?.name}</h2>

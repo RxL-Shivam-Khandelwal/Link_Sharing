@@ -8,7 +8,6 @@ class UserProfileController {
       if(session.user_id == null){
           render(template: "/templates/errorHandling");
       }else{
-        println "value is " + session?.user;
         Users user = Users.findById(session.user_id);
        Long userId = user.id;
       def subscriptionCount = Subscription.where {
@@ -72,8 +71,11 @@ class UserProfileController {
               def most_recent_resource_of_s2 = s2.topic.resources.findAll { !it.isdeleted }.max { it.lastUpdated }?.lastUpdated
               return most_recent_resource_of_s1 <=> most_recent_resource_of_s2
           }.reverse()
-
-    render(view:"../Frontend/userProfile" , model:[subscriptionCount: subscriptionCount, topicCount: topicCount,all_Topics: topics, resource: l, subscription_Topic: sub_topic,curr_user:user])
+          Long maxPerPage = 2
+          Long currentPage = 1;
+          Long offset = (currentPage - 1) * maxPerPage;
+          Long totalRecords=5;
+    render(view:"../Frontend/userProfile" , model:[subscriptionCount: subscriptionCount, topicCount: topicCount,all_Topics: topics, resource: l, subscription_Topic: sub_topic,curr_user:user, currentPage: currentPage, totalRecords: totalRecords,maxPerPage: maxPerPage])
           }
     }
 }

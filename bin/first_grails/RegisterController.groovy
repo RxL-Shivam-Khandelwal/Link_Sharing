@@ -15,6 +15,7 @@ class RegisterController {
    if(session.user_id == null){
        render(template: "/templates/errorHandling")
    }else{
+       userId = session.user_id;
     def user = Users.findById(userId)
         def curr_user = user;
     def subscriptionCount = Subscription.where {
@@ -58,17 +59,41 @@ class RegisterController {
      l = l.flatten();
        String user_img = curr_user.photoURL;
        println user_img;
-    render(view: "../Frontend/dashboard", model: [subscriptionCount: subscriptionCount, topicCount: topicCount,all_Topics:topics,resource: l,subscription_Topic: sub_topic, curr_user:user,user_img: user_img])
+
+       // preparing data for pagination.
+       def totalRecords = topics.size();
+       Long maxPerPage = 2
+       Long currentPage = 1;
+       Long offset = (currentPage - 1) * maxPerPage;
+     topics=  Topic.createCriteria().list(max: maxPerPage, offset: offset){
+       }
+       render(view: "../Frontend/dashboard", model: [subscriptionCount: subscriptionCount, topicCount: topicCount,all_Topics:topics,resource: l,subscription_Topic: sub_topic, curr_user:user,user_img: user_img,maxPerPage:maxPerPage,currentPage:currentPage,offset:offset,totalRecords:totalRecords])
        }
 }
 
+    def nextPage() {
+        def maxPerPage = 2
+        Long currentPage = 1;
+        Long totalRecords = params.totalRecords.toLong();
+        if(params?.page){
+            currentPage= params.page.toLong();
+        }
+        def offset = (currentPage - 1) * maxPerPage
+        def topics=  Topic.createCriteria().list(max: maxPerPage, offset: offset){
+        }
+        println "hello all "
+        Users curr_user = session.user;
+        render(template: '/templates/trendingTopics', model: [all_Topics: topics, currentPage: currentPage, totalRecords: totalRecords,maxPerPage: maxPerPage,curr_user : curr_user]);
+    }
     def create_user() {
         try {
             Users user = new Users(params)
             println params;
+            println "user image format check" + params.photo;
             user.save(flush: true, failOnError: true)
             def userId = user.id
              session.user_id = user.id
+             session.user = user;
             // Set user ID in localStorage
             render(template: '/register/setLocalStorage', model: [userId: userId])
         }catch (Exception e) {
@@ -90,6 +115,7 @@ class RegisterController {
           r_item.save(flush:true, failOnError:true);
         }
         Long userId = session.user.id;
+        flash.message = "message is marked as read!"
         redirect(action:"dashboard", params: [userId: userId]);
     }
 
@@ -98,6 +124,7 @@ class RegisterController {
         Topic curr_topic = Topic.findById(params.topicId);
         curr_topic.name = topic_name;
         curr_topic.save(flush:true, failOnError:true);
+        flash.message = "Topic name changed successfully!"
         Long userId= session.user.id;
         redirect(action: "dashboard",params: [userId:userId] );
 
@@ -107,6 +134,7 @@ class RegisterController {
         Topic curr_topic = Topic.findById(params.topicId);
         curr_topic.visibility = params.selectedVisibility;
         curr_topic.save(flush:true);
+        flash.message = "Visibility mode changed!"
         Long userId= session.user.id;
         redirect(action:"dashboard",params: [userId: userId]);
     }
@@ -116,6 +144,7 @@ class RegisterController {
         curr_sub.seriousness = params.selectedSeriousness;
         curr_sub.save(flush:true);
         println params;
+        flash.message = "Seriousness changed!"
         Long userId= session.user.id;
         redirect(action:"dashboard",params: [userId: userId]);
     }
