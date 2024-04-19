@@ -3,7 +3,7 @@ package first_grails
 class ProfileController {
 
     def index() {
-         if(session.user ==null){
+         if(session.user_id ==null){
              render(template: "/templates/errorHandling");
          }else {
              def sub = Subscription.list();
@@ -20,12 +20,12 @@ class ProfileController {
     if (user.save(flush: true)) {
         // Invalidate the session
         session.invalidate()
-        render(view: "../Frontend/login")
+        flash.message = "Save successful!"
     } else {
         // Handle errors if any
         flash.message = "Error updating password"
-        render(view: "../Frontend/login")
     }
+         redirect(controller:"Login");
      }
 
      def change_profile(){
@@ -38,10 +38,11 @@ class ProfileController {
     if (user.save(flush: true)) {
         // Invalidate the session
         session.invalidate()
+        flash.message = "Save successful!"
     } else {
         // Handle errors if any
         flash.message = "Error updating password"
     }
-    render(view: "../Frontend/login")
+         redirect(controller:"Login");
      }
 }

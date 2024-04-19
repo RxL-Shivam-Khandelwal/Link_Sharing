@@ -25,7 +25,7 @@ class TopicController {
             new_subs.user = user;         //user created the topic therefore user should be added as it is.
             new_subs.seriousness = "Serious";
             new_subs.save(flush:true, failOnError:true);
-          
+            flash.message = "Save successful!"
             redirect(controller:"Register", action:"dashboard", params:[userId: userId] )
 
         }catch(Exception e){

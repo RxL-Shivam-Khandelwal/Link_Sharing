@@ -17,5 +17,12 @@ class UrlMappings {
         "/1"(view:"/Frontend/login");
         "/2"(view:"/Frontend/register");
         "/dashboard"(view:"/Frontend/dashboard");
+//        "/register/$dashboard?"(controller: "register") {
+//            // Apply the interceptor to all actions of UserController
+//            interceptor(first_grails.AuthenticationInterceptor.GroovyInterceptor)
+//        }
+//        "/topic/$create_Topic?"(controller: "topic"){
+//            interceptor(first_grails.AuthenticationInterceptor.GroovyInterceptor)
+//        }
     }
 }

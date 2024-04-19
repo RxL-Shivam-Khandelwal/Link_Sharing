@@ -39,9 +39,10 @@
                             <div class="post_content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur magni temporibus nulla mollitia fugit optio corporis repudiandae porro animi aliquid </div>
                             <div class="poster_info" >
                                 <div class="clogo" >
-                                    <img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
-                                    <img src="${assetPath(src: 'twitter.svg')}" alt="twitter">
-                                    <img src="${assetPath(src: 'instagram.svg')}" alt="instagram">
+                                    <a href="https://www.facebook.com/" target="_blank"><img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
+                                    </a>
+                                    <a href="https://www.instagram.com/" target="_blank"><img src="${assetPath(src: 'instagram.svg')}" alt="instagram"></a>
+                                    <a href="https://www.twitter.com/" target="_blank"><img src="${assetPath(src: 'twitter.svg')}" alt="twitter"></a>
                                 </div>
                                  <span class="topic"> Grails</span>
                              </div>
@@ -60,9 +61,10 @@
                             <div class="post_content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur magni temporibus nulla mollitia fugit optio corporis repudiandae porro animi aliquid </div>
                             <div class="poster_info" >
                                 <div class="clogo" >
-                                    <img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
-                                    <img src="${assetPath(src: 'twitter.svg')}" alt="twitter">
-                                    <img src="${assetPath(src: 'instagram.svg')}" alt="instagram">
+                                    <a href="https://www.facebook.com/" target="_blank"><img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
+                                    </a>
+                                    <a href="https://www.instagram.com/" target="_blank"><img src="${assetPath(src: 'instagram.svg')}" alt="instagram"></a>
+                                    <a href="https://www.twitter.com/" target="_blank"><img src="${assetPath(src: 'twitter.svg')}" alt="twitter"></a>
                                 </div>
                                  <span class="topic"> Grails</span>
                              </div>
@@ -95,9 +97,10 @@
                             <div class="post_content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur magni temporibus nulla mollitia fugit optio corporis repudiandae porro animi aliquid </div>
                             <div class="poster_info" >
                                 <div class="clogo" >
-                                    <img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
-                                    <img src="${assetPath(src: 'twitter.svg')}" alt="twitter">
-                                    <img src="${assetPath(src: 'instagram.svg')}" alt="instagram">
+                                    <a href="https://www.facebook.com/" target="_blank"><img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
+                                    </a>
+                                    <a href="https://www.instagram.com/" target="_blank"><img src="${assetPath(src: 'instagram.svg')}" alt="instagram"></a>
+                                    <a href="https://www.twitter.com/" target="_blank"><img src="${assetPath(src: 'twitter.svg')}" alt="twitter"></a>
                                 </div>
                                  <span class="topic"> Grails</span>
                              </div>
@@ -116,9 +119,10 @@
                             <div class="post_content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur magni temporibus nulla mollitia fugit optio corporis repudiandae porro animi aliquid </div>
                             <div class="poster_info" >
                                 <div class="clogo" >
-                                    <img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
-                                    <img src="${assetPath(src: 'twitter.svg')}" alt="twitter">
-                                    <img src="${assetPath(src: 'instagram.svg')}" alt="instagram">
+                                    <a href="https://www.facebook.com/" target="_blank"><img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
+                                    </a>
+                                    <a href="https://www.instagram.com/" target="_blank"><img src="${assetPath(src: 'instagram.svg')}" alt="instagram"></a>
+                                    <a href="https://www.twitter.com/" target="_blank"><img src="${assetPath(src: 'twitter.svg')}" alt="twitter"></a>
                                 </div>
                                  <span class="topic"> Grails</span>
                              </div>

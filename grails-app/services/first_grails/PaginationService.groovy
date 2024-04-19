@@ -9,6 +9,6 @@ class PaginationService {
         Long maxPerPage = 2
         Long currentPage = 1;
         Long offset = (currentPage - 1) * maxPerPage
-
+     return [maxPerPage:maxPerPage,currentPage:currentPage,offset: offset];
     }
 }

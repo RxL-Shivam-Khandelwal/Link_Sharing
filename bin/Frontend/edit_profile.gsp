@@ -6,6 +6,8 @@
     <title>Edit profile</title>
     <link rel="stylesheet" href="${assetPath(src: 'Login.css')}" type="text/css">
     <link rel="stylesheet" href="${assetPath(src: 'edit_profile.css')}" type="text/css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 <body>
 <g:if test="${session.user}">
@@ -42,7 +44,17 @@
             </div>
         </div>
     </div>
-
+    <g:if test="${flash.message || flash.error}">
+        <div id="alertMessage" class="alert ${flash.error ? 'alert-danger' : 'alert-success'}">
+            ${flash.message ?: flash.error}
+        </div>
+        <script>
+            // Automatically hide the alert after 3 seconds
+            setTimeout(function() {
+                $('#alertMessage').fadeOut('slow');
+            }, 3000);
+        </script>
+    </g:if>
 <div class="Parent">
     <div class="lft">
         <div class="userCard">

@@ -5,7 +5,7 @@ class UserProfileController {
     def index() { }
 
     def show(){
-      if(session.user == null){
+      if(session.user_id == null){
           render(template: "/templates/errorHandling");
       }else{
         println "value is " + session?.user;
@@ -41,23 +41,37 @@ class UserProfileController {
              l.add(resource);
          }
      }
-  
-       def sub_topic = Subscription.findAllByUser(user);
-           sub_topic = sub_topic.sort{s1, s2 ->
-               int s1_resources = s1.resources.size();
-               int s2_resources = s2.resources.size();
 
-               if(s1_resources == s2_resources && s1_resources==0){
-                  return  s1.lastUpdated > s2.lastUpdated;
-               }else if(s1_resources==0){
-                   return -1;
-               }else if(s2_resources==0){
-                   return 1;
-               }
-               int most_recent_resource_of_s1 = s1.resources.max{it-> it.lastUpdated}
-               int most_recent_resource_of_s2 = s2.resources.max{it->it.lastUpdated}
-               return most_recent_resource_of_s1 > most_recent_resource_of_s2;
-           }
+          def sub_topic = Subscription.findAllByUser(user)
+
+          sub_topic = sub_topic.sort { s1, s2 ->
+              def s1_resources = Resources.createCriteria().get {
+                  'in'('topic', s1.topic)
+                  ne('isdeleted', true)
+                  projections {
+                      countDistinct('id')
+                  }
+              }
+
+              def s2_resources = Resources.createCriteria().get {
+                  'in'('topic', s2.topic)
+                  ne('isdeleted', true)
+                  projections {
+                      countDistinct('id')
+                  }
+              }
+              def resourceComparison = s1_resources.compareTo(s2_resources)
+
+              if (resourceComparison == 0 && s1_resources == 0) {
+                  return s1.lastUpdated <=> s2.lastUpdated
+              }
+              if (s1_resources == 0 || s2_resources == 0) {
+                  return s1_resources <=> s2_resources
+              }
+              def most_recent_resource_of_s1 = s1.topic.resources.findAll { !it.isdeleted }.max { it.lastUpdated }?.lastUpdated
+              def most_recent_resource_of_s2 = s2.topic.resources.findAll { !it.isdeleted }.max { it.lastUpdated }?.lastUpdated
+              return most_recent_resource_of_s1 <=> most_recent_resource_of_s2
+          }.reverse()
 
     render(view:"../Frontend/userProfile" , model:[subscriptionCount: subscriptionCount, topicCount: topicCount,all_Topics: topics, resource: l, subscription_Topic: sub_topic,curr_user:user])
           }

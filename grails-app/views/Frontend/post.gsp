@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,9 +27,9 @@
 <body>
     <div class="navbar" style="justify-content: space-evenly;">
         <div>
-            <a href="#" class="nav-link">
+            <g:link controller="Register" action="dashboard" >
                 <h3>Link Sharing</h3>
-            </a>
+            </g:link>
         </div>
         <div class="search-container">
             <span class="search-icon">&#128269;</span>
@@ -44,7 +45,7 @@
         <div class="dprofile">
             <img src="${assetPath(src: 'person-fill.svg')}" alt="person-fill" style="height: 30px; width: 30px; padding-top: 6px;">  
             <div class="dropdown">
-                <button class="dropbtn nbtn">Dropdown
+                <button class="dropbtn nbtn">${curr_resource.user.firstName}
                     <img src="/Img/caret-down-fill.svg" alt="">
                 </button>
 <div class="dropdown-content">
@@ -112,7 +113,7 @@
                             <div class="rating">
                                 <div class="lft_half" style="justify-content: center;">
                                   <div class="userid" style="margin-top:1px ">  @${curr_resource.user.username}</div>
-                                   <div  class="avg_rating">   Average Rating: ${avgRating}  </div>
+                                   <div  class="avg_rating" id="post_avg_rating">   Average Rating: ${avgRating}  </div>
                                 </div>
                                 <div class="rgt_half">
                                     <div class="date">${curr_resource.lastUpdated}</div>
@@ -146,9 +147,10 @@
                             <g:if test="${session.user}">
                             <div class="poster_info">
                                 <div class="clogo">
-                                    <img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
-                                    <img src="${assetPath(src: 'twitter.svg')}" alt="twitter">
-                                    <img src="${assetPath(src: 'instagram.svg')}" alt="instagram">
+                                    <a href="https://www.facebook.com/" target="_blank"><img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
+                                    </a>
+                                    <a href="https://www.instagram.com/" target="_blank"><img src="${assetPath(src: 'instagram.svg')}" alt="instagram"></a>
+                                    <a href="https://www.twitter.com/" target="_blank"><img src="${assetPath(src: 'twitter.svg')}" alt="twitter"></a>
                                 </div>
                                 <div class="modal fade" id="exampleModalDeletepost${curr_resource.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
@@ -174,8 +176,12 @@
                                 <button type="button" class="btn" data-toggle="modal" data-target="#exampleModalDeletepost${curr_resource.id}" style="padding: 0; color: blue;">
                                     Delete  </button>
                                 <button type="button" class="btn" data-toggle="modal" data-target="#exampleModalLinkRes" data-whatever="@getbootstrap" style="padding: 0; color: blue;" onclick="populateModal('${curr_resource.topic.name}','${curr_resource.id}')">  Edit  </button>
+                                <g:if test="${curr_resource.url == null}">
                                 <a href="#">Download</a>
-                                <a href="#">View full site</a>
+                                </g:if>
+                                <g:else>
+                                <a href = "${createLink(absolute:true, uri:"${curr_resource.url}")}" target="_blank">View full site</a>
+                                </g:else>
                             </div>
                             </g:if>
                         </div>
@@ -190,64 +196,9 @@
                 <p>Trending Topics</p>
                 <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
             </div>
-                <g:each in="${all_Topics}"  var="topicData">
-                    <g:if test="${topicData.isdeleted==null || !topicData.isdeleted}">
-
-                        <div class="Border1" style="border: 2px solid black;">
-                <div class="DSubcontent">
-                    <div class="userCard" style="border: 0cap;">
-                        <div class="userImg">
-                            <%-- <img src="/Img/" alt="" height="90px" width="90px"> --%>
-                            <img src="${assetPath(src: 'person-circle.svg')}" alt="instagram" height="90px" width="90px">
-
-                        </div>
-                        <div class="userData">
-                            <h2>${topicData?.name}</h2>
-                            <div class="userS">
-                                <div class="DId">
-                                    <p>${topicData?.user.username}</p>
-                                    <g:if test="${curr_user?.id}">
-                    <g:if test="${Subscription?.findByTopicAndUser(topicData,session.user)!=null}">
-                                        <g:link controller="SubandUnsub" action="unsubscribe" params="[topicId: topicData.id, cuser: curr_user.id]">unsubscribe</g:link>
-                                      </g:if>  
-                                      <g:else>                                       
-                                          <g:link controller="SubandUnsub" action="subscribe" params="[topicId: topicData.id, cuser: curr_user.id]">subscribe</g:link>
-                                        </g:else>
-                                    </g:if>
-                                </div>
-                                <div class="S">
-                                    <p>Subscription</p>
-                                    <p>${topicData?.subscriptions?.size()}</p>
-                                </div>
-                                <div class="T">
-                                    <p>Topics</p>
-                                    <p>${topicData?.resources?.size()}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="SubInfo">
-                    <select id="dropdown-menu">
-                        <option value="" disabled selected>Serious</option>
-                        <option value="option1">Option 1</option>
-                        <option value="option2">Option 2</option>
-                        <option value="option3">Option 3</option>
-                    </select>
-                    <select id="dropdown-menu">
-                        <option value="" disabled selected>Private</option>
-                        <option value="option1">Option 1</option>
-                        <option value="option2">Option 2</option>
-                        <option value="option3">Option 3</option>
-                    </select>
-                   <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">
-                   <img src="${assetPath(src: 'link.svg')}" alt="link">
-                   <img src="${assetPath(src: 'trash-fill.svg')}" alt="trash-fill">
-
-                </div>
+            <div id="trending_Topics">
+            <g:render template="/templates/trendingTopics" model="[all_Topics:all_Topics,maxPerPage:maxPerPage,currentPage:currentPage,offset:offset,totalRecords:totalRecords]" />
             </div>
-                    </g:if>
-                    </g:each>
         </div>
     </div>
 
@@ -310,7 +261,7 @@ function rate(rating) {
         success: function(data) {
             // Handle successful response from the server
             console.log('Rating saved successfully:', data);
-            $('#output').text('Rating is: ' + rating + '/5');
+            $('#post_avg_rating').text('Average rating:'+ data);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             // Handle error

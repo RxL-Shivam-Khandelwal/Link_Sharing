@@ -12,7 +12,7 @@ class RegisterController {
         render " Due to some error, account not created."
     }
  def dashboard(Long userId) {
-   if(session.user == null){
+   if(session.user_id == null){
        render(template: "/templates/errorHandling")
    }else{
     def user = Users.findById(userId)
@@ -56,7 +56,9 @@ class RegisterController {
          }
      }
      l = l.flatten();
-    render(view: "../Frontend/dashboard", model: [subscriptionCount: subscriptionCount, topicCount: topicCount,all_Topics:topics,resource: l,subscription_Topic: sub_topic, curr_user:user])
+       String user_img = curr_user.photoURL;
+       println user_img;
+    render(view: "../Frontend/dashboard", model: [subscriptionCount: subscriptionCount, topicCount: topicCount,all_Topics:topics,resource: l,subscription_Topic: sub_topic, curr_user:user,user_img: user_img])
        }
 }
 

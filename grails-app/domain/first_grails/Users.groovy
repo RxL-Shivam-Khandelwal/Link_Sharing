@@ -1,13 +1,18 @@
 package first_grails
 import org.hibernate.type.StandardBasicTypes
 
+import javax.persistence.Lob
+
 class Users {
     String email
     String username
     String password
     String firstName
     String lastName
-    byte[] photo 
+
+    @Lob
+    byte[] photo
+
     Boolean admin
     Boolean active = true;
 
@@ -28,4 +33,9 @@ class Users {
     }
 
     static hasMany = [subscriptions: Subscription, resources: Resources, resourceRatings: ResourceRating, readingItems: ReadingItem, topics: Topic]
+
+    String getPhotoURL() {
+        if(!photo) return ""
+        return "data:image/jpeg;base64," + Base64.encoder.encodeToString(photo)
+    }
 }

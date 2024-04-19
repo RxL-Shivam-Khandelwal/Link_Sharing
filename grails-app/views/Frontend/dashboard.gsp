@@ -89,8 +89,8 @@
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
-              <g:form controller="LinkResource" action="CreateLink"> 
-                 <g:hiddenField name="userId" value="${session.userId}"/>  
+              <g:form controller="DocumentResource" action="documentRes" enctype="multipart/form-data">
+                 <g:hiddenField name="userId" value="${session.userId}"/>
                 <div class="share_info"  >
                     <div class="share_link">
                         <label for="link">
@@ -192,8 +192,8 @@
         <div class="dprofile">
             <img src="${assetPath(src: 'person-fill.svg')}" alt="person-fill" style="height: 30px; width: 30px; padding-top: 6px;">  
             <div class="dropdown">
-                <button class="dropbtn nbtn">Dropdown
-                    <img src="/Img/caret-down-fill.svg" alt="">
+                <button class="dropbtn nbtn">${curr_user?.firstName}
+                    <img src="${assetPath(src: 'caret-down-fill.svg')}" alt="drop_down logo">
                 </button>
 <div class="dropdown-content">
     <g:link controller="Profile">Profile</g:link>
@@ -206,14 +206,24 @@
             </div>
         </div>
     </div>
-
-
+    <g:if test="${flash.message}">
+        <div id="alertMessage" class="alert alert-success">
+            ${flash.message}
+        </div>
+        <script>
+            // Automatically hide the alert after 3 seconds
+            setTimeout(function() {
+                $('#alertMessage').fadeOut('slow');
+            }, 2000);
+        </script>
+    </g:if>
     <div class="Dash">
 
         <div class="leftD">
             <div class="userCard" id="userCard">
                 <div class="userImg">
-                    <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg"  height="90px" width="90px">
+%{--                    <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg"  height="90px" width="90px">--}%
+                    <img src="${user_img}" alt="user_image" height="90px" width="90px">
                 </div>
                 <div class="userData">
                     <h2 id="userName">${curr_user?.firstName}</h2>
@@ -221,7 +231,7 @@
                     <div class="userS">
                         <div class="S">
                             <p>Subscription</p>
-                            <p>...${subscriptionCount}</p>
+                            <p>${subscriptionCount}</p>
                         </div>
                         <div class="T">
                             <p>Topics</p>
@@ -235,92 +245,7 @@
                     <p>Subscription</p>
                     <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
                 </div>
-<g:if test="${subscription_Topic}">
-    <g:set var="num" value="${1}" />
-    <g:each in="${subscription_Topic}" var="StopicData">
-        <g:if test="${!StopicData.topic.isdeleted}">
-        <div class="Border1" style="border: 2px solid black;">
-            <div class="DSubcontent">
-                <div class="userCard" style="border: 0cap;">
-                    <div class="userImg">
-                        <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg" height="90px" width="90px">
-                    </div>
-                    <div class="userData">
-
-                        <h2>${StopicData?.topic?.name}</h2>
-                        <g:form id="myFormS${num++}" name="myFormS${num++}"  class="hidden" controller="Register"  action="change_topic_name" >
-                            <g:hiddenField name="topicId" value="${StopicData.topic.id}"/>
-                            <g:if test="${StopicData.topic.user == session.user }">
-                                <input type="text" placeholder="Enter New Topic Name" name="new_topic_name">
-                                <button type="submit" class="btn">Save</button>
-                                <button id="cancelBtn" type="button" class="btn" onclick="showForm('myFormS${num - 1}')">Cancel</button>
-                            </g:if>
-                        </g:form>
-                        <div class="userS">
-                            <div class="DId">
-                                <p>${StopicData?.topic?.user?.username}</p>
-                                <g:link controller="SubandUnsub" action="unsubscribe" params="[topicId: StopicData.topic.id, cuser: curr_user.id]">unsubscribe</g:link>
-                            </div>
-                            <div class="S">
-                                <p>Subscription</p>
-                                <p>${StopicData?.topic?.subscriptions?.size()}</p>
-                            </div>
-                            <div class="T">
-                                <p>Post</p>
-                                <p>${Resources.findAllByTopicAndIsdeleted(StopicData.topic,false).size()}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="SubInfo">
-
-                <g:select id="seriournessSub_${StopicData.id}" from="['Serious', 'Casual','Very_serious']" name="selectedSeriousness"
-                          value="${StopicData.seriousness}"
-                          onchange="sendSeriournessToController(this.value, ${StopicData.id})"
-                          style="height: 30px; width: 140px;" />
-                <g:if test="${StopicData.topic.user == session.user}">
-                <g:select id="visiblitySub_${StopicData.topic.id}" from="['Public', 'Private']" name="selectedVisibility"
-                          value="${StopicData.topic.visibility}"
-                          onchange="sendDataToController(this.value, ${StopicData.topic.id})"
-                          style="height: 30px; width: 140px;" />
-                </g:if>
-                <g:if test="${StopicData.topic.user == session.user }">
-                    <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">
-                    <div class="modal fade" id="exampleModalDeletetopic${StopicData.topic.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    Are you sure you want to delete Title?
-                                </div>
-                                <g:form controller="register" action="toDelete" params="${[id:StopicData.topic.id]}">
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                                        <button type="submit" class="btn btn-primary">Yes</button>
-                                    </div>
-                                </g:form>
-                            </div>
-                        </div>
-                    </div>
-                    <button id="showFormBtn" type="button" class="btn" onclick="showForm('myFormS${num - 1}')" style="padding: 0px"> <img src="${assetPath(src: 'pencil-square.svg')}" alt="edit" >   </button>
-                    <button type="button" class="btn" data-toggle="modal" data-target="#exampleModalDeletetopic${StopicData.topic.id}" style="padding: 0px">
-                        <img src="${assetPath(src: 'trash-fill.svg')}" alt="trash-fill">    </button>
-                </g:if>
-            </div>
-        </div>
-        </g:if>
-    </g:each>
-</g:if>
-<g:else>
-    <p>No subscriptions</p>
-</g:else>
-
+                <g:render template="/templates/userSubscriptions" model="[subscription_Topic:subscription_Topic]" />
             </div>
 
 
@@ -329,111 +254,9 @@
                     <p>Trending Topics</p>
                     <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
                 </div>
-                <g:if test="${all_Topics!= null}">
-                <g:set var="num" value="${1}" />
-                <g:each in="${all_Topics}"  var="topicData">
-                    <g:if test="${topicData.isdeleted==null || !topicData.isdeleted}">
-                <div class="Border1" style="border: 2px solid black;">
-                    <div class="DSubcontent">
-
-                        <div class="userCard" style="border: 0cap;">
-                            <div class="userImg">
-                    <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg"  height="90px" width="90px">
-                            </div>
-                            
-                            <div class="userData">
-                                <g:link controller= "Topic_show" action="topic" params="[topicId: topicData.id]"> 
-                                  <h2>${topicData?.name} </h2>
-                                </g:link>
-                                <g:form id="myForm${num++}" name="myForm${num++}"  class="hidden" controller="Register"  action="change_topic_name" >
-                                    <g:hiddenField name="topicId" value="${topicData.id}"/>
-                                    <g:if test="${topicData.user == session.user }">
-                                   <input type="text" placeholder="Enter New Topic Name" name="new_topic_name">
-                                   <button type="submit" class="btn">Save</button>
-                                   <button id="cancelBtn" type="button" class="btn" onclick="showForm('myForm${num - 1}')">Cancel</button>
-                                   </g:if>
-                                 </g:form>                  
-                                <div class="userS">
-                                    <div class="DId">
-                                     <p>  ${topicData?.user.username} </p>
-
-                                     <g:if test="${Subscription?.findByTopicAndUser(topicData,session.user)!=null}">
-                                        <g:link controller="SubandUnsub" action="unsubscribe" params="[topicId: topicData.id, cuser: curr_user.id]">unsubscribe</g:link>
-                                      </g:if>
-                                      <g:else>                                       
-                                          <g:link controller="SubandUnsub" action="subscribe" params="[topicId: topicData.id, cuser: curr_user.id]">subscribe</g:link>
-                                        </g:else> 
-                                                
-                                    </div>
-                                    <div class="S">
-                                        <p>Subscription</p>
-                                        <p>${topicData?.subscriptions?.size()}</p>
-                                    </div>
-                                    <div class="T">
-                                        <p>Post</p>
-                                        <g:if test="${topicData != null}">
-                                            <p>${Resources.findAllByTopicAndIsdeleted(topicData,false).size()}</p>
-                                            </g:if>
-                                            <g:else>
-                                            <p> 0 </p>
-                                            </g:else>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                        </div>
-                    </div>
-                    <div class="SubInfo">
-                        <g:set var="Subscriber" value="${Subscription.findByUserAndTopic(session.user,topicData)}" />
-
-                        <g:if test="${Subscriber  &&  session.user == topicData.user}">
-                        <g:select id="seriournessSub_${topicData.id}" from="['Serious', 'Casual','Very_serious']" name="selectedSeriousness"
-                                  value="${Subscriber.seriousness}"
-                                  onchange="sendSeriournessToController(this.value, ${Subscriber.id})"
-                                  style="height: 30px; width: 140px;" />
-                        </g:if>
-                        <g:if test="${topicData.user == session.user}">
-                            <g:select id="visiblitySub_${topicData.id}" from="['Public', 'Private']" name="selectedVisibility"
-                                      value="${topicData.visibility}"
-                                      onchange="sendDataToController(this.value, ${topicData.id})"
-                                      style="height: 30px; width: 140px;" />
-                        </g:if>
-                        <g:if test="${topicData.user == session.user }">
-                         <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">
-                            <div class="modal fade" id="exampleModalDelete${topicData.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Are you sure you want to delete Title?
-                                        </div>
-                                        <g:form controller="register" action="toDelete" params="${[id:topicData.id]}">
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                                                <button type="submit" class="btn btn-primary">Yes</button>
-                                            </div>
-                                        </g:form>
-                                    </div>
-                                </div>
-                            </div>
-                       <button id="showFormBtn" type="button" class="btn" onclick="showForm('myForm${num - 1}')" style="padding: 0px"> <img src="${assetPath(src: 'pencil-square.svg')}" alt="edit" >   </button>
-                            <button type="button" class="btn" data-toggle="modal" data-target="#exampleModalDelete${topicData.id}" style="padding: 0px">
-                                <img src="${assetPath(src: 'trash-fill.svg')}" alt="trash-fill">    </button>
-                         </g:if>
-
-                    </div>
-                </div>
-                    </g:if>
-                </g:each>
-                </g:if>
-                <g:else>
-                   <p>No Trending Topic</p>
-                   </g:else>
+                 <div id="trending_Topics">
+                <g:render template="/templates/trendingTopics" model="[all_Topics:all_Topics,maxPerPage:maxPerPage,currentPage:currentPage,offset:offset,totalRecords:totalRecords]" />
+                 </div>
 
             </div>
         </div>
@@ -458,13 +281,18 @@
                         </div>
                         <div class="poster_info setting_margin">
                             <div class="clogo">
-                                    <img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
-                                    <img src="${assetPath(src: 'twitter.svg')}" alt="twitter">
-                                    <img src="${assetPath(src: 'instagram.svg')}" alt="instagram">
+                                <a href="https://www.facebook.com/" target="_blank"><img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
+                                </a>
+                                <a href="https://www.instagram.com/" target="_blank"><img src="${assetPath(src: 'instagram.svg')}" alt="instagram"></a>
+                                <a href="https://www.twitter.com/" target="_blank"><img src="${assetPath(src: 'twitter.svg')}" alt="twitter"></a>
                             </div>
                             <span class="topic">
-                                <a href="#">Download</a>
+                                <g:if test="${res.url == null}">
+                                <g:link  controller="DocumentResource" action="downloadFile" params="[fileId: res.id]" target="_blank">Download File</g:link>
+                                </g:if>
+                                <g:else>
                                 <a href = "${createLink(absolute:true, uri:"${res.url}")}" target="_blank">View Full Site</a>
+                                </g:else>
                                 <g:link controller ="Register" action="is_read" params="[resId:res.id]"> Mark as read </g:link>
                                 <g:link controller="Post" action="show" params="[resId: res.id]">View post</g:link>
                             </span>
@@ -614,7 +442,7 @@ function changeColor(element) {
                 console.error(error);
             }
         });
-    }
+    }selectedSeriousness
 
     function sendSeriournessToController(selectedSeriousness, StopicId) {
         $.ajax({
@@ -631,5 +459,6 @@ function changeColor(element) {
             }
         });
     }
+
      </script>
 </html>

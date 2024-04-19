@@ -14,12 +14,11 @@ class LinkResourceController {
           println "topic is : ${curr_user.username}";
           Resources new_res = new Resources(description:params.description,user: curr_user,topic : ctopic, url: params.url);
           new_res.save(flush:true, failOnError:true);
+              flash.message = "Save successful!"
            ReadingItem readingItem = new ReadingItem(resource:new_res,user: curr_user,isRead: false);
            readingItem.save(flush:true, failOnError:true);
                 Long userId= curr_user.id;
                 redirect(controller: "Register", action:"dashboard", params:[userId:userId]);
-
-             
           }
           catch(Exception e){
 

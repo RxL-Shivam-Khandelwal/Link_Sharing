@@ -38,17 +38,23 @@ def totalRecords_Posts = Resources.createCriteria().count{
         eq('id', curr_topic.id);
     }
 }
-        println "value of the total items are:" + totalRecords_Posts;
+        Map subscribers_with_photo = [:]
+        topic_subscribers.each{it->
+            String users_img= it.user.photoURL;
+            subscribers_with_photo[it] = users_img;
+        }
 
         def topic_Show_Map = [
             curr_topic: curr_topic,
             topic_owner: topic_owner,
             topic_subscribers: topic_subscribers,
-            topic_posts: topic_posts
+            topic_posts: topic_posts,
+            subscribers_with_photo:subscribers_with_photo
         ]
-  println "total sibscrubers:" + totalRecords;
+  println "total sibscrubers:" + subscribers_with_photo.size();
   println "based on pagination subscribers" + topic_subscribers;
-        render(view:"../Frontend/topic_show" , model:[topic_Show_Map:topic_Show_Map,currentPage: currentPage, totalRecords: totalRecords, maxPerPage: maxPerPage,totalRecords_Posts: totalRecords_Posts]);
+        String user_img = topic_owner.photoURL;
+        render(view:"../Frontend/topic_show" , model:[topic_Show_Map:topic_Show_Map,currentPage: currentPage, totalRecords: totalRecords, maxPerPage: maxPerPage,totalRecords_Posts: totalRecords_Posts, user_img: user_img]);
 
     }
 

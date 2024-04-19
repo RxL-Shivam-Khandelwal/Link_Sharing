@@ -15,15 +15,16 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
 <asset:javascript src="dashboard.js"/>
     <div class="navbar" style="justify-content: space-evenly;">
         <div>
-            <a href="#" class="nav-link">
+            <g:link controller="register" action="dashboard">
                 <h3>Link Sharing</h3>
-            </a>
+            </g:link>>
         </div>
         <div class="search-container">
             <span class="search-icon">&#128269;</span>
@@ -212,6 +213,7 @@
         </div>
     </div>
 
+
     <div class="Dash">
 
         <div class="leftD">
@@ -300,73 +302,73 @@
                     <p>Trending Topics</p>
                     <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
                 </div>
-                <g:if test="${all_Topics!= null && all_Topics.size()!=0}">
-                <g:each in="${all_Topics}"  var="topicData">
-                <div class="Border1" style="border: 2px solid black;">
-                    <div class="DSubcontent">
-                        <div class="userCard" style="border: 0cap;">
-                            <div class="userImg">
-                    <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg"  height="90px" width="90px">
-                            </div>
-                            
-                            <div class="userData">
-                                <g:link controller= "Topic_show" action="topic" params="[topicId: topicData.id]"> 
-                                  <h2>${topicData?.name}</h2>
-                                </g:link>
-                                <div class="userS">
-                                    <div class="DId">
-                                     <p>  ${topicData?.user.username} </p>
+%{--                <g:if test="${all_Topics!= null && all_Topics.size()!=0}">--}%
+%{--                <g:each in="${all_Topics}"  var="topicData">--}%
+%{--                <div class="Border1" style="border: 2px solid black;">--}%
+%{--                    <div class="DSubcontent">--}%
+%{--                        <div class="userCard" style="border: 0cap;">--}%
+%{--                            <div class="userImg">--}%
+%{--                    <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg"  height="90px" width="90px">--}%
+%{--                            </div>--}%
+%{--                            --}%
+%{--                            <div class="userData">--}%
+%{--                                <g:link controller= "Topic_show" action="topic" params="[topicId: topicData.id]"> --}%
+%{--                                  <h2>${topicData?.name}</h2>--}%
+%{--                                </g:link>--}%
+%{--                                <div class="userS">--}%
+%{--                                    <div class="DId">--}%
+%{--                                     <p>  ${topicData?.user.username} </p>--}%
 
-                    <g:if test="${Subscription?.findByTopicAndUser(topicData,session.user)!=null}">
-                                        <g:link controller="SubandUnsub" action="unsubscribe" params="[topicId: topicData.id, cuser: curr_user.id]">unsubscribe</g:link>
-                                      </g:if>  
-                                      <g:else>                                       
-                                          <g:link controller="SubandUnsub" action="subscribe" params="[topicId: topicData.id, cuser: curr_user.id]">subscribe</g:link>
-                                        </g:else> 
-                                                
-                                    </div>
-                                    <div class="S">
-                                        <p>Subscription</p>
-                                        <p>${topicData?.subscriptions?.size()}</p>
-                                    </div>
-                                    <div class="T">
-                                        <p>Post</p>
-                                        <g:if test="${topicData != null}">
-                                            <p>${topicData?.resources?.size()}</p>
-                                            </g:if>
-                                            <g:else>
-                                            <p> 0 </p>
-                                            </g:else>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                        </div>
-                    </div>
-                    <div class="SubInfo">
-                        <select id="dropdown-menu">
-                            <option value="" disabled selected>Serious</option>
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
-                        </select>
-                        <select id="dropdown-menu">
-                            <option value="" disabled selected>Private</option>
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
-                        </select>
-                         <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">
-                         <img src="${assetPath(src: 'link.svg')}" alt="link" >
-                         <img src="${assetPath(src: 'trash-fill.svg')}" alt="trash-fill">
-                    </div>
-                </div>
-                </g:each>
-                </g:if>
-                <g:else>
-                   <p>No Trending Topic</p>
-                   </g:else>
-
+%{--                    <g:if test="${Subscription?.findByTopicAndUser(topicData,session.user)!=null}">--}%
+%{--                                        <g:link controller="SubandUnsub" action="unsubscribe" params="[topicId: topicData.id, cuser: curr_user.id]">unsubscribe</g:link>--}%
+%{--                                      </g:if>  --}%
+%{--                                      <g:else>                                       --}%
+%{--                                          <g:link controller="SubandUnsub" action="subscribe" params="[topicId: topicData.id, cuser: curr_user.id]">subscribe</g:link>--}%
+%{--                                        </g:else> --}%
+%{--                                                --}%
+%{--                                    </div>--}%
+%{--                                    <div class="S">--}%
+%{--                                        <p>Subscription</p>--}%
+%{--                                        <p>${topicData?.subscriptions?.size()}</p>--}%
+%{--                                    </div>--}%
+%{--                                    <div class="T">--}%
+%{--                                        <p>Post</p>--}%
+%{--                                        <g:if test="${topicData != null}">--}%
+%{--                                            <p>${topicData?.resources?.size()}</p>--}%
+%{--                                            </g:if>--}%
+%{--                                            <g:else>--}%
+%{--                                            <p> 0 </p>--}%
+%{--                                            </g:else>--}%
+%{--                                    </div>--}%
+%{--                                </div>--}%
+%{--                            </div>--}%
+%{--                            --}%
+%{--                        </div>--}%
+%{--                    </div>--}%
+%{--                    <div class="SubInfo">--}%
+%{--                        <select id="dropdown-menu">--}%
+%{--                            <option value="" disabled selected>Serious</option>--}%
+%{--                            <option value="option1">Option 1</option>--}%
+%{--                            <option value="option2">Option 2</option>--}%
+%{--                            <option value="option3">Option 3</option>--}%
+%{--                        </select>--}%
+%{--                        <select id="dropdown-menu">--}%
+%{--                            <option value="" disabled selected>Private</option>--}%
+%{--                            <option value="option1">Option 1</option>--}%
+%{--                            <option value="option2">Option 2</option>--}%
+%{--                            <option value="option3">Option 3</option>--}%
+%{--                        </select>--}%
+%{--                         <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">--}%
+%{--                         <img src="${assetPath(src: 'link.svg')}" alt="link" >--}%
+%{--                         <img src="${assetPath(src: 'trash-fill.svg')}" alt="trash-fill">--}%
+%{--                    </div>--}%
+%{--                </div>--}%
+%{--                </g:each>--}%
+%{--                </g:if>--}%
+%{--                <g:else>--}%
+%{--                   <p>No Trending Topic</p>--}%
+%{--                   </g:else>--}%
+                <g:render template="/templates/trendingTopics" model="[all_Topics:all_Topics, currentPage: currentPage, totalRecords: totalRecords,maxPerPage: maxPerPage]" />
             </div>
         </div>
         <div class="rightD">
@@ -390,9 +392,11 @@
                         </div>
                         <div class="poster_info setting_margin">
                             <div class="clogo">
-                                    <img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
-                                    <img src="${assetPath(src: 'twitter.svg')}" alt="twitter">
-                                    <img src="${assetPath(src: 'instagram.svg')}" alt="instagram">
+                                <a href="https://www.facebook.com/" target="_blank"><img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
+                                </a>
+                                <a href="https://www.instagram.com/" target="_blank"><img src="${assetPath(src: 'instagram.svg')}" alt="instagram"></a>
+                                 <a href="https://www.twitter.com/" target="_blank"><img src="${assetPath(src: 'twitter.svg')}" alt="twitter"></a>
+
                             </div>
                             <span class="topic">
                                 <a href="#">Download</a>

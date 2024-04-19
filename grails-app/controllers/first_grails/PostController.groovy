@@ -1,17 +1,16 @@
 package first_grails
 
 class PostController {
-
+ ResourceRating postRating;
     def index() { }
 
     def show(Long resId , Float avgRating){
 
-            println "value isdofdsfdsif " + avgRating;
             Resources resource = Resources.findById(resId);
             def rating = 0;
             Float av_rating = 0.0;
            av_rating= calculateAverageRatingForResource(resource);
-           def topics =  Topic.list();
+//           def topics =  Topic.list();
              if(session.user  == null){
                  render(view:"../Frontend/post", model: [resId:resId, post_rating : rating,avgRating:av_rating,all_Topics: topics,curr_resource: resource])
              }else {
@@ -23,15 +22,28 @@ class PostController {
                  }
                  println avgRating;
                  def curr_user = session.user;
-                 render(view: "../Frontend/post", model: [resId: resId, post_rating: rating, avgRating: av_rating, all_Topics: topics, curr_user: curr_user, curr_resource: resource]);
+                 Long maxPerPage=2;
+                 Long currentPage=1;
+                 Long offset=0;
+                 def totalRecords = Topic.createCriteria().get {
+                     projections {
+                         countDistinct "id"
+                     }
+                 }
+
+                 List<Topic> topics =  Topic.createCriteria().list(max: maxPerPage, offset: offset){
+                 }
+
+                 render(view: "../Frontend/post", model: [resId: resId, post_rating: rating, avgRating: av_rating, all_Topics: topics, curr_user: curr_user, curr_resource: resource,maxPerPage:maxPerPage,currentPage:currentPage,offset:offset,totalRecords:totalRecords]);
              }
     }
+
 
     def save(){
          def rating = params.rating.toInteger();
          def resId = params.resId;
-         Resources resource= Resources.findById(resId);
          Users user = session.user;
+        Resources resource= Resources.findById(resId);
          ResourceRating r= ResourceRating.findByUserAndResource(user, resource);
          ResourceRating curr_res_rating= new ResourceRating();
 
@@ -44,21 +56,15 @@ class PostController {
          curr_res_rating.user= user;
          curr_res_rating.score= rating;
          curr_res_rating.save(flush:true, failOnError:true);
-
-         // resource.save(flush: true)
          }
          if(r!=null){curr_res_rating=r;}
-            // calculation of resource rating.
-        def resourceId = curr_res_rating.resource.id
-        //  println "resourceId is :" + resourceId;
-    def rating_resource = Resources.get(resourceId)
-    Float avgRating = calculateAverageRatingForResource(rating_resource);
-         rating_resource.avgRating = avgRating
-         rating_resource.save(flush:true, failOnError:true);
-       println "resourceId is :" + avgRating;
-
-         redirect(action: "show", params: [resId: resId,avgRating: avgRating]);
+        println "hello guys"
+    Float avgRating = calculateAverageRatingForResource(resource);
+//        println postRating.serviceMethod();
+//        Float avgRating  = postRating.calculateAverageRatingForResource(resource);
+        render(avgRating);
     }
+
 
       private Float calculateAverageRatingForResource(Resources resource) {
         def ratings = ResourceRating.findAllByResource(resource)

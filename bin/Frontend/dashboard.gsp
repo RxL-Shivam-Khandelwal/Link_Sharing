@@ -206,14 +206,24 @@
             </div>
         </div>
     </div>
-
-
+    <g:if test="${flash.message}">
+        <div id="alertMessage" class="alert alert-success">
+            ${flash.message}
+        </div>
+        <script>
+            // Automatically hide the alert after 3 seconds
+            setTimeout(function() {
+                $('#alertMessage').fadeOut('slow');
+            }, 2000);
+        </script>
+    </g:if>
     <div class="Dash">
 
         <div class="leftD">
             <div class="userCard" id="userCard">
                 <div class="userImg">
-                    <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg"  height="90px" width="90px">
+%{--                    <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg"  height="90px" width="90px">--}%
+                    <img src="${user_img}" alt="user_image" height="90px" width="90px">
                 </div>
                 <div class="userData">
                     <h2 id="userName">${curr_user?.firstName}</h2>
@@ -614,7 +624,7 @@ function changeColor(element) {
                 console.error(error);
             }
         });
-    }
+    }selectedSeriousness
 
     function sendSeriournessToController(selectedSeriousness, StopicId) {
         $.ajax({
@@ -631,5 +641,6 @@ function changeColor(element) {
             }
         });
     }
+
      </script>
 </html>

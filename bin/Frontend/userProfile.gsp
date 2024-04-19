@@ -21,9 +21,9 @@
 <asset:javascript src="dashboard.js"/>
     <div class="navbar" style="justify-content: space-evenly;">
         <div>
-            <a href="#" class="nav-link">
+            <g:link controller="register" action="dashboard">
                 <h3>Link Sharing</h3>
-            </a>
+            </g:link>>
         </div>
         <div class="search-container">
             <span class="search-icon">&#128269;</span>
@@ -390,9 +390,11 @@
                         </div>
                         <div class="poster_info setting_margin">
                             <div class="clogo">
-                                    <img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
-                                    <img src="${assetPath(src: 'twitter.svg')}" alt="twitter">
-                                    <img src="${assetPath(src: 'instagram.svg')}" alt="instagram">
+                                <a href="https://www.facebook.com/" target="_blank"><img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
+                                </a>
+                                <a href="https://www.instagram.com/" target="_blank"><img src="${assetPath(src: 'instagram.svg')}" alt="instagram"></a>
+                                 <a href="https://www.twitter.com/" target="_blank"><img src="${assetPath(src: 'twitter.svg')}" alt="twitter"></a>
+
                             </div>
                             <span class="topic">
                                 <a href="#">Download</a>
