@@ -3,7 +3,7 @@ package first_grails
 import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
-class Topic_demoServiceSpec extends Specification implements ServiceUnitTest<Topic_demoService>{
+class UserProfileServiceSpec extends Specification implements ServiceUnitTest<UserProfileService>{
 
     def setup() {
     }

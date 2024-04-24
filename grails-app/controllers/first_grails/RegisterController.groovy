@@ -4,7 +4,7 @@ import org.hibernate.criterion.CriteriaSpecification
 import org.hibernate.criterion.*
 
 class RegisterController {
-
+ RegisterService registerService;
     def index() {
     }
 
@@ -16,74 +16,22 @@ class RegisterController {
        render(template: "/templates/errorHandling")
    }else{
        userId = session.user_id;
-    def user = Users.findById(userId)
-        def curr_user = user;
-    def subscriptionCount = Subscription.where {
-        (user.id == userId  && topic.isdeleted == false)
-    }.count()
-
-    def topicCount = Topic.where {
-        user.id == userId   && isdeleted==false
-    }.count()
-     def sub_topic = Subscription.findAllByUser(user);
-
-   def topics =  Topic.list();
-
-     session.user = user;
-     def l = []
-
-
-     def new_posts= [];
-     topics.each{ it->
-         if(Subscription.findByTopicAndUser(it,session.user) && it.resources.size()){
-            //  new_posts.add([it.resources]);
-             def reso = it.resources;
-             reso.each{ it1->
-                  new_posts.add([it1]);
-             }
-         }
-     }
-     println  new_posts;
-     new_posts.each{  resource->
-         def readingItemlist = ReadingItem.findAllByResource(resource);
-         Boolean flag=0;
-         readingItemlist.each{it->
-             if(it.user==session.user && it.isRead){
-                 flag=1;
-             }
-         }
-         if(!flag){
-             l.add([resource]);
-         }
-     }
-     l = l.flatten();
-       String user_img = curr_user.photoURL;
-       println user_img;
-
-       // preparing data for pagination.
-       def totalRecords = topics.size();
-       Long maxPerPage = 2
-       Long currentPage = 1;
-       Long offset = (currentPage - 1) * maxPerPage;
-     topics=  Topic.createCriteria().list(max: maxPerPage, offset: offset){
-       }
-       render(view: "../Frontend/dashboard", model: [subscriptionCount: subscriptionCount, topicCount: topicCount,all_Topics:topics,resource: l,subscription_Topic: sub_topic, curr_user:user,user_img: user_img,maxPerPage:maxPerPage,currentPage:currentPage,offset:offset,totalRecords:totalRecords])
+      def user = Users.findById(userId)
+       Map result = registerService.dashboard(userId);
+       render(view: "../Frontend/dashboard", model: [subscriptionCount: result.subscriptionCount, topicCount: result.topicCount,all_Topics:result.topics,resource: result.l,subscription_Topic: result.sub_topic, curr_user:result.user,user_img: result.user_img,maxPerPage:result.maxPerPage,currentPage:result.currentPage,offset:result.offset,totalRecords:result.totalRecords])
        }
 }
 
     def nextPage() {
-        def maxPerPage = 2
         Long currentPage = 1;
         Long totalRecords = params.totalRecords.toLong();
         if(params?.page){
             currentPage= params.page.toLong();
         }
-        def offset = (currentPage - 1) * maxPerPage
-        def topics=  Topic.createCriteria().list(max: maxPerPage, offset: offset){
-        }
-        println "hello all "
         Users curr_user = session.user;
-        render(template: '/templates/trendingTopics', model: [all_Topics: topics, currentPage: currentPage, totalRecords: totalRecords,maxPerPage: maxPerPage,curr_user : curr_user]);
+        Map result = registerService.nextPage(currentPage,totalRecords,curr_user);
+
+        render(template: '/templates/trendingTopics', model: [all_Topics: result.topics, currentPage: result.currentPage, totalRecords: result.totalRecords,maxPerPage: result.maxPerPage,curr_user : result.curr_user]);
     }
     def create_user() {
         try {
@@ -106,27 +54,16 @@ class RegisterController {
 
         Resources res= Resources.findById(params.resId);
         Users user= Users.findById(session.user_id);
-        ReadingItem item = ReadingItem.findByUserAndResource(user,res);
-        if(item!=null){
-        item.isRead = true;
-        item.save(flush: true, failOnError: true);
-        }else{
-          ReadingItem r_item = new ReadingItem(resource:res, user:user,isRead:true);
-          r_item.save(flush:true, failOnError:true);
-        }
+        registerService.is_read(res,user);
         Long userId = session.user.id;
-        flash.message = "message is marked as read!"
         redirect(action:"dashboard", params: [userId: userId]);
     }
 
     def change_topic_name(){
-         def topic_name = params.new_topic_name;
-        Topic curr_topic = Topic.findById(params.topicId);
-        curr_topic.name = topic_name;
-        curr_topic.save(flush:true, failOnError:true);
+        registerService.change_topic_name(params);
         flash.message = "Topic name changed successfully!"
         Long userId= session.user.id;
-        redirect(action: "dashboard",params: [userId:userId] );
+        redirect(action: "dashboard",params: [userId:userId]);
 
     }
 

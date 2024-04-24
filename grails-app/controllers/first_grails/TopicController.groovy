@@ -11,8 +11,8 @@ class TopicController {
         
         try{
             println params;
-             def userId= session.user_id;
-            def user= Users.get(userId);
+             Long userId= session.user_id;
+            Users user= Users.get(userId);
 
             Topic topic= new Topic(name:params.name, user:user,visibility:params.visibility);
             // as user has created a topic, it means it should also be added to its subscriptions.

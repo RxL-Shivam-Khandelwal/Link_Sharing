@@ -15,8 +15,8 @@ class DocumentResourceController {
           Resources new_res = new Resources(description:params.description,user: curr_user,topic : ctopic, documentResource: params.documentResource);
         new_res.save(flush:true, failOnError:true);
                       println "hello world";
-                def res = Resources.list();
-                def topics = Topic.list();
+                      List<Resources> res = Resources.list();
+                      List<Topic>topics = Topic.list();
              redirect(controller:"Register", action:"dashboard");
           }
           catch(Exception e){
@@ -27,7 +27,7 @@ class DocumentResourceController {
     }
 
     def downloadFile(Long fileId) {
-        def fileEntity = Resources.get(fileId)
+        Resources fileEntity = Resources.get(fileId)
         if (!fileEntity) {
             // Handle case where file is not found
             // Redirect or display error message

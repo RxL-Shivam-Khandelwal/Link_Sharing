@@ -1,9 +1,9 @@
 package first_grails
 
-import grails.testing.web.controllers.ControllerUnitTest
+import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
-class PostControllerSpec extends Specification implements ControllerUnitTest<PostController> {
+class PostServiceSpec extends Specification implements ServiceUnitTest<PostService>{
 
     def setup() {
     }

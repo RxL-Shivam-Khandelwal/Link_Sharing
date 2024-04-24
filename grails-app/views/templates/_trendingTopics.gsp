@@ -23,7 +23,7 @@
                             </g:link>
                             <g:form id="myForm${num++}" name="myForm${num++}"  class="hidden" controller="Register"  action="change_topic_name" >
                                 <g:hiddenField name="topicId" value="${topicData.id}"/>
-                                <g:if test="${topicData.user == session.user }">
+                                <g:if test="${topicData.user == curr_user }">
                                     <input type="text" placeholder="Enter New Topic Name" name="new_topic_name">
                                     <button type="submit" class="btn">Save</button>
                                     <button id="cancelBtn" type="button" class="btn" onclick="showForm('myForm${num - 1}')">Cancel</button>
@@ -33,7 +33,7 @@
                                 <div class="DId">
                                     <p>  ${topicData?.user.username} </p>
 
-                                    <g:if test="${Subscription?.findByTopicAndUser(topicData,session.user)!=null}">
+                                    <g:if test="${Subscription?.findByTopicAndUser(topicData,curr_user)!=null}">
                                         <g:link controller="SubandUnsub" action="unsubscribe" params="[topicId: topicData.id, cuser: curr_user.id]">unsubscribe</g:link>
                                     </g:if>
                                     <g:else>
@@ -60,21 +60,21 @@
                     </div>
                 </div>
                 <div class="SubInfo">
-                    <g:set var="Subscriber" value="${Subscription.findByUserAndTopic(session.user,topicData)}" />
+                    <g:set var="Subscriber" value="${Subscription.findByUserAndTopic(curr_user,topicData)}" />
 
-                    <g:if test="${Subscriber  &&  session.user == topicData.user}">
+                    <g:if test="${Subscriber  &&  curr_user == topicData.user}">
                         <g:select id="seriournessSub_${topicData.id}" from="['Serious', 'Casual','Very_serious']" name="selectedSeriousness"
                                   value="${Subscriber.seriousness}"
                                   onchange="sendSeriournessToController(this.value, ${Subscriber.id})"
                                   style="height: 30px; width: 140px;" />
                     </g:if>
-                    <g:if test="${topicData.user == session.user}">
+                    <g:if test="${topicData.user == curr_user}">
                         <g:select id="visiblitySub_${topicData.id}" from="['Public', 'Private']" name="selectedVisibility"
                                   value="${topicData.visibility}"
                                   onchange="sendDataToController(this.value, ${topicData.id})"
                                   style="height: 30px; width: 140px;" />
                     </g:if>
-                    <g:if test="${topicData.user == session.user }">
+                    <g:if test="${topicData.user == curr_user }">
                         <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">
                         <div class="modal fade" id="exampleModalDelete${topicData.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">

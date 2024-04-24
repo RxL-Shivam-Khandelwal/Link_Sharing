@@ -5,8 +5,10 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class DemoService {
 
-    def serviceMethod() {
-        println "demo service"
-        return  true;
+    static def serviceMethod(int a, int b) {
+        return  a+b;
     }
+
+
+
 }

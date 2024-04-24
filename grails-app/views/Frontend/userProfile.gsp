@@ -241,58 +241,9 @@
                     <p>Subscription</p>
                     <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
                 </div>
-<g:if test="${subscription_Topic}">
+                <g:render template="/templates/userSubscriptions" model="[subscription_Topic:subscription_Topic,curr_user: curr_user]" />
 
-    <g:each in="${subscription_Topic}" var="StopicData">
 
-        <div class="Border1" style="border: 2px solid black;">
-            <div class="DSubcontent">
-                <div class="userCard" style="border: 0cap;">
-                    <div class="userImg">
-                        <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg" height="90px" width="90px">
-                    </div>
-                    <div class="userData">
-                        <h2>${StopicData?.topic?.name}</h2>
-                        <div class="userS">
-                            <div class="DId">
-                                <p>${StopicData?.topic?.user?.username}</p>
-                                <a href="#">Unsubscribed</a>
-                            </div>
-                            <div class="S">
-                                <p>Subscription</p>
-                                <p>${StopicData?.topic?.subscriptions?.size()}</p>
-                            </div>
-                            <div class="T">
-                                <p>Post</p>
-                                <p>${StopicData?.topic?.resources?.size()}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="SubInfo">
-                <select id="dropdown-menu">
-                    <option value="" disabled selected>Serious</option>
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
-                </select>
-                <select id="dropdown-menu">
-                    <option value="" disabled selected>Private</option>
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
-                </select>
-                <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">
-                <img src="${assetPath(src: 'link.svg')}" alt="link">
-                <img src="${assetPath(src: 'trash-fill.svg')}" alt="trash-fill">
-            </div>
-        </div>
-    </g:each>
-</g:if>
-<g:else>
-    <p>No subscriptions</p>
-</g:else>
 
             </div>
 
@@ -302,72 +253,6 @@
                     <p>Trending Topics</p>
                     <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
                 </div>
-%{--                <g:if test="${all_Topics!= null && all_Topics.size()!=0}">--}%
-%{--                <g:each in="${all_Topics}"  var="topicData">--}%
-%{--                <div class="Border1" style="border: 2px solid black;">--}%
-%{--                    <div class="DSubcontent">--}%
-%{--                        <div class="userCard" style="border: 0cap;">--}%
-%{--                            <div class="userImg">--}%
-%{--                    <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg"  height="90px" width="90px">--}%
-%{--                            </div>--}%
-%{--                            --}%
-%{--                            <div class="userData">--}%
-%{--                                <g:link controller= "Topic_show" action="topic" params="[topicId: topicData.id]"> --}%
-%{--                                  <h2>${topicData?.name}</h2>--}%
-%{--                                </g:link>--}%
-%{--                                <div class="userS">--}%
-%{--                                    <div class="DId">--}%
-%{--                                     <p>  ${topicData?.user.username} </p>--}%
-
-%{--                    <g:if test="${Subscription?.findByTopicAndUser(topicData,session.user)!=null}">--}%
-%{--                                        <g:link controller="SubandUnsub" action="unsubscribe" params="[topicId: topicData.id, cuser: curr_user.id]">unsubscribe</g:link>--}%
-%{--                                      </g:if>  --}%
-%{--                                      <g:else>                                       --}%
-%{--                                          <g:link controller="SubandUnsub" action="subscribe" params="[topicId: topicData.id, cuser: curr_user.id]">subscribe</g:link>--}%
-%{--                                        </g:else> --}%
-%{--                                                --}%
-%{--                                    </div>--}%
-%{--                                    <div class="S">--}%
-%{--                                        <p>Subscription</p>--}%
-%{--                                        <p>${topicData?.subscriptions?.size()}</p>--}%
-%{--                                    </div>--}%
-%{--                                    <div class="T">--}%
-%{--                                        <p>Post</p>--}%
-%{--                                        <g:if test="${topicData != null}">--}%
-%{--                                            <p>${topicData?.resources?.size()}</p>--}%
-%{--                                            </g:if>--}%
-%{--                                            <g:else>--}%
-%{--                                            <p> 0 </p>--}%
-%{--                                            </g:else>--}%
-%{--                                    </div>--}%
-%{--                                </div>--}%
-%{--                            </div>--}%
-%{--                            --}%
-%{--                        </div>--}%
-%{--                    </div>--}%
-%{--                    <div class="SubInfo">--}%
-%{--                        <select id="dropdown-menu">--}%
-%{--                            <option value="" disabled selected>Serious</option>--}%
-%{--                            <option value="option1">Option 1</option>--}%
-%{--                            <option value="option2">Option 2</option>--}%
-%{--                            <option value="option3">Option 3</option>--}%
-%{--                        </select>--}%
-%{--                        <select id="dropdown-menu">--}%
-%{--                            <option value="" disabled selected>Private</option>--}%
-%{--                            <option value="option1">Option 1</option>--}%
-%{--                            <option value="option2">Option 2</option>--}%
-%{--                            <option value="option3">Option 3</option>--}%
-%{--                        </select>--}%
-%{--                         <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">--}%
-%{--                         <img src="${assetPath(src: 'link.svg')}" alt="link" >--}%
-%{--                         <img src="${assetPath(src: 'trash-fill.svg')}" alt="trash-fill">--}%
-%{--                    </div>--}%
-%{--                </div>--}%
-%{--                </g:each>--}%
-%{--                </g:if>--}%
-%{--                <g:else>--}%
-%{--                   <p>No Trending Topic</p>--}%
-%{--                   </g:else>--}%
                 <g:render template="/templates/trendingTopics" model="[all_Topics:all_Topics, currentPage: currentPage, totalRecords: totalRecords,maxPerPage: maxPerPage]" />
             </div>
         </div>

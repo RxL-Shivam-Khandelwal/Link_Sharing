@@ -19,7 +19,7 @@
                             <h2>${StopicData?.topic?.name}</h2>
                             <g:form id="myFormS${num++}" name="myFormS${num++}"  class="hidden" controller="Register"  action="change_topic_name" >
                                 <g:hiddenField name="topicId" value="${StopicData.topic.id}"/>
-                                <g:if test="${StopicData.topic.user == session.user }">
+                                <g:if test="${StopicData.topic.user == curr_user }">
                                     <input type="text" placeholder="Enter New Topic Name" name="new_topic_name">
                                     <button type="submit" class="btn">Save</button>
                                     <button id="cancelBtn" type="button" class="btn" onclick="showForm('myFormS${num - 1}')">Cancel</button>
@@ -48,13 +48,13 @@
                               value="${StopicData.seriousness}"
                               onchange="sendSeriournessToController(this.value, ${StopicData.id})"
                               style="height: 30px; width: 140px;" />
-                    <g:if test="${StopicData.topic.user == session.user}">
+                    <g:if test="${StopicData.topic.user == curr_user}">
                         <g:select id="visiblitySub_${StopicData.topic.id}" from="['Public', 'Private']" name="selectedVisibility"
                                   value="${StopicData.topic.visibility}"
                                   onchange="sendDataToController(this.value, ${StopicData.topic.id})"
                                   style="height: 30px; width: 140px;" />
                     </g:if>
-                    <g:if test="${StopicData.topic.user == session.user }">
+                    <g:if test="${StopicData.topic.user == curr_user }">
                         <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">
                         <div class="modal fade" id="exampleModalDeletetopic${StopicData.topic.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
