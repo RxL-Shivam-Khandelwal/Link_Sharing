@@ -3,7 +3,7 @@ package first_grails
 import grails.testing.web.controllers.ControllerUnitTest
 import spock.lang.Specification
 
-class PostControllerSpec extends Specification implements ControllerUnitTest<PostController> {
+class SearchControllerSpec extends Specification implements ControllerUnitTest<SearchController> {
 
     def setup() {
     }

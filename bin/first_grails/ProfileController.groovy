@@ -6,7 +6,7 @@ class ProfileController {
          if(session.user_id ==null){
              render(template: "/templates/errorHandling");
          }else {
-             def sub = Subscription.list();
+            List<Subscription>  sub = Subscription.list();
              Users user = Users.findById(session.user.id);
              render(view: "../Frontend/edit_profile", model: [subscriptions: sub, user: user]);
          }

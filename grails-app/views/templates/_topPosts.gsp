@@ -23,7 +23,21 @@
                             <img src="${assetPath(src: 'instagram.svg')}" alt="instagram">
                         </div>
                         <span class="topic">
+                            <g:if test="${session.user != null}">
+
+
+                            <g:if test="${res.url == null}">
+                                <g:link  controller="DocumentResource" action="downloadFile" params="[fileId: res.id]" target="_blank">Download File</g:link>
+                            </g:if>
+                            <g:else>
+                                <a href = "${createLink(absolute:true, uri:"${res.url}")}" target="_blank">View Full Site</a>
+                            </g:else>
+                            <g:link controller ="Register" action="is_read" params="[resId:res.id]"> Mark as read </g:link>
                             <g:link controller="Post" action="show" params="[resId: res.id]">View post</g:link>
+                            </g:if>
+                            <g:else>
+                                <g:link controller="Post" action="show" params="[resId: res.id]">View post</g:link>
+                            </g:else>
                         </span>
                     </div>
                 </div>
@@ -39,24 +53,24 @@
 
 </div>
 
-<script>
-    function loadNextPageP() {
-        let currentPage = parseInt('${currentPageP}');
-        console.log(${currentPageP});
-        console.log("current page is ", currentPage);
-        let nextPage = currentPage + 1;
-        let url = '${createLink(controller: "Login", action: "topPosts")}?page=' + nextPage;
-        $.ajax({
-            url: url,
-            type: 'GET',
-            dataType: 'html',
-            success: function(response) {
-                console.log(${currentPageP});
-                $('#top_Posts').html(response);
-            },
-            error: function(xhr, status, error) {
-                console.error('Error loading next page:', status, error);
-            }
-        });
-    }
-</script>
+%{--<script>--}%
+%{--    function loadNextPageP() {--}%
+%{--        let currentPage = parseInt('${currentPageP}');--}%
+%{--        console.log(${currentPageP});--}%
+%{--        console.log("current page is ", currentPage);--}%
+%{--        let nextPage = currentPage + 1;--}%
+%{--        let url = '${createLink(controller: "Login", action: "topPosts")}?page=' + nextPage;--}%
+%{--        $.ajax({--}%
+%{--            url: url,--}%
+%{--            type: 'GET',--}%
+%{--            dataType: 'html',--}%
+%{--            success: function(response) {--}%
+%{--                console.log(${currentPageP});--}%
+%{--                $('#top_Posts').html(response);--}%
+%{--            },--}%
+%{--            error: function(xhr, status, error) {--}%
+%{--                console.error('Error loading next page:', status, error);--}%
+%{--            }--}%
+%{--        });--}%
+%{--    }--}%
+%{--</script>--}%

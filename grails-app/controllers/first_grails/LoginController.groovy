@@ -5,19 +5,15 @@ class LoginController {
     def index() {
         Long maxPerPage = 2
         Long currentPage = 1;
-        if(params?.page){
-            currentPage= params.page.toLong();
-        }
-
+        Long currentPageP = 1;
         Long offset = (currentPage - 1) * maxPerPage
         List<Resources> resource = Resources.createCriteria().list(max: maxPerPage, offset: offset){
             eq("isdeleted", false)
             order("lastUpdated","desc")
         }
-
         Long totalRecords = Resources.countByIsdeleted(false)
         List<Resources>  res_shares = resource;
-        render (view : "../Frontend/login", model:[resource: resource, currentPage: currentPage, totalRecords: totalRecords,res_shares:res_shares, maxPerPage: maxPerPage]);
+        render (view : "../Frontend/login", model:[resource: resource, currentPage: currentPage, totalRecords: totalRecords,res_shares:res_shares, maxPerPage: maxPerPage,currentPageP: currentPageP]);
     }
 
     def loginUser(){
@@ -48,39 +44,39 @@ class LoginController {
 
 
     def nextPage() {
-        def maxPerPage = 2
+        Long maxPerPage = 2
         Long currentPage = 1;
+        Long currentPageP = 1;
         if(params?.page){
             currentPage= params.page.toLong();
         }
         println "value of current page is :" + currentPage;
-        def offset = (currentPage - 1) * maxPerPage
-        def resource = Resources.createCriteria().list(max: maxPerPage, offset: offset){
+        Long offset = (currentPage - 1) * maxPerPage
+        List<Resources> resource = Resources.createCriteria().list(max: maxPerPage, offset: offset){
             eq("isdeleted", false)
             order("lastUpdated","desc")
         }
         println "value of currentPGE IS :" + currentPage + "resources are:" + resource;
-        def totalRecords = Resources.countByIsdeleted(false)
+        Long totalRecords = Resources.countByIsdeleted(false)
 
-        render(template: '/templates/recentShares', model: [resource: resource, currentPage: currentPage, totalRecords: totalRecords,maxPerPage: maxPerPage]);
+        render(template: '/templates/recentShares', model: [resource: resource, currentPage: currentPage, totalRecords: totalRecords,maxPerPage: maxPerPage,currentPageP: currentPageP]);
     }
 
 
     def topPosts(){
-        def maxPerPage = 2
+        Long maxPerPage = 2
         Long currentPage = 1;
         if(params?.page){
             currentPage= params.page.toLong();
         }
         println "value of current page is :" + currentPage;
-        def offset = (currentPage - 1) * maxPerPage
-        def resource = Resources.createCriteria().list(max: maxPerPage, offset: offset){
+        Long offset = (currentPage - 1) * maxPerPage
+        List<Resources> resource = Resources.createCriteria().list(max: maxPerPage, offset: offset){
             eq("isdeleted", false)
             order("lastUpdated","desc")
         }
         println "value of currentPGE IS :" + currentPage + "resources are:" + resource;
-        def totalRecords = Resources.countByIsdeleted(false)
-
+        Long totalRecords = Resources.countByIsdeleted(false)
         render(template: '/templates/topPosts', model: [resourceP: resource, currentPageP: currentPage, totalRecordsP: totalRecords,maxPerPageP: maxPerPage]);
 
     }

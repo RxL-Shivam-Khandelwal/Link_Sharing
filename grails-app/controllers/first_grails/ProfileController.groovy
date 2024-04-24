@@ -6,9 +6,10 @@ class ProfileController {
          if(session.user_id ==null){
              render(template: "/templates/errorHandling");
          }else {
-            List<Subscription>  sub = Subscription.list();
+//            List<Subscription>  sub = Subscription.list();
              Users user = Users.findById(session.user.id);
-             render(view: "../Frontend/edit_profile", model: [subscriptions: sub, user: user]);
+             List<Subscription> sub_topic = Subscription.findAllByUser(user);
+             render(view: "../Frontend/edit_profile", model: [subscriptions: sub_topic, user: user]);
          }
      }
 

@@ -13,9 +13,8 @@ class RegisterService {
     }
 
     def dashboard(Long userId) {
-         Users user = Users.findById(userId)
-            Users curr_user = user;
-
+        Users user = Users.findById(userId)
+        Users curr_user = user;
         def subscriptionCount = Subscription.createCriteria().get {
             projections {
                 count()
@@ -24,149 +23,134 @@ class RegisterService {
             eq('user.id', userId)
             eq('t.isdeleted', false)
         }
-        def topicCount = Topic.createCriteria().get{
-            projections{
+        def topicCount = Topic.createCriteria().get {
+            projections {
                 count()
             }
             eq('user.id', userId)
             eq('isdeleted', false)
         }
 
-            List<Subscription> sub_topic = Subscription.findAllByUser(user);
-            List<Topic> topics =  Topic.list();
-            topics.sort({t1, t2 ->
-                Long ResourcecountT1 = t1.resources.size();
-                Long ResourcecountT2 = t2.resources.size();
-                ResourcecountT2.compareTo(ResourcecountT1)
-            })
+        List<Subscription> sub_topic = Subscription.findAllByUser(user);
+        List<Topic> topics = Topic.list();
+        topics.sort({ t1, t2 ->
+            Long ResourcecountT1 = t1.resources.size();
+            Long ResourcecountT2 = t2.resources.size();
+            ResourcecountT2.compareTo(ResourcecountT1)
+        })
+        def all = allPosts(topics, user);
+        List<Resources> l = all[0];
+        Long totalRecordsP = all[1];
 
-            List<Resources> l = []
-        List<Resources> new_posts= [];
-            topics.each{ it->
-                if(Subscription.findByTopicAndUser(it,user) && it.resources.size() && it.visibility == Topic.Visibility.Public){
-                    def reso = it.resources;
-                    reso.each{ it1->
-                        new_posts.add([it1]);
-                    }
-                }
-            }
-            new_posts.each{  resource->
-                List<ReadingItem> readingItemlist = ReadingItem.findAllByResource(resource);
-                Boolean flag=0;
-                readingItemlist.each{it->
-                    if(it.user==user && it.isRead){
-                        flag=1;
-                    }
-                }
-                if(!flag){
-                    l.add([resource]);
-                }
-            }
-            l = l.flatten();
-            String user_img = curr_user.photoURL;
-            println  topics.size();
-            // preparing data for pagination.
-            Long totalRecords = topics.size();
-            Long maxPerPage = 2
-            Long currentPage = 1;
-            Long offset = (currentPage - 1) * maxPerPage;
-            topics=  Topic.createCriteria().list(max: maxPerPage, offset: offset){
-                eq('isdeleted', false);
-
-            }
-         Map mp = [
-                 subscriptionCount: subscriptionCount,
-                 topicCount: topicCount,
-                 topics: topics,
-                 l: l,
-                 sub_topic: sub_topic,
-                 user: user,
-                 user_img: user_img,
-                 maxPerPage: maxPerPage,
-                 currentPage: currentPage,
-                 offset: offset,
-                 totalRecords: totalRecords
-         ]
-           return mp;
-     }
-
-    def nextPage(Long currentPage,Long totalRecords, Users curr_user) {
-        def maxPerPage = 2
-        def offset = (currentPage - 1) * maxPerPage
-        def topics=  Topic.createCriteria().list(max: maxPerPage, offset: offset){
+        String user_img = curr_user.photoURL;
+        println topics.size();
+        // preparing data for pagination.
+        Long totalRecords = topics.size();
+        Long maxPerPage = 2
+        Long currentPage = 1;
+        Long offset = (currentPage - 1) * maxPerPage;
+        topics = Topic.createCriteria().list(max: maxPerPage, offset: offset) {
             eq('isdeleted', false);
+
         }
+        maxPerPage = 3;
+        List<Resources> paginatedSubscriptions = PaginatePosts(l, offset, maxPerPage);
+        maxPerPage = 2;
         Map mp = [
-                topics : topics,
-                currentPage: currentPage,
-                totalRecords: totalRecords,
-                maxPerPage:maxPerPage,
-                curr_user: curr_user
+                subscriptionCount     : subscriptionCount,
+                topicCount            : topicCount,
+                topics                : topics,
+                l                     : l,
+                sub_topic             : sub_topic,
+                user                  : user,
+                user_img              : user_img,
+                maxPerPage            : maxPerPage,
+                currentPage           : currentPage,
+                offset                : offset,
+                totalRecords          : totalRecords,
+                paginatedSubscriptions: paginatedSubscriptions,
+                totalRecordsP         : totalRecordsP
         ]
         return mp;
     }
 
-    def create_user() {
-        try {
-            Users user = new Users(params)
-            println params;
-            println "user image format check" + params.photo;
-            user.save(flush: true, failOnError: true)
-            def userId = user.id
-            session.user_id = user.id
-            session.user = user;
-            // Set user ID in localStorage
-            render(template: '/register/setLocalStorage', model: [userId: userId])
-        }catch (Exception e) {
-            println e;
-            render (view: "create", model: [errors: e])
+    List<Resources> PaginatePosts(List<Resources> l, Long offset, maxPerPage) {
+        List<Resources> paginatedSubscriptions;
+
+        int endIndex = Math.min(offset + maxPerPage, l.size());
+
+        if (offset < l.size()) {
+            paginatedSubscriptions = l.subList(Math.toIntExact(offset), Math.toIntExact(endIndex));
+        } else {
+            paginatedSubscriptions = Collections.emptyList();
         }
+        return paginatedSubscriptions;
     }
 
-    void is_read(Resources res,Users user){
-
-        ReadingItem item = ReadingItem.findByUserAndResource(user,res);
-        if(item!=null){
-            item.isRead = true;
-            item.save(flush: true, failOnError: true);
-        }else{
-            ReadingItem r_item = new ReadingItem(resource:res, user:user,isRead:true);
-            r_item.save(flush:true, failOnError:true);
+    List<Resources> allPosts(List<Topic> topics, Users user) {
+        List<Resources> l = []
+        List<Resources> new_posts = [];
+        Long totalRecordsP = 0;
+        topics.each { it ->
+            if (Subscription.findByTopicAndUser(it, user) && it.resources.size() && it.visibility == Topic.Visibility.Public) {
+                def reso = it.resources;
+                reso.each { it1 ->
+                    new_posts.add([it1]);
+                }
+            }
         }
-    }
-
-    void change_topic_name(def params){
-        def topic_name = params.new_topic_name;
-        Topic curr_topic = Topic.findById(params.topicId);
-        curr_topic.name = topic_name;
-        curr_topic.save(flush:true, failOnError:true);
-    }
-
-
-
-    def change_seriousness(){
-        Subscription curr_sub = Subscription.findById(params.StopicId);
-        curr_sub.seriousness = params.selectedSeriousness;
-        curr_sub.save(flush:true);
-        println params;
-        flash.message = "Seriousness changed!"
-        Long userId= session.user.id;
-        redirect(action:"dashboard",params: [userId: userId]);
-    }
-
-    def toDelete(){
-        Topic topic = Topic.findById(params.id);
-
-        println "topic id that has deleted:" + topic.id;
-
-        def res=  Resources.findAllByTopic(topic);
-        res.each{ it->
-            it.isdeleted =1;
+        new_posts.each { resource ->
+            List<ReadingItem> readingItemlist = ReadingItem.findAllByResource(resource);
+            Boolean flag = 0;
+            readingItemlist.each { it ->
+                if (it.user == user && it.isRead) {
+                    flag = 1;
+                }
+            }
+            if (!flag) {
+                l.add([resource]);
+                totalRecordsP++;
+            }
         }
-        Resources.saveAll(res);
-        topic.isdeleted=true;
-        topic.save(flush:true);
-        Long userId= session.user.id;
-        redirect(action: "dashboard",params: [userId: userId] );
+
+        l = l.flatten();
+        return [l, totalRecordsP];
     }
+
+    def nextPage(Long currentPage, Long totalRecords, Users curr_user) {
+        def maxPerPage = 2
+        def offset = (currentPage - 1) * maxPerPage
+        def topics = Topic.createCriteria().list(max: maxPerPage, offset: offset) {
+            eq('isdeleted', false);
+        }
+        Map mp = [
+                topics      : topics,
+                currentPage : currentPage,
+                totalRecords: totalRecords,
+                maxPerPage  : maxPerPage,
+                curr_user   : curr_user
+        ]
+        return mp;
+    }
+
+    def nextPageP(def params, Users user) {
+
+        Long maxPerPage = 3
+        Long currentPage = 1;
+        if (params?.page) {
+            currentPage = params.page.toLong();
+        }
+        println "value of current page is :" + currentPage;
+        Long offset = (currentPage - 1) * maxPerPage
+        List<Topic> topics = Topic.list();
+        def all = allPosts(topics, user);
+        List<Resources> l = all[0];
+        Long totalRecordsP = all[1];
+        List<Resources> paginatedSubscriptions = PaginatePosts(l, offset, maxPerPage);
+          Map mp = [
+                  paginatedSubscriptions:paginatedSubscriptions,totalRecordsP:totalRecordsP,maxPerPage:maxPerPage,currentPage:currentPage
+          ]
+        return mp;
+    }
+
 }

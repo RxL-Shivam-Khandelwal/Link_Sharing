@@ -3,7 +3,7 @@ package demo
 
 class AuthenticationInterceptor {
    public AuthenticationInterceptor(){
-       match(controller: ['Topic', 'Profile', 'UserProfile', 'LinkResource','Post'])
+       match(controller: ['Topic', 'Profile', 'UserProfile', 'LinkResource','Post','Register'])
     }
     boolean before() {
         def user = session.getAttribute('user_id')

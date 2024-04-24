@@ -16,9 +16,10 @@ class RegisterController {
        render(template: "/templates/errorHandling")
    }else{
        userId = session.user_id;
-      def user = Users.findById(userId)
+      Users user = Users.findById(userId)
        Map result = registerService.dashboard(userId);
-       render(view: "../Frontend/dashboard", model: [subscriptionCount: result.subscriptionCount, topicCount: result.topicCount,all_Topics:result.topics,resource: result.l,subscription_Topic: result.sub_topic, curr_user:result.user,user_img: result.user_img,maxPerPage:result.maxPerPage,currentPage:result.currentPage,offset:result.offset,totalRecords:result.totalRecords])
+       Long currentPageP =1;
+       render(view: "../Frontend/dashboard", model: [subscriptionCount: result.subscriptionCount, topicCount: result.topicCount,all_Topics:result.topics,resource: result.paginatedSubscriptions,subscription_Topic: result.sub_topic, curr_user:result.user,user_img: result.user_img,maxPerPage:result.maxPerPage,currentPage:result.currentPage,offset:result.offset,totalRecords:result.totalRecords,currentPageP: currentPageP,totalRecordsP:result.totalRecordsP])
        }
 }
 
@@ -32,6 +33,55 @@ class RegisterController {
         Map result = registerService.nextPage(currentPage,totalRecords,curr_user);
 
         render(template: '/templates/trendingTopics', model: [all_Topics: result.topics, currentPage: result.currentPage, totalRecords: result.totalRecords,maxPerPage: result.maxPerPage,curr_user : result.curr_user]);
+    }
+    def nextPageP(){
+        Users user = session.user;
+
+        Map result = registerService.nextPageP(params, user);
+//        Long totalRecordsP = 0;
+//            Long maxPerPage = 2
+//            Long currentPage = 1;
+//            if(params?.page){
+//                currentPage= params.page.toLong();
+//            }
+//            println "value of current page is :" + currentPage;
+//            Long offset = (currentPage - 1) * maxPerPage
+//        List<Topic> topics =  Topic.list();
+//        List<Resources> l = []
+//        List<Resources> new_posts= [];
+//        topics.each{ it->
+//            if(Subscription.findByTopicAndUser(it,user) && it.resources.size() && it.visibility == Topic.Visibility.Public){
+//                def reso = it.resources;
+//                reso.each{ it1->
+//                    new_posts.add([it1]);
+//                }
+//            }
+//        }
+//        new_posts.each{  resource->
+//            List<ReadingItem> readingItemlist = ReadingItem.findAllByResource(resource);
+//            Boolean flag=0;
+//            readingItemlist.each{it->
+//                if(it.user==user && it.isRead){
+//                    flag=1;
+//                }
+//            }
+//            if(!flag){
+//                l.add([resource]);
+//                totalRecordsP++;
+//            }
+//        }
+//        l = l.flatten();
+//        List<Resources> paginatedSubscriptions;
+//
+//        int endIndex = Math.min(offset + maxPerPage, l.size());
+//
+//        if (offset < l.size()) {
+//            paginatedSubscriptions = l.subList(Math.toIntExact(offset), Math.toIntExact(endIndex));
+//        } else {
+//            paginatedSubscriptions = Collections.emptyList();
+//        }
+        println "program reaches here fine!"
+        render(template: '/templates/topPosts', model: [resourceP: result.paginatedSubscriptions, currentPageP: result.currentPage, totalRecordsP: result.totalRecordsP,maxPerPageP: result.maxPerPage]);
     }
     def create_user() {
         try {

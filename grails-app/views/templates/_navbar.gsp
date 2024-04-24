@@ -3,9 +3,12 @@
         <g:link controller="register"  action="dashboard"> <h3>Link Sharing</h3>  </g:link>
     </div>
     <div class="search-container">
-        <span class="search-icon">&#128269;</span>
-        <input type="text" class="search-input" placeholder="Search...">
-        <span class="close-icon">&#10005;</span>
+        <g:form controller="Search" action="index">
+            <span class="search-icon">&#128269;</span>
+            <input type="text" class="search-input" name="searchTerm" placeholder="Search...">
+            <span class="close-icon">&#10005;</span>
+        </g:form>
+
     </div>
     <div class="clogo">
         <%-- <div class="logo-container" onmouseover="changeColor(this)"> <img src="${assetPath(src: 'chat-fill.svg')}" alt="chat-fill" onclick="showCard(1)"></div>

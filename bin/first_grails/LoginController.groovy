@@ -10,28 +10,28 @@ class LoginController {
         }
 
         Long offset = (currentPage - 1) * maxPerPage
-        def resource = Resources.createCriteria().list(max: maxPerPage, offset: offset){
+        List<Resources> resource = Resources.createCriteria().list(max: maxPerPage, offset: offset){
             eq("isdeleted", false)
             order("lastUpdated","desc")
         }
 
-        def totalRecords = Resources.countByIsdeleted(false)
-        def res_shares = resource;
+        Long totalRecords = Resources.countByIsdeleted(false)
+        List<Resources>  res_shares = resource;
         render (view : "../Frontend/login", model:[resource: resource, currentPage: currentPage, totalRecords: totalRecords,res_shares:res_shares, maxPerPage: maxPerPage]);
     }
 
     def loginUser(){
-        def email = params.email
-        def password = params.password
-        def user = Users.findByEmailAndPassword(email, password);
+        String email = params.email
+        String password = params.password
+        Users user = Users.findByEmailAndPassword(email, password);
 
 
           if (user) {
                   Long userId = user.id;
-                  def subscriptionCount = Subscription.where {
+                  Long subscriptionCount = Subscription.where {
                       user.id == userId;
                   }.count()
-                  def topicCount = Topic.where {
+                  Long topicCount = Topic.where {
                       user.id == userId
                   }.count()
                 //   def topics= Topic.list();

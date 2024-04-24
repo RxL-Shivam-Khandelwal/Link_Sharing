@@ -2,7 +2,11 @@
 <%@ page import="first_grails.Resources" %>
 <%@ page import="first_grails.Subscription" %>
 <%@  page import="first_grails.Topic" %>
-
+<style>
+.hidden{
+    display: none;
+  }
+</style>
 
 <g:if test="${subscription_Topic}">
     <g:set var="num" value="${1}" />
@@ -89,3 +93,18 @@
 <g:else>
     <p>No subscriptions</p>
 </g:else>
+
+
+
+
+<script>
+
+    function showForm(formName) {
+        let form = document.forms[formName];
+        if (form) {
+            form.classList.toggle("hidden");
+        } else {
+            console.error("Form element with name '" + formName + "' not found.");
+        }
+    }
+</script>

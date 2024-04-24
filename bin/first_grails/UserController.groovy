@@ -7,7 +7,7 @@ class UserController {
 
         def details(Long userId) {
         // Fetch user details based on userId
-        def user = Users.get(userId)
+        Users user = Users.get(userId)
         println user;
         // Long posts= Resources.findAllByTopic()
 
