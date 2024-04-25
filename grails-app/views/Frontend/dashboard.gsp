@@ -74,7 +74,7 @@
                 </div>
                 <g:hiddenField name="topPostPage" id="topPostPage" value="${currentPageP}"/>
                 <div id="RecentShare">
-                <g:render template="/templates/topPosts" model="[resourceP:resource, currentPageP: currentPageP, totalRecordsP: totalRecordsP, maxPerPageP: maxPerPage]"/>
+                <g:render template="/templates/topPosts" model="[resourceP:resource, currentPageP: currentPageP, totalRecordsP: totalRecordsP, maxPerPageP: maxPerPageP]"/>
             </div>
             </div>
         </div>

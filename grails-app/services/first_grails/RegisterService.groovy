@@ -31,31 +31,34 @@ class RegisterService {
             eq('isdeleted', false)
         }
 
-        List<Subscription> sub_topic = Subscription.findAllByUser(user);
+//        List<Subscription> sub_topic = Subscription.findAllByUser(user);
+        List<Subscription> sub_topic = Subscription.createCriteria().list{
+            eq("user" , user)
+        }
         List<Topic> topics = Topic.list();
         topics.sort({ t1, t2 ->
             Long ResourcecountT1 = t1.resources.size();
             Long ResourcecountT2 = t2.resources.size();
-            ResourcecountT2.compareTo(ResourcecountT1)
+            (ResourcecountT2 <=> ResourcecountT1)
         })
         def all = allPosts(topics, user);
         List<Resources> l = all[0];
         Long totalRecordsP = all[1];
-
         String user_img = curr_user.photoURL;
         println topics.size();
         // preparing data for pagination.
         Long totalRecords = topics.size();
         Long maxPerPage = 2
+        Long maxPerPageP = 3
         Long currentPage = 1;
         Long offset = (currentPage - 1) * maxPerPage;
         topics = Topic.createCriteria().list(max: maxPerPage, offset: offset) {
             eq('isdeleted', false);
 
         }
-        maxPerPage = 3;
-        List<Resources> paginatedSubscriptions = PaginatePosts(l, offset, maxPerPage);
-        maxPerPage = 2;
+
+        List<Resources> paginatedSubscriptions = PaginatePosts(l, offset, maxPerPageP);
+
         Map mp = [
                 subscriptionCount     : subscriptionCount,
                 topicCount            : topicCount,
@@ -69,12 +72,13 @@ class RegisterService {
                 offset                : offset,
                 totalRecords          : totalRecords,
                 paginatedSubscriptions: paginatedSubscriptions,
-                totalRecordsP         : totalRecordsP
+                totalRecordsP         : totalRecordsP,
+                maxPerPageP  :           maxPerPageP
         ]
         return mp;
     }
 
-    List<Resources> PaginatePosts(List<Resources> l, Long offset, maxPerPage) {
+    List<Resources> PaginatePosts(List<Resources> l, Long offset, Long maxPerPage) {
         List<Resources> paginatedSubscriptions;
 
         int endIndex = Math.min(offset + maxPerPage, l.size());

@@ -13,15 +13,21 @@ class SearchController {
         Long currentPageP =1;
          List<Resources> demo = result.l;
         List<Resources>search_posts = []
-      demo.each{it->
-          if(it.description.contains(searchTerm)  || (it.topic.name == searchTerm)){
-              search_posts.add(it);
-          }
-      }
+        if(user.admin ==false && searchTerm.length() > 0) {
+            demo.each { it ->
+                if (it.description.contains(searchTerm) || (it.topic.name == searchTerm)) {
+                    search_posts.add(it);
+                }
+            }
+        }else if(user.admin ==false && searchTerm.length() == 0){
+            search_posts= demo;
+        }
+        Long totalRecordsP = search_posts.size();
+
         Long offset = 0;
         Long maxPerPage = 3;
         List<Resources> PaginatedSearchResult = registerService.PaginatePosts(search_posts,offset,maxPerPage);
-        render(view: "../Frontend/search", model: [subscriptionCount: result.subscriptionCount, topicCount: result.topicCount,all_Topics:result.topics,resource: PaginatedSearchResult,subscription_Topic: result.sub_topic, curr_user:result.user,user_img: result.user_img,maxPerPage:result.maxPerPage,currentPage:result.currentPage,offset:result.offset,totalRecords:result.totalRecords,currentPageP: currentPageP,totalRecordsP:result.totalRecordsP])
+        render(view: "../Frontend/search", model: [subscriptionCount: result.subscriptionCount, topicCount: result.topicCount,all_Topics:result.topics,resource: PaginatedSearchResult,subscription_Topic: result.sub_topic, curr_user:result.user,user_img: result.user_img,maxPerPage:maxPerPage,currentPage:result.currentPage,offset:result.offset,totalRecords:result.totalRecords,currentPageP: currentPageP,totalRecordsP:totalRecordsP])
     }
 
     def nextPageP(){

@@ -13,7 +13,7 @@ class Users {
     @Lob
     byte[] photo
 
-    Boolean admin
+    Boolean admin = false;
     Boolean active = true;
 
     static mapping = {

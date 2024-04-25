@@ -19,7 +19,7 @@ class RegisterController {
       Users user = Users.findById(userId)
        Map result = registerService.dashboard(userId);
        Long currentPageP =1;
-       render(view: "../Frontend/dashboard", model: [subscriptionCount: result.subscriptionCount, topicCount: result.topicCount,all_Topics:result.topics,resource: result.paginatedSubscriptions,subscription_Topic: result.sub_topic, curr_user:result.user,user_img: result.user_img,maxPerPage:result.maxPerPage,currentPage:result.currentPage,offset:result.offset,totalRecords:result.totalRecords,currentPageP: currentPageP,totalRecordsP:result.totalRecordsP])
+       render(view: "../Frontend/dashboard", model: [subscriptionCount: result.subscriptionCount, topicCount: result.topicCount,all_Topics:result.topics,resource: result.paginatedSubscriptions,subscription_Topic: result.sub_topic, curr_user:result.user,user_img: result.user_img,maxPerPage:result.maxPerPage,currentPage:result.currentPage,offset:result.offset,totalRecords:result.totalRecords,currentPageP: currentPageP,totalRecordsP:result.totalRecordsP,maxPerPageP:result.maxPerPageP])
        }
 }
 
