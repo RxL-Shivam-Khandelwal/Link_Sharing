@@ -47,7 +47,7 @@
                         <h4 style="padding: 4px;">Recent Share</h4>
                     </div>
                     <div id="recent_share">
-<g:render template="/templates/recentShares" model="[resource: resource, currentPage: currentPage, totalRecords: totalRecords, maxPerPage: maxPerPage]" />
+                        <g:render template="/templates/recentShares" ></g:render>
                     </div>
 
                 </div>
@@ -66,8 +66,9 @@
                             </div>
                         </div>
                     </div>
+                    <g:hiddenField name="topPostPage" id="topPostPage" value="${currentPageP}"/>
                     <div id="top_Posts">
-                    <g:render template="/templates/topPosts" model="[resourceP: resource, currentPageP: currentPage, totalRecordsP: totalRecords, maxPerPageP: maxPerPage]" />
+                    <g:render template="/templates/topPosts" model="[resourceP: resource, currentPageP: currentPageP, totalRecordsP: totalRecords, maxPerPageP: maxPerPage]" />
                     </div>
                 </div>
             </div>
@@ -96,5 +97,27 @@
         </div>
     </div>
 </body>
-
+<script>
+    function loadNextPageP() {
+        %{--let currentPage = parseInt('${currentPageP}');--}%
+        let currentPage  = document.getElementById("topPostPage");
+        let currentValue = parseInt(currentPage.value);
+        let newValue = currentValue + 1;
+        currentPage.value = newValue;
+        console.log(${newValue});
+        console.log("current page is ", newValue);
+        let url = '${createLink(controller: "Login", action: "topPosts")}?page=' + newValue;
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'html',
+            success: function(response) {
+                $('#top_Posts').html(response);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error loading next page:', status, error);
+            }
+        });
+    }
+</script>
 </html>

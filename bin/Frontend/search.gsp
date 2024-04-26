@@ -1,3 +1,9 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: shivamkhandelwal
+  Date: 24/04/24
+  Time: 5:06 PM
+--%>
 
 <%@ page import="first_grails.Resources" %>
 <%@ page import="first_grails.Subscription" %>
@@ -15,13 +21,13 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>  
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
-<style> 
+<style>
 .hidden{
     display: none;
-  }
+}
 </style>
 <body>
 <asset:javascript src="dashboard.js"/>
@@ -52,19 +58,19 @@
             </div>
             <div class="Dsubscription">
                 <div class="hSub">
-                    <p>Subscription</p>
+                    <p>Trending Topics</p>
                     <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
                 </div>
-                <g:render template="/templates/userSubscriptions" model="[subscription_Topic:subscription_Topic,curr_user: curr_user]" />
+                <g:render template="/templates/trendingTopics" model="[all_Topics:all_Topics,maxPerPage:maxPerPage,currentPage:currentPage,offset:offset,totalRecords:totalRecords,curr_user:curr_user]" />
             </div>
             <div class="Dsubscription">
                 <div class="hSub">
                     <p>Trending Topics</p>
                     <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
                 </div>
-                 <div id="trending_Topics">
-                <g:render template="/templates/trendingTopics" model="[all_Topics:all_Topics,maxPerPage:maxPerPage,currentPage:currentPage,offset:offset,totalRecords:totalRecords,curr_user:curr_user]" />
-                 </div>
+                <div id="trending_Topics">
+                    <g:render template="/templates/trendingTopics" model="[all_Topics:all_Topics,maxPerPage:maxPerPage,currentPage:currentPage,offset:offset,totalRecords:totalRecords,curr_user:curr_user]" />
+                </div>
             </div>
         </div>
         <div class="rightD">
@@ -74,8 +80,8 @@
                 </div>
                 <g:hiddenField name="topPostPage" id="topPostPage" value="${currentPageP}"/>
                 <div id="RecentShare">
-                <g:render template="/templates/topPosts" model="[resourceP:resource, currentPageP: currentPageP, totalRecordsP: totalRecordsP, maxPerPageP: maxPerPageP]"/>
-            </div>
+                    <g:render template="/templates/topPosts" model="[resourceP:resource, currentPageP: currentPageP, totalRecordsP: totalRecordsP, maxPerPageP: maxPerPage]"/>
+                </div>
             </div>
         </div>
     </div>
@@ -83,38 +89,21 @@
 
 </g:if>
 <g:else>
-<g:render template="/templates/errorHandling"/>
+    <g:render template="/templates/errorHandling"/>
 </g:else>
 </body>
 <script>
-    // Check if userId is stored in localStorage
     var userId = localStorage.getItem('userId');
-    %{--console.log("helloWorld, userId is: " , userId);--}%
-    %{--// AJAX request to fetch user details--}%
-    %{--fetch('${createLink(controller: "User", action: "details")}?userId=' + userId)--}%
-    %{--    .then(response => response.json())--}%
-    %{--    .then(user => {--}%
-    %{--        // Update UI with user details--}%
-    %{--        console.log(user.username);--}%
-    %{--        console.log("user email id : ", user.email);--}%
-    %{--        document.getElementById('userName').textContent = user.username;--}%
-    %{--        document.getElementById('userEmail').textContent = user.email;--}%
-    %{--    })--}%
-    %{--    .catch(error => {--}%
-    %{--        console.error('Data is not extracted, Error:', error);--}%
-    %{--    });--}%
 
-  // change the div colour
-// JavaScript function to change the background color of the parent div when the mouse hovers over the child image
-function changeColor(element) {
-    const logoContainers = document.querySelectorAll('.logo-container');
-    
-    logoContainers.forEach(container => {
-        container.classList.remove('hovered'); // Remove the 'hovered' class from all logo containers
-    });
+    function changeColor(element) {
+        const logoContainers = document.querySelectorAll('.logo-container');
 
-    element.classList.add('hovered'); // Add 'hovered' class to the parent div of the hovered image
-}
+        logoContainers.forEach(container => {
+            container.classList.remove('hovered'); // Remove the 'hovered' class from all logo containers
+        });
+
+        element.classList.add('hovered'); // Add 'hovered' class to the parent div of the hovered image
+    }
 
     document.addEventListener('DOMContentLoaded', function () {
         var textarea = document.querySelector('.share_link textarea');
@@ -124,32 +113,12 @@ function changeColor(element) {
         });
     });
 
-        document.getElementById('userCard').addEventListener('click', function() {
+    document.getElementById('userCard').addEventListener('click', function() {
         // Redirect to user profile page
         window.location.href = "${createLink(controller: 'UserProfile', action: 'show', id: userCard)}";
     });
 
 
-  // function showForm(formId) {
-  //        console.log("formId is :" + formId-1);
-  //
-  //   var form = document.getElementById(formId-1);
-  //   if (form) {
-  //     if (form.classList.contains("hidden")) {
-  //       form.classList.remove("hidden");
-  //     }
-  //   } else {
-  //     console.error("Form element with ID '" + formId-1 + "' not found.");
-  //   }
-  // }
-  //   window.onload = function showForm(formId) {
-  //       var form = document.getElementById(formId);
-  //       if (form) {
-  //           form.classList.toggle("hidden");
-  //       } else {
-  //           console.error("Form element with ID '" + formId + "' not found.");
-  //       }
-  //   }
     function showForm(formName) {
         var form = document.forms[formName];
         if (form) {
@@ -158,10 +127,7 @@ function changeColor(element) {
             console.error("Form element with name '" + formName + "' not found.");
         }
     }
-  // function hideForm(formName) {
-  //   var form = document.getElementById(formId);
-  //   form.classList.add("hidden");
-  // }
+
     function sendDataToController(selectedVisibility, topicId) {
         $.ajax({
             url: "${createLink(controller: 'Register', action: 'change_topic_mode')}",
@@ -212,5 +178,5 @@ function changeColor(element) {
             }
         });
     }
-     </script>
+</script>
 </html>

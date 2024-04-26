@@ -1,5 +1,25 @@
 ---
 grails:
+    mail:
+        host: "smtp.gmail.com"
+        port: 587
+        username: "linksharing068@gmail.com"
+        password: "grrv xhsi htzk awzm"
+        props:
+            mail.smtp.auth: true
+            mail.smtp.starttls.enable: true
+            mail.smtp.ssl.trust: "*"
+
+#    props:
+#        mail.smtp.starttls.enable: true
+#        mail.smtp.auth: true
+#        mail.smtp.ssl.trust: "smtp.gmail.com"
+
+
+
+    servlet:
+        maxFileSize: 10 * 1024 * 1024 # Maximum file size in bytes (e.g., 10MB)
+        maxRequestSize: 10 * 1024 * 1024 # Maximum request size in bytes (e.g., 10MB)
     profile: web
     codegen:
         defaultPackage: first_grails
@@ -25,6 +45,9 @@ endpoints:
     enabled: false
     jmx:
         enabled: true
+
+
+
 
 ---
 grails:
@@ -130,3 +153,6 @@ environments:
 
 server:
     port:  8181
+
+
+

@@ -9,7 +9,7 @@ class UrlMappings {
             }
         }
 
-        "/"(view:"/index")
+        "/"(controller: "Register", action: "dashboard")
         "500"(view:'/error')
         "404"(view:'/notFound')
         "/helloWorld/new_method"(controller:"helloWorld", action:"f1");

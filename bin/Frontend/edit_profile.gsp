@@ -5,54 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit profile</title>
     <link rel="stylesheet" href="${assetPath(src: 'Login.css')}" type="text/css">
+    <link rel="stylesheet" href="${assetPath(src: 'dash.css')}" type="text/css">
     <link rel="stylesheet" href="${assetPath(src: 'edit_profile.css')}" type="text/css">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+<asset:javascript src="dashboard.js"/>
+
 <body>
 <g:if test="${session.user}">
-    <div class="navbar" style="justify-content: space-evenly;">
-        <div>
-            <g:link controller="register"  action="dashboard"> <h3>Link Sharing</h3>  </g:link>
-        </div>
-        <div class="search-container">
-            <span class="search-icon">&#128269;</span>
-            <input type="text" class="search-input" placeholder="Search...">
-            <span class="close-icon">&#10005;</span>
-        </div>
-        <div class="clogo">
-            <img src="${assetPath(src: 'chat-fill.svg')}" alt="chat-fill" onclick="showCard(1)">
-            <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" onclick="showCard(2)">
-            <img src="${assetPath(src: 'link.svg')}" alt="link" onclick="showCard(3)">
-            <img src="${assetPath(src: 'file-earmark-fill.svg')}" alt="file-earmark-fill" onclick="showCard(4)">
-        </div>
-        <div class="dprofile">
-            <img src="${assetPath(src: 'person-fill.svg')}" alt="person-fill" style="height: 30px; width: 30px; padding-top: 6px;">  
-            <div class="dropdown">
-                <button class="dropbtn nbtn">Dropdown
-                    <img src="/Img/caret-down-fill.svg" alt="">
-                </button>
-                <div class="dropdown-content">
-    <g:link controller="Profile">Profile</g:link>
-    <g:link controller="user">User</g:link>
-    <g:link controller="topic">Topic</g:link>
-    <g:link controller="post">Post</g:link>
-    <g:link controller="logout">Logout</g:link>
-                </div>
-            </div>
-        </div>
-    </div>
-    <g:if test="${flash.message || flash.error}">
-        <div id="alertMessage" class="alert ${flash.error ? 'alert-danger' : 'alert-success'}">
-            ${flash.message ?: flash.error}
-        </div>
-        <script>
-            // Automatically hide the alert after 3 seconds
-            setTimeout(function() {
-                $('#alertMessage').fadeOut('slow');
-            }, 3000);
-        </script>
-    </g:if>
+    <g:render template="/templates/navbar"  model="[subscription_Topic:subscriptions, curr_user: user]"/>
+
+%{--    <div class="navbar" style="justify-content: space-evenly;">--}%
+%{--        <div>--}%
+%{--            <g:link controller="register"  action="dashboard"> <h3>Link Sharing</h3>  </g:link>--}%
+%{--        </div>--}%
+%{--        <div class="search-container">--}%
+%{--            <span class="search-icon">&#128269;</span>--}%
+%{--            <input type="text" class="search-input" placeholder="Search...">--}%
+%{--            <span class="close-icon">&#10005;</span>--}%
+%{--        </div>--}%
+%{--        <div class="clogo">--}%
+%{--            <img src="${assetPath(src: 'chat-fill.svg')}" alt="chat-fill" onclick="showCard(1)">--}%
+%{--            <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" onclick="showCard(2)">--}%
+%{--            <img src="${assetPath(src: 'link.svg')}" alt="link" onclick="showCard(3)">--}%
+%{--            <img src="${assetPath(src: 'file-earmark-fill.svg')}" alt="file-earmark-fill" onclick="showCard(4)">--}%
+%{--        </div>--}%
+%{--        <div class="dprofile">--}%
+%{--            <img src="${assetPath(src: 'person-fill.svg')}" alt="person-fill" style="height: 30px; width: 30px; padding-top: 6px;">  --}%
+%{--            <div class="dropdown">--}%
+%{--                <button class="dropbtn nbtn">Dropdown--}%
+%{--                    <img src="/Img/caret-down-fill.svg" alt="">--}%
+%{--                </button>--}%
+%{--                <div class="dropdown-content">--}%
+%{--    <g:link controller="Profile">Profile</g:link>--}%
+%{--    <g:link controller="user">User</g:link>--}%
+%{--    <g:link controller="topic">Topic</g:link>--}%
+%{--    <g:link controller="post">Post</g:link>--}%
+%{--    <g:link controller="logout">Logout</g:link>--}%
+%{--                </div>--}%
+%{--            </div>--}%
+%{--        </div>--}%
+%{--    </div>--}%
+%{--    <g:if test="${flash.message || flash.error}">--}%
+%{--        <div id="alertMessage" class="alert ${flash.error ? 'alert-danger' : 'alert-success'}">--}%
+%{--            ${flash.message ?: flash.error}--}%
+%{--        </div>--}%
+%{--        <script>--}%
+%{--            // Automatically hide the alert after 3 seconds--}%
+%{--            setTimeout(function() {--}%
+%{--                $('#alertMessage').fadeOut('slow');--}%
+%{--            }, 3000);--}%
+%{--        </script>--}%
+%{--    </g:if>--}%
 <div class="Parent">
     <div class="lft">
         <div class="userCard">
@@ -79,57 +88,59 @@
                     <p>Subscription</p>
                     <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
                 </div>
-             <g:if test="${subscriptions}">
+                <g:render template="/templates/userSubscriptions" model="[subscription_Topic:subscriptions,curr_user: user]" />
 
-              <g:each in="${subscriptions}" var="StopicData">
-        <div class="Border1" style="border: 2px solid black;">
-            <div class="DSubcontent">
-                <div class="userCard" style="border: 0cap;">
-                    <div class="userImg">
-                        <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg" height="90px" width="90px">
-                    </div>
-                    <div class="userData">
-                        <h2>${StopicData?.topic?.name}</h2>
-                        <div class="userS">
-                            <div class="DId">
-                                <p>${StopicData?.topic?.user?.username}</p>
-                                <a href="#">Unsubscribed</a>
-                            </div>
-                            <div class="S">
-                                <p>Subscription</p>
-                                <p>${StopicData?.topic?.subscriptions?.size()}</p>
-                            </div>
-                            <div class="T">
-                                <p>Post</p>
-                                <p>${StopicData?.topic?.resources?.size()}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="SubInfo">
-                <select id="dropdown-menu">
-                    <option value="" disabled selected>Serious</option>
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
-                </select>
-                <select id="dropdown-menu">
-                    <option value="" disabled selected>Private</option>
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
-                </select>
-                <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">
-                <img src="${assetPath(src: 'link.svg')}" alt="link">
-                <img src="${assetPath(src: 'trash-fill.svg')}" alt="trash-fill">
-            </div>
-        </div>
-                </g:each>
-                </g:if>
-                <g:else>
-                 <p> No Topic subscribed by the user </p>
-                 </g:else>
+%{--                <g:if test="${subscriptions}">--}%
+
+%{--              <g:each in="${subscriptions}" var="StopicData">--}%
+%{--        <div class="Border1" style="border: 2px solid black;">--}%
+%{--            <div class="DSubcontent">--}%
+%{--                <div class="userCard" style="border: 0cap;">--}%
+%{--                    <div class="userImg">--}%
+%{--                        <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg" height="90px" width="90px">--}%
+%{--                    </div>--}%
+%{--                    <div class="userData">--}%
+%{--                        <h2>${StopicData?.topic?.name}</h2>--}%
+%{--                        <div class="userS">--}%
+%{--                            <div class="DId">--}%
+%{--                                <p>${StopicData?.topic?.user?.username}</p>--}%
+%{--                                <a href="#">Unsubscribed</a>--}%
+%{--                            </div>--}%
+%{--                            <div class="S">--}%
+%{--                                <p>Subscription</p>--}%
+%{--                                <p>${StopicData?.topic?.subscriptions?.size()}</p>--}%
+%{--                            </div>--}%
+%{--                            <div class="T">--}%
+%{--                                <p>Post</p>--}%
+%{--                                <p>${StopicData?.topic?.resources?.size()}</p>--}%
+%{--                            </div>--}%
+%{--                        </div>--}%
+%{--                    </div>--}%
+%{--                </div>--}%
+%{--            </div>--}%
+%{--            <div class="SubInfo">--}%
+%{--                <select id="dropdown-menu">--}%
+%{--                    <option value="" disabled selected>Serious</option>--}%
+%{--                    <option value="option1">Option 1</option>--}%
+%{--                    <option value="option2">Option 2</option>--}%
+%{--                    <option value="option3">Option 3</option>--}%
+%{--                </select>--}%
+%{--                <select id="dropdown-menu">--}%
+%{--                    <option value="" disabled selected>Private</option>--}%
+%{--                    <option value="option1">Option 1</option>--}%
+%{--                    <option value="option2">Option 2</option>--}%
+%{--                    <option value="option3">Option 3</option>--}%
+%{--                </select>--}%
+%{--                <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">--}%
+%{--                <img src="${assetPath(src: 'link.svg')}" alt="link">--}%
+%{--                <img src="${assetPath(src: 'trash-fill.svg')}" alt="trash-fill">--}%
+%{--            </div>--}%
+%{--        </div>--}%
+%{--                </g:each>--}%
+%{--                </g:if>--}%
+%{--                <g:else>--}%
+%{--                 <p> No Topic subscribed by the user </p>--}%
+%{--                 </g:else>--}%
             </div>
             
     </div>

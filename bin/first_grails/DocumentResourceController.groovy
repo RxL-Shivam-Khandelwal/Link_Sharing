@@ -1,11 +1,18 @@
 package first_grails
+
+//import grails.gorm.transactions.Transactional
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
+import org.springframework.web.multipart.MultipartFile
+import org.springframework.web.bind.annotation.*
+import javax.servlet.annotation.MultipartConfig
 class DocumentResourceController {
 
     def index() { }
-
-
+//
+//    @Transactional
+//    @RequestMapping("/documentRes", method = RequestMethod.POST)
+//    @MultipartConfig(maxFileSize = "10MB") // Adjust the maximum file size as needed
     def documentRes(){
 
                   try{
