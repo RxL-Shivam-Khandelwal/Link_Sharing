@@ -88,9 +88,9 @@
                     <input type="submit" class="btnSubmit" value="Login" />
                 </div>
                 <div class="form-group">
-                    <a href="#" class="btnForgetPwd" value="Login">Forget Password?</a>
+                    <g:link controller="login" action="forgetPass">Forget Password?</g:link>
                     <h6>Don't have account?</h6>
-                    <a href="Register.html">Register Now!!</a>
+                    <g:link controller="Register" action="dashboard">  Register Now!!</g:link>
                 </div>
                 </g:form>
             </div>

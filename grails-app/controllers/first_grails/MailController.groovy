@@ -25,8 +25,8 @@ InvitationService invitationService;
         String link = "http://localhost:8181/mail/subscription/?receiverEmail=${params.to}&authToken=${token}&topicId=${params.topic}";
         // Construct the email body with the link
         String body = "Invitation to Subscribe the Topic :  ${link}";
-
-     Boolean result =  invitationService.sendEmail(params.to, body);
+         String subject = "Invitation for Subscription of Topic";
+     Boolean result =  invitationService.sendEmail(params.to, body,subject);
         if(result){
             flash.message = "successfully send invitation!!"
         }else{
@@ -38,10 +38,6 @@ InvitationService invitationService;
     def generateAuthToken() {
         // Generate a UUID
         String authToken = UUID.randomUUID().toString()
-
-        // Use the authToken as needed
-
-        // Return the generated authToken
         return authToken
     }
 
@@ -76,4 +72,7 @@ InvitationService invitationService;
             redirect(controller: "Login");
         }
     }
+
+
+
 }
