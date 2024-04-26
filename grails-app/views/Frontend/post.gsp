@@ -173,15 +173,20 @@
                                         </div>
                                     </div>
                                 </div>
+                                <g:if test="${(curr_resource.user.id ==curr_user.id) || (curr_user.admin == true)}">
+
+
                                 <button type="button" class="btn" data-toggle="modal" data-target="#exampleModalDeletepost${curr_resource.id}" style="padding: 0; color: blue;">
                                     Delete  </button>
                                 <button type="button" class="btn" data-toggle="modal" data-target="#exampleModalLinkRes" data-whatever="@getbootstrap" style="padding: 0; color: blue;" onclick="populateModal('${curr_resource.topic.name}','${curr_resource.id}')">  Edit  </button>
+                                </g:if>
                                 <g:if test="${curr_resource.url == null}">
                                 <a href="#">Download</a>
                                 </g:if>
                                 <g:else>
                                 <a href = "${createLink(absolute:true, uri:"${curr_resource.url}")}" target="_blank">View full site</a>
                                 </g:else>
+
                             </div>
                             </g:if>
                         </div>
@@ -252,7 +257,7 @@ function rate(rating) {
     console.log("rating frontend:" + rating);
 
     $.ajax({
-        url: '/report/post/save ',
+        url: '/post/save ',
         type: 'POST',
         headers: {
             'X-Requested-With': 'XMLHttpRequest'

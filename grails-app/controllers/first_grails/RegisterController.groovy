@@ -13,7 +13,17 @@ class RegisterController {
     }
  def dashboard(Long userId) {
    if(session.user_id == null){
-       render(template: "/templates/errorHandling")
+       Long maxPerPage = 2
+       Long currentPage = 1;
+       Long currentPageP = 1;
+       Long offset = (currentPage - 1) * maxPerPage
+       List<Resources> resource = Resources.createCriteria().list(max: maxPerPage, offset: offset){
+           eq("isdeleted", false)
+           order("lastUpdated","desc")
+       }
+       Long totalRecords = Resources.countByIsdeleted(false)
+       List<Resources>  res_shares = resource;
+       render (view : "../Frontend/login", model:[resource: resource, currentPage: currentPage, totalRecords: totalRecords,res_shares:res_shares, maxPerPage: maxPerPage,currentPageP: currentPageP]);
    }else{
        userId = session.user_id;
       Users user = Users.findById(userId)
@@ -104,17 +114,19 @@ class RegisterController {
 
         Resources res= Resources.findById(params.resId);
         Users user= Users.findById(session.user_id);
-        registerService.is_read(res,user);
+        ReadingItem readingItem  = new ReadingItem(resource: res, user: user, isRead: true);
+        readingItem.save(flush:true);
         Long userId = session.user.id;
         redirect(action:"dashboard", params: [userId: userId]);
     }
 
     def change_topic_name(){
-        registerService.change_topic_name(params);
+        Topic topic = Topic.findById(params.topicId);
+        topic.name = params.new_topic_name;
+        topic.save(flush:true);
         flash.message = "Topic name changed successfully!"
         Long userId= session.user.id;
         redirect(action: "dashboard",params: [userId:userId]);
-
     }
 
     def change_topic_mode(){

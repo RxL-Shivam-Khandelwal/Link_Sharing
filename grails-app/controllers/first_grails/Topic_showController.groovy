@@ -9,8 +9,11 @@ TopicShowService topicShowService;
         Topic curr_topic = Topic.findById(params.topicId);
         Users  topic_owner = curr_topic.user;
         Long currentPage = 1;
-        Map result = topicShowService.serviceMethod(curr_topic,topic_owner,currentPage);
-        render(view:"../Frontend/topic_show" , model:[topic_Show_Map: result.topic_Show_Map, currentPage: currentPage, totalRecords: result.totalRecords, maxPerPage: result.maxPerPage,totalRecords_Posts: result.totalRecords_Posts, user_img: result.user_img]);
+        Users user = session.user;
+        Map result = topicShowService.serviceMethod(curr_topic,topic_owner,currentPage,user);
+
+//        subscription_Topic:subscription_Topic, curr_user: curr_user
+        render(view:"../Frontend/topic_show" , model:[topic_Show_Map: result.topic_Show_Map, currentPage: currentPage, totalRecords: result.totalRecords, maxPerPage: result.maxPerPage,totalRecords_Posts: result.totalRecords_Posts, user_img: result.user_img,subscription_Topic : result.sub_topic,curr_user:user]);
     }
     def nextPage(){
          Topic curr_topic = Topic.findById(params.topicId);

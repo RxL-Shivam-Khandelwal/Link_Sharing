@@ -62,7 +62,8 @@
             <div class="Dsubscription">
                 <div class="hSub">
                     <p>Trending Topics</p>
-                    <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
+                  <div class="view_all"> <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
+                  </div>
                 </div>
                  <div id="trending_Topics">
                 <g:render template="/templates/trendingTopics" model="[all_Topics:all_Topics,maxPerPage:maxPerPage,currentPage:currentPage,offset:offset,totalRecords:totalRecords,curr_user:curr_user]" />

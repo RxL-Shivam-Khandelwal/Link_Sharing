@@ -136,7 +136,7 @@ fork{
 
 </style>
 <body>
-<div class="error-500" data-text="Oh no! You have logout your account, Please login again. By just clicking on the link:!">
+<div class="error-500" data-text="${msg}">
 
     <spaguetti>
         <fork></fork>

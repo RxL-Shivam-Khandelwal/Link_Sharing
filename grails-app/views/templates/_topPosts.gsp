@@ -3,7 +3,9 @@
         <g:if test="${!res.isdeleted}">
             <div class="card1 ">
                 <div class="image">
-                    <img src="https://louisville.edu/enrollmentmanagement/images/person-icon/image" alt="p1">
+%{--                    <img src="https://louisville.edu/enrollmentmanagement/images/person-icon/image" alt="p1">--}%
+                    <img src="${res.topic.user.photoURL}" alt="person-circle.svg"  height="90px" width="90px"  >
+
                 </div>
                 <div class="content">
                     <div class="poster_info">

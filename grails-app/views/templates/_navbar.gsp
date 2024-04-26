@@ -101,7 +101,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLinkR">New message</h5>
+                        <h5 class="modal-title" id="exampleModalLinkR">Link Resource</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -119,7 +119,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="message-text" class="col-form-label">Topic:</label>
-                                <select name="topic" id="topics">
+                                <select name="topic" id="topics1">
                                     <g:if test="${subscription_Topic.size()}">
                                         <g:each in="${subscription_Topic}" var="sTopic">
                                             <option value="${sTopic.topic.name}">${sTopic.topic.name}</option>
@@ -140,29 +140,30 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Share Through Mail</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <g:form controller="LinkResource" action="CreateLink">
-                        <g:hiddenField name="userId" value="${session.userId}"/>
+                    <g:form controller="Mail" action="SendMail">
+%{--                        <g:hiddenField name="sender_emailId" value="${curr_user.email}"/>--}%
+%{--                        <g:hiddenField name="from" value="linksharing068@gmail.com"/>--}%
+%{--                        <g:hiddenField name="subject" value="linksharing068@gmail.com"/>--}%
+%{--                        <g:hiddenField name="body" value="linksharing068@gmail.com"/>--}%
+
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="recipient-name" class="col-form-label">url* :</label>
-                                <input type="text" class="form-control" id="recipient-name" name="url">
-                            </div>
-                            <div class="form-group">
-                                <label for="message-text" class="col-form-label">Description:</label>
-                                <textarea class="form-control" id="message-text" name=description></textarea>
+                                <label for="recipient-name" class="col-form-label">Email* :</label>
+                                <input type="email" class="form-control" id="recipient-name" name="to">
                             </div>
                             <div class="form-group">
                                 <label for="message-text" class="col-form-label">Topic:</label>
                                 %{--                        <input type="text" class="form-control" id="recipient-name" name="topic">--}%
                                 <select name="topic" id="topics">
+
                                     <g:if test="${subscription_Topic.size()}">
                                         <g:each in="${subscription_Topic}" var="sTopic">
-                                            <option value="${sTopic.topic.name}">${sTopic.topic.name}</option>
+                                            <option value="${sTopic.topic.id}">${sTopic.topic.name} (${sTopic.topic.user.username})</option>
                                         </g:each>
                                     </g:if>
                                 </select>
@@ -185,7 +186,7 @@
             </button>
             <div class="dropdown-content">
                 <g:link controller="Profile">Profile</g:link>
-                <g:link controller="admin">Users</g:link>
+              <g:if test="${session.user.admin}"> <g:link controller="admin">Users</g:link>  </g:if>
                 <g:link controller="topic">Topic</g:link>
                 <g:link controller="post">Post</g:link>
                 <g:link controller="Logout">Logout</g:link>
@@ -205,3 +206,4 @@
         }, 2000);
     </script>
 </g:if>
+

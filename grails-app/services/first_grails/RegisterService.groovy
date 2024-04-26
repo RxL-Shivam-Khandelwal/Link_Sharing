@@ -1,9 +1,8 @@
 package first_grails
 
 import grails.gorm.transactions.Transactional
-import first_grails.Subscription;
-import first_grails.Topic;
-import org.hibernate.criterion.Projections
+import org.hibernate.criterion.CriteriaSpecification
+
 
 @Transactional
 class RegisterService {
@@ -36,33 +35,67 @@ class RegisterService {
             eq("user" , user)
         }
         List<Topic> topics = Topic.list();
+        List <Topic> dp = [];
+         topics.each{it->
+             if(it.user.active == true){
+                 dp.add(it);
+             }
+         }
+        topics = dp;
+        println topics.name;
+
+
         topics.sort({ t1, t2 ->
-            Long ResourcecountT1 = t1.resources.size();
-            Long ResourcecountT2 = t2.resources.size();
+            Long ResourcecountT1 = 0;
+            t1.resources.each{r1->
+                if(r1.isdeleted == false){
+                    ResourcecountT1++;
+                }
+            }
+            Long ResourcecountT2 = 0;
+            t2.resources.each{r2->
+                if(r2.isdeleted == false){
+                    ResourcecountT2++;
+                }
+            }
             (ResourcecountT2 <=> ResourcecountT1)
         })
+
         def all = allPosts(topics, user);
         List<Resources> l = all[0];
         Long totalRecordsP = all[1];
         String user_img = curr_user.photoURL;
         println topics.size();
         // preparing data for pagination.
-        Long totalRecords = topics.size();
-        Long maxPerPage = 2
+//        Long totalRecords = Topic.createCriteria().get {
+//            eq('isdeleted', false)
+//            createAlias('user', 'u') // Alias for joining User table
+//            eq('u.active', true)
+//            projections {
+//                countDistinct('id') // Count the number of distinct topic IDs
+//            }
+//        }
+
+        int maxPerPage = 3
         Long maxPerPageP = 3
         Long currentPage = 1;
-        Long offset = (currentPage - 1) * maxPerPage;
-        topics = Topic.createCriteria().list(max: maxPerPage, offset: offset) {
-            eq('isdeleted', false);
-
-        }
-
+        int offset = (currentPage - 1) * maxPerPage;
+        Long totalRecords = topics.size();
+//        topics = Topic.createCriteria().list(max: maxPerPage, offset: offset) {
+//            eq('isdeleted', false)
+//            createAlias('user', 'u') // Alias for joining User table
+//            eq('u.active', true)
+//        }
+         println "total topics" + topics.size();
+        int endIndex = Math.min(offset + maxPerPage, topics.size());
+        List<Topic> paginatedTopics = topics.subList(offset, endIndex);
+        println "total topics after pagincation : " + paginatedTopics.size();
         List<Resources> paginatedSubscriptions = PaginatePosts(l, offset, maxPerPageP);
 
         Map mp = [
                 subscriptionCount     : subscriptionCount,
                 topicCount            : topicCount,
-                topics                : topics,
+                topics                : paginatedTopics,
                 l                     : l,
                 sub_topic             : sub_topic,
                 user                  : user,
@@ -122,13 +155,36 @@ class RegisterService {
     }
 
     def nextPage(Long currentPage, Long totalRecords, Users curr_user) {
-        def maxPerPage = 2
-        def offset = (currentPage - 1) * maxPerPage
-        def topics = Topic.createCriteria().list(max: maxPerPage, offset: offset) {
-            eq('isdeleted', false);
+        int maxPerPage = 3
+        int offset = (currentPage - 1) * maxPerPage
+        List<Topic> topics = Topic.list();
+        List <Topic> dp = [];
+        topics.each{it->
+            if(it.user.active == true){
+                dp.add(it);
+            }
         }
+        topics = dp;
+       println "chcekingihsg.."
+        topics.sort({ t1, t2 ->
+            Long ResourcecountT1 = 0;
+            t1.resources.each{r1->
+                if(r1.isdeleted == false){
+                    ResourcecountT1++;
+                }
+            }
+            Long ResourcecountT2 = 0;
+            t2.resources.each{r2->
+                if(r2.isdeleted == false){
+                    ResourcecountT2++;
+                }
+            }
+            (ResourcecountT2 <=> ResourcecountT1)
+        })
+        int endIndex = Math.min(offset + maxPerPage, topics.size());
+        List<Topic> paginatedTopics = topics.subList(offset, endIndex);
         Map mp = [
-                topics      : topics,
+                topics      : paginatedTopics,
                 currentPage : currentPage,
                 totalRecords: totalRecords,
                 maxPerPage  : maxPerPage,

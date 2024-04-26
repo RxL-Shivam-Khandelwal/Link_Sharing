@@ -5,7 +5,7 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class TopicShowService {
 
-    def serviceMethod(Topic curr_topic, Users  topic_owner, Long currentPage) {
+    def serviceMethod(Topic curr_topic, Users  topic_owner, Long currentPage,Users user) {
 
         Long maxPerPage = 2
         Long offset = (currentPage - 1) * maxPerPage
@@ -36,13 +36,16 @@ class TopicShowService {
             String users_img= it.user.photoURL;
             subscribers_with_photo[it] = users_img;
         }
-
+        List<Subscription> sub_topic = Subscription.createCriteria().list{
+            eq("user" , user)
+        }
         def topic_Show_Map = [
                 curr_topic: curr_topic,
                 topic_owner: topic_owner,
                 topic_subscribers: topic_subscribers,
                 topic_posts: topic_posts,
-                subscribers_with_photo:subscribers_with_photo
+                subscribers_with_photo:subscribers_with_photo,
+                sub_topic: sub_topic
         ]
         println "total sibscrubers:" + subscribers_with_photo.size();
         println "based on pagination subscribers" + topic_subscribers;

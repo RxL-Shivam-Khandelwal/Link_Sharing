@@ -18,12 +18,13 @@ class PostController {
     }
 
     def save(){
-
+      println "hello check"
          Long rating = params.rating.toLong();
          Long resId = params.resId.toLong();
          Users user = session.user;
          Resources resource= Resources.findById(resId);
          ResourceRating r= ResourceRating.findByUserAndResource(user, resource);
+        println "value of avgRating is : " + 12;
          def curr_res_rating= new ResourceRating();
 
          if(r!=null){

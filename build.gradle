@@ -26,6 +26,7 @@ repositories {
 }
 
 dependencies {
+    compile "org.grails.plugins:asynchronous-mail:2.0.2"
     compile "org.springframework.boot:spring-boot-starter-logging"
     compile "org.springframework.boot:spring-boot-autoconfigure"
     compile "org.grails:grails-core"
@@ -60,6 +61,7 @@ dependencies {
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
     runtime 'org.grails.plugins:grails-console:2.1.1'
     runtime 'com.oracle.database.jdbc:ojdbc8:19.8.0.0'
+
 }
 
 bootRun {

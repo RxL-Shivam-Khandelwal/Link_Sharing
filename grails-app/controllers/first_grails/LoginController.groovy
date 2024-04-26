@@ -3,26 +3,28 @@ import org.hibernate.criterion.Order
 class LoginController {
 
     def index() {
-        Long maxPerPage = 2
-        Long currentPage = 1;
-        Long currentPageP = 1;
-        Long offset = (currentPage - 1) * maxPerPage
-        List<Resources> resource = Resources.createCriteria().list(max: maxPerPage, offset: offset){
-            eq("isdeleted", false)
-            order("lastUpdated","desc")
-        }
-        Long totalRecords = Resources.countByIsdeleted(false)
-        List<Resources>  res_shares = resource;
-        render (view : "../Frontend/login", model:[resource: resource, currentPage: currentPage, totalRecords: totalRecords,res_shares:res_shares, maxPerPage: maxPerPage,currentPageP: currentPageP]);
+            Long maxPerPage = 2
+            Long currentPage = 1;
+            Long currentPageP = 1;
+            Long offset = (currentPage - 1) * maxPerPage
+            List<Resources> resource = Resources.createCriteria().list(max: maxPerPage, offset: offset) {
+                eq("isdeleted", false)
+                order("lastUpdated", "desc")
+            }
+            Long totalRecords = Resources.countByIsdeleted(false)
+            List<Resources> res_shares = resource;
+            render(view: "../Frontend/login", model: [resource: resource, currentPage: currentPage, totalRecords: totalRecords, res_shares: res_shares, maxPerPage: maxPerPage, currentPageP: currentPageP]);
+
     }
 
     def loginUser(){
         String email = params.email
         String password = params.password
+        Users dummyUser = Users.findByEmail(email);
         Users user = Users.findByEmailAndPassword(email, password);
+        String msg = ""
 
-
-          if (user) {
+        if (user && user.active == true) {
                   Long userId = user.id;
                   Long subscriptionCount = Subscription.where {
                       user.id == userId;
@@ -36,10 +38,13 @@ class LoginController {
                   session.user_id = userId;
             render(template: '/register/setLocalStorage', model: [userId: userId])
             // render (view: "../Frontend/dashboard",model: [subscriptionCount: subscriptionCount, topicCount: topicCount])
-        } else {
-            // redirect(controller: "register", action: "index")
-            render "create an account first";
+        } else if(dummyUser){
+               msg = "Please write correct Credentials!!"
+          }
+          else {
+               msg = "Please contact Admin!!"
         }
+        render(template:"/templates/errorHandling", model: [msg: msg]);
     }
 
 

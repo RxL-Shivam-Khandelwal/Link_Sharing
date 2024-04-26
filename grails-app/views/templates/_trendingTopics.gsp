@@ -4,6 +4,9 @@
 .hidden{
     display: none;
 }
+.hidden_form{
+    display: flex;
+}
 </style>
 <g:if test="${all_Topics!= null}">
     <g:set var="num" value="${1}" />
@@ -14,7 +17,7 @@
 
                     <div class="userCard" style="border: 0cap;">
                         <div class="userImg">
-                            <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg"  height="90px" width="90px">
+                            <img src="${topicData.user.photoURL}" alt="person-circle.svg"  height="90px" width="90px">
                         </div>
 
                         <div class="userData">
@@ -23,10 +26,12 @@
                             </g:link>
                             <g:form id="myForm${num++}" name="myForm${num++}"  class="hidden" controller="Register"  action="change_topic_name" >
                                 <g:hiddenField name="topicId" value="${topicData.id}"/>
-                                <g:if test="${topicData.user == curr_user }">
-                                    <input type="text" placeholder="Enter New Topic Name" name="new_topic_name">
-                                    <button type="submit" class="btn">Save</button>
+                                <g:if test="${(topicData.user.id == curr_user.id ) || (curr_user.admin == true)}">
+                                    <div class="hidden_form">
+                                   <input type="text" placeholder="${topicData.name}" name="${topicData.name}" style="width: 150px;">
+                                        <button type="submit" class="btn">Save</button>
                                     <button id="cancelBtn" type="button" class="btn" onclick="showForm('myForm${num - 1}')">Cancel</button>
+                                    </div>
                                 </g:if>
                             </g:form>
                             <div class="userS">
@@ -62,19 +67,19 @@
                 <div class="SubInfo">
                     <g:set var="Subscriber" value="${Subscription.findByUserAndTopic(curr_user,topicData)}" />
 
-                    <g:if test="${Subscriber  &&  curr_user == topicData.user}">
+                    <g:if test="${Subscriber != null}">
                         <g:select id="seriournessSub_${topicData.id}" from="['Serious', 'Casual','Very_serious']" name="selectedSeriousness"
                                   value="${Subscriber.seriousness}"
                                   onchange="sendSeriournessToController(this.value, ${Subscriber.id})"
                                   style="height: 30px; width: 140px;" />
                     </g:if>
-                    <g:if test="${topicData.user == curr_user}">
+                    <g:if test="${(topicData.user.id == curr_user.id) || (curr_user.admin == true)}">
                         <g:select id="visiblitySub_${topicData.id}" from="['Public', 'Private']" name="selectedVisibility"
                                   value="${topicData.visibility}"
                                   onchange="sendDataToController(this.value, ${topicData.id})"
                                   style="height: 30px; width: 140px;" />
                     </g:if>
-                    <g:if test="${topicData.user == curr_user }">
+                    <g:if test="${(topicData.user.id == curr_user.id)|| (curr_user.admin == true)  }">
                         <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">
                         <div class="modal fade" id="exampleModalDelete${topicData.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">

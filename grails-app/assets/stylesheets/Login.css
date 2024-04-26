@@ -297,10 +297,15 @@
 
 .hSub{
   display: flex;
+    align-items: center;
   justify-content: space-between;
   background-color: #888;
   border: 2px solid black;
 
+}
+.view_all{
+    display: flex;
+    align-items: center;
 }
 
 .DSubcontent{

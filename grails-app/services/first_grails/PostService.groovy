@@ -24,13 +24,20 @@ class PostService {
             Long currentPage=1;
             Long offset=0;
             Long totalRecords = Topic.createCriteria().get {
+                eq('isdeleted', false)
+                createAlias('user', 'u') // Alias for joining User table
+                eq('u.active', true)
                 projections {
-                    countDistinct "id"
+                    countDistinct('id') // Count the number of distinct topic IDs
                 }
             }
-
-            List <Topic> topics =  Topic.createCriteria().list(max: maxPerPage, offset: offset){
+            println totalRecords + " value is ";
+            List <Topic> topics = Topic.createCriteria().list(max: maxPerPage, offset: offset) {
+                eq('isdeleted', false)
+                createAlias('user', 'u') // Alias for joining User table
+                eq('u.active', true)
             }
+           println topics.name;
             Map mp = [resId: resId, rating: rating, av_rating: av_rating, topics: topics, curr_user: curr_user, resource: resource,maxPerPage:maxPerPage,currentPage:currentPage,offset:offset,totalRecords:totalRecords];
               return mp
     }

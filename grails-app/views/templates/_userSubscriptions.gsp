@@ -16,7 +16,7 @@
                 <div class="DSubcontent">
                     <div class="userCard" style="border: 0cap;">
                         <div class="userImg">
-                            <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg" height="90px" width="90px">
+                            <img src="${StopicData.topic.user.photoURL}" alt="person-circle.svg" height="90px" width="90px">
                         </div>
                         <div class="userData">
 
@@ -47,7 +47,7 @@
                     </div>
                 </div>
                 <div class="SubInfo">
-
+                      <g:if test="${dont_show == null}">
                     <g:select id="seriournessSub_${StopicData.id}" from="['Serious', 'Casual','Very_serious']" name="selectedSeriousness"
                               value="${StopicData.seriousness}"
                               onchange="sendSeriournessToController(this.value, ${StopicData.id})"
@@ -58,6 +58,7 @@
                                   onchange="sendDataToController(this.value, ${StopicData.topic.id})"
                                   style="height: 30px; width: 140px;" />
                     </g:if>
+                      </g:if>
                     <g:if test="${StopicData.topic.user == curr_user }">
                         <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">
                         <div class="modal fade" id="exampleModalDeletetopic${StopicData.topic.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

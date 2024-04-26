@@ -54,6 +54,7 @@
             </div>
         </div>
     </div>
+%{--<g:render template="/templates/navbar"  model="[subscription_Topic:subscription_Topic, curr_user: curr_user]"/>--}%
 
 
     <div class="window">

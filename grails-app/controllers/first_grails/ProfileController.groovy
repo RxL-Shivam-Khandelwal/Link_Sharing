@@ -9,7 +9,8 @@ class ProfileController {
 //            List<Subscription>  sub = Subscription.list();
              Users user = Users.findById(session.user.id);
              List<Subscription> sub_topic = Subscription.findAllByUser(user);
-             render(view: "../Frontend/edit_profile", model: [subscriptions: sub_topic, user: user]);
+             Boolean dont_show = 0 ;
+             render(view: "../Frontend/edit_profile", model: [subscriptions: sub_topic, user: user,dont_show: dont_show]);
          }
      }
 
