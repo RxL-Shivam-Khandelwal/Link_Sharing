@@ -157,11 +157,12 @@
     </div>
     <div class="form-group">
         <label for="password">Password *</label>
-        <g:passwordField class="form-control" name="password" id="password" placeholder="Password *" />
+        <g:passwordField class="form-control" name="password" id="pass" placeholder="Password *" />
     </div>
     <div class="form-group">
         <label for="confirmPassword">Confirm password *</label>
-        <g:passwordField class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Confirm password *" />
+        <g:passwordField class="form-control" name="confirmPassword" id="cpass" placeholder="Confirm password *" />
+        <p id="passwordError" style="color: red; display: none;">Passwords do not match.</p>
     </div>
     <div class="form-group">
         <label for="imageInput">Profile Picture</label>
@@ -178,5 +179,36 @@
     </div>
     
 </body>
+
+<script>
+
+    const passInput = document.getElementById('pass');
+    const cpassInput = document.getElementById('cpass');
+    const updateButton = document.getElementById('updateButton');
+    const passwordForm = document.getElementById('passwordForm');
+    const passwordError = document.getElementById('passwordError');
+
+    // Function to check if passwords match
+    function checkPasswordMatch() {
+        if (passInput.value !== cpassInput.value) {
+            passwordError.style.display = 'block';
+            updateButton.disabled = true;
+        } else {
+            passwordError.style.display = 'none';
+            updateButton.disabled = false;
+        }
+    }
+
+    // Add event listener to confirm password input
+    cpassInput.addEventListener('input', checkPasswordMatch);
+
+    // Add event listener to Update button
+    updateButton.addEventListener('click', function() {
+        if (passInput.value === cpassInput.value) {
+            // Submit the form if passwords match
+            passwordForm.submit();
+        }
+    });
+</script>
 
 </html>

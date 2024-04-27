@@ -61,7 +61,6 @@ class LoginController {
             eq("isdeleted", false)
             order("lastUpdated","desc")
         }
-        println "value of currentPGE IS :" + currentPage + "resources are:" + resource;
         Long totalRecords = Resources.countByIsdeleted(false)
 
         render(template: '/templates/recentShares', model: [resource: resource, currentPage: currentPage, totalRecords: totalRecords,maxPerPage: maxPerPage,currentPageP: currentPageP]);
@@ -107,7 +106,7 @@ class LoginController {
         catch (Exception e){
             println(e);
         }
-        String link = "http://localhost:8181/mail/resetPassword/?receiverEmail=${params.email}&authToken=${authToken}";
+        String link = "http://localhost:8181/login/resetPassword/?receiverEmail=${params.email}&authToken=${authToken}";
         String body = "Reset Password link :  ${link}";
         String subject = "Reset Password link!!"
         Boolean result =  invitationService.sendEmail(params.email, body, subject);

@@ -66,7 +66,7 @@
     <div class="lft">
         <div class="userCard">
             <div class="userImg">
-                    <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg"  height="90px" width="90px">
+                    <img src="${user.photoURL}" alt="person-circle.svg"  height="90px" width="90px">
             </div>
             <div class="userData">
                 <h2 id="userName">Loading Name..</h2>
@@ -85,62 +85,11 @@
             </div>
             <div class="Dsubscription">
                 <div class="hSub">
-                    <p>Subscription</p>
+                    <p>Topics</p>
                     <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
                 </div>
                 <g:render template="/templates/userSubscriptions" model="[subscription_Topic:subscriptions,curr_user: user]" />
 
-%{--                <g:if test="${subscriptions}">--}%
-
-%{--              <g:each in="${subscriptions}" var="StopicData">--}%
-%{--        <div class="Border1" style="border: 2px solid black;">--}%
-%{--            <div class="DSubcontent">--}%
-%{--                <div class="userCard" style="border: 0cap;">--}%
-%{--                    <div class="userImg">--}%
-%{--                        <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg" height="90px" width="90px">--}%
-%{--                    </div>--}%
-%{--                    <div class="userData">--}%
-%{--                        <h2>${StopicData?.topic?.name}</h2>--}%
-%{--                        <div class="userS">--}%
-%{--                            <div class="DId">--}%
-%{--                                <p>${StopicData?.topic?.user?.username}</p>--}%
-%{--                                <a href="#">Unsubscribed</a>--}%
-%{--                            </div>--}%
-%{--                            <div class="S">--}%
-%{--                                <p>Subscription</p>--}%
-%{--                                <p>${StopicData?.topic?.subscriptions?.size()}</p>--}%
-%{--                            </div>--}%
-%{--                            <div class="T">--}%
-%{--                                <p>Post</p>--}%
-%{--                                <p>${StopicData?.topic?.resources?.size()}</p>--}%
-%{--                            </div>--}%
-%{--                        </div>--}%
-%{--                    </div>--}%
-%{--                </div>--}%
-%{--            </div>--}%
-%{--            <div class="SubInfo">--}%
-%{--                <select id="dropdown-menu">--}%
-%{--                    <option value="" disabled selected>Serious</option>--}%
-%{--                    <option value="option1">Option 1</option>--}%
-%{--                    <option value="option2">Option 2</option>--}%
-%{--                    <option value="option3">Option 3</option>--}%
-%{--                </select>--}%
-%{--                <select id="dropdown-menu">--}%
-%{--                    <option value="" disabled selected>Private</option>--}%
-%{--                    <option value="option1">Option 1</option>--}%
-%{--                    <option value="option2">Option 2</option>--}%
-%{--                    <option value="option3">Option 3</option>--}%
-%{--                </select>--}%
-%{--                <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">--}%
-%{--                <img src="${assetPath(src: 'link.svg')}" alt="link">--}%
-%{--                <img src="${assetPath(src: 'trash-fill.svg')}" alt="trash-fill">--}%
-%{--            </div>--}%
-%{--        </div>--}%
-%{--                </g:each>--}%
-%{--                </g:if>--}%
-%{--                <g:else>--}%
-%{--                 <p> No Topic subscribed by the user </p>--}%
-%{--                 </g:else>--}%
             </div>
             
     </div>

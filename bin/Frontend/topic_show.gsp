@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Topic Show</title>
     <link rel="stylesheet" href="${assetPath(src: 'Login.css')}" type="text/css">
+    <link rel="stylesheet" href="${assetPath(src: 'dash.css')}" type="text/css">
     <link rel="stylesheet" href="${assetPath(src: 'topic_show.css')}" type="text/css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -16,6 +17,8 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 </head>
 <style>
 .hidden{
@@ -23,39 +26,7 @@
 }
 </style>
 <body>
-    <div class="navbar" style="justify-content: space-evenly;">
-        <div>
-            <g:link controller="register"  action="dashboard"> <h3>Link Sharing</h3>  </g:link>
-        </div>
-        <div class="search-container">
-            <span class="search-icon">&#128269;</span>
-            <input type="text" class="search-input" placeholder="Search...">
-            <span class="close-icon">&#10005;</span>
-        </div>
-        <div class="clogo">
-           <div class="logo-container" onmouseover="changeColor(this)"> <img src="${assetPath(src: 'chat-fill.svg')}" alt="chat-fill" onclick="showCard(1)"></div>
-         <div class="logo-container" onmouseover="changeColor(this)">   <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" onclick="showCard(2)">  </div>
-          <div class="logo-container" onmouseover="changeColor(this)">  <img src="${assetPath(src: 'link.svg')}" alt="link" onclick="showCard(3)">  </div>
-          <div class="logo-container" onmouseover="changeColor(this)">  <img src="${assetPath(src: 'file-earmark-fill.svg')}" alt="file-earmark-fill" onclick="showCard(4)">  </div>
-        </div>
-        <div class="dprofile">
-            <img src="/Img/person-fill.svg" alt="" style="height: 30px; width: 30px; padding-top: 6px;">
-            <div class="dropdown">
-                <button class="dropbtn nbtn">Dropdown
-                    <img src="/Img/caret-down-fill.svg" alt="">
-                </button>
-                <div class="dropdown-content">
-    <g:link controller="Profile">Profile</g:link>
-    <g:link controller="user">User</g:link>
-    <g:link controller="topic">Topic</g:link>
-    <g:link controller="post">Post</g:link>
-    <g:link controller="Logout">Logout</g:link>
-                </div>
-            </div>
-        </div>
-    </div>
-%{--<g:render template="/templates/navbar"  model="[subscription_Topic:subscription_Topic, curr_user: curr_user]"/>--}%
-
+<g:render template="/templates/navbar"  model="[subscription_Topic:subscription_Topic, curr_user: curr_user]"/>
 
     <div class="window">
         <div class="leftside">
@@ -160,8 +131,14 @@
         <div class="rightside">
 
             <div class="topics">
-                <div class="Recent_share">
+                <div class="Recent_share p-1" style="display: flex; justify-content: space-between;align-items:center">
                     <h5>Recent Share</h5>
+                    <g:form id="searchForm" class="form-inline my-2 my-lg-0">
+                        <input id="searchInput" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <!-- Add type="button" to prevent default form submission -->
+                        <button id="searchButton" class="btn bg-primary text-white my-2 my-sm-0 rounded" type="button">Search</button>
+                    </g:form>
+
                 </div>
                 <div id="23topicPosts">
                 <g:render template="/templates/topicPosts" model="[topic_Show_MapP: topic_Show_Map, currentPageP: currentPage, totalRecords_Posts: totalRecords_Posts, maxPerPageP: maxPerPage]" />
@@ -218,4 +195,31 @@
             }
         });
     }
+
+
+    $(document).ready(function() {
+        $('#searchButton').click(function() {
+            // Get form data
+            var formData = {
+                search: $('#searchInput').val(),
+                curr_topicId: ${topic_Show_Map?.curr_topic.id}
+            };
+
+            // Send AJAX request
+            $.ajax({
+                type: 'POST',
+                url: '/search/ajaxSearch', // Replace with your controller and action URL
+                data: formData,
+                success: function(response) {
+                    // Handle successful response
+                    $('#23topicPosts').html(response);
+                    // Optionally, do something with the response
+                },
+                error: function(xhr, status, error) {
+                    // Handle errors
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
 </script>

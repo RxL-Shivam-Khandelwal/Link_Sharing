@@ -18,10 +18,21 @@
                         <img src="${assetPath(src: 'twitter.svg')}" alt="twitter">
                         <img src="${assetPath(src: 'instagram.svg')}" alt="instagram">
                     </div>
-                    <a href="#">Delete</a>
-                    <a href="#">Edit</a>
-                    <a href="#">Download</a>
-                    <a href="#">View full site</a>
+                    <g:if test="${session.user != null}">
+
+
+                        <g:if test="${posts.url == null}">
+                            <g:link  controller="DocumentResource" action="downloadFile" params="[fileId: posts.id]" target="_blank">Download File</g:link>
+                        </g:if>
+                        <g:else>
+                            <a href = "${createLink(absolute:true, uri:"${posts.url}")}" target="_blank">View Full Site</a>
+                        </g:else>
+                        <g:link controller ="Register" action="is_read" params="[resId:posts.id]"> Mark as read </g:link>
+                        <g:link controller="Post" action="show" params="[resId: posts.id]">View post</g:link>
+                    </g:if>
+                    <g:else>
+                        <g:link controller="Post" action="show" params="[resId: posts.id]">View post</g:link>
+                    </g:else>
                 </div>
             </div>
 
@@ -33,8 +44,6 @@
 </g:else>
 
 
-${"value of page is;" + currentPageP}
-${"value of the total record is " + totalRecords_Posts }
 <div class="pagination">
     <g:if test="${totalRecords_Posts > maxPerPageP * currentPageP}">
         <a href="javascript:void(0);" onclick="loadNextPageP()">Next</a>

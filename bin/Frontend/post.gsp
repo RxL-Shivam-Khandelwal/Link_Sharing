@@ -15,6 +15,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="${assetPath(src: 'Login.css')}" type="text/css">
     <link rel="stylesheet" href="${assetPath(src: 'topic_show.css')}" type="text/css">
+    <link rel="stylesheet" href="${assetPath(src: 'dash.css')}" type="text/css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
@@ -25,40 +26,42 @@
     }
 </style>
 <body>
-    <div class="navbar" style="justify-content: space-evenly;">
-        <div>
-            <g:link controller="Register" action="dashboard" >
-                <h3>Link Sharing</h3>
-            </g:link>
-        </div>
-        <div class="search-container">
-            <span class="search-icon">&#128269;</span>
-            <input type="text" class="search-input" placeholder="Search...">
-            <span class="close-icon">&#10005;</span>
-        </div>
-        <div class="clogo">
-           <div class="logo-container" onmouseover="changeColor(this)"> <img src="${assetPath(src: 'chat-fill.svg')}" alt="chat-fill" onclick="showCard(1)"></div>
-         <div class="logo-container" onmouseover="changeColor(this)">   <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" onclick="showCard(2)">  </div>
-          <div class="logo-container" onmouseover="changeColor(this)">  <img src="${assetPath(src: 'link.svg')}" alt="link" onclick="showCard(3)">  </div>
-          <div class="logo-container" onmouseover="changeColor(this)">  <img src="${assetPath(src: 'file-earmark-fill.svg')}" alt="file-earmark-fill" onclick="showCard(4)">  </div>
-        </div>
-        <div class="dprofile">
-            <img src="${assetPath(src: 'person-fill.svg')}" alt="person-fill" style="height: 30px; width: 30px; padding-top: 6px;">  
-            <div class="dropdown">
-                <button class="dropbtn nbtn">${curr_resource.user.firstName}
-                    <img src="/Img/caret-down-fill.svg" alt="">
-                </button>
-<div class="dropdown-content">
-    <g:link controller="Profile">Profile</g:link>
-    <g:link controller="user">User</g:link>
-    <g:link controller="topic">Topic</g:link>
-    <g:link controller="post">Post</g:link>
-    <g:link controller="Logout">Logout</g:link>
-</div>
+%{--    <div class="navbar" style="justify-content: space-evenly;">--}%
+%{--        <div>--}%
+%{--            <g:link controller="Register" action="dashboard" >--}%
+%{--                <h3>Link Sharing</h3>--}%
+%{--            </g:link>--}%
+%{--        </div>--}%
+%{--        <div class="search-container">--}%
+%{--            <span class="search-icon">&#128269;</span>--}%
+%{--            <input type="text" class="search-input" placeholder="Search...">--}%
+%{--            <span class="close-icon">&#10005;</span>--}%
+%{--        </div>--}%
+%{--        <div class="clogo">--}%
+%{--           <div class="logo-container" onmouseover="changeColor(this)"> <img src="${assetPath(src: 'chat-fill.svg')}" alt="chat-fill" onclick="showCard(1)"></div>--}%
+%{--         <div class="logo-container" onmouseover="changeColor(this)">   <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" onclick="showCard(2)">  </div>--}%
+%{--          <div class="logo-container" onmouseover="changeColor(this)">  <img src="${assetPath(src: 'link.svg')}" alt="link" onclick="showCard(3)">  </div>--}%
+%{--          <div class="logo-container" onmouseover="changeColor(this)">  <img src="${assetPath(src: 'file-earmark-fill.svg')}" alt="file-earmark-fill" onclick="showCard(4)">  </div>--}%
+%{--        </div>--}%
+%{--        <div class="dprofile">--}%
+%{--            <img src="${assetPath(src: 'person-fill.svg')}" alt="person-fill" style="height: 30px; width: 30px; padding-top: 6px;">  --}%
+%{--            <div class="dropdown">--}%
+%{--                <button class="dropbtn nbtn">${curr_resource.user.firstName}--}%
+%{--                    <img src="/Img/caret-down-fill.svg" alt="">--}%
+%{--                </button>--}%
+%{--<div class="dropdown-content">--}%
+%{--    <g:link controller="Profile">Profile</g:link>--}%
+%{--    <g:link controller="user">User</g:link>--}%
+%{--    <g:link controller="topic">Topic</g:link>--}%
+%{--    <g:link controller="post">Post</g:link>--}%
+%{--    <g:link controller="Logout">Logout</g:link>--}%
+%{--</div>--}%
 
-            </div>
-        </div>
-    </div>
+%{--            </div>--}%
+%{--        </div>--}%
+%{--    </div>--}%
+<g:render template="/templates/navbar"  model="[subscription_Topic:subscription_Topic, curr_user: curr_user]"/>
+
     <div class="window">
         <g:if test="session?.user">
         <div class="modal fade" id="exampleModalLinkRes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLinkR" aria-hidden="true">
