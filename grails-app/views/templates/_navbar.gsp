@@ -15,12 +15,12 @@
       <div class="logo-container" onmouseover="changeColor(this)">   <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" onclick="showCard(2)">  </div>
        <div class="logo-container" onmouseover="changeColor(this)">  <img src="${assetPath(src: 'link.svg')}" alt="link" onclick="showCard(3)">  </div>
        <div class="logo-container" onmouseover="changeColor(this)">  <img src="${assetPath(src: 'file-earmark-fill.svg')}" alt="file-earmark-fill" onclick="showCard(4)">  </div> --%>
-        <button type="button" class="btn "  data-toggle="modal" data-target="#exampleModalTopic" data-whatever="@mdo"><img src="${assetPath(src: 'chat-fill.svg')}" alt="chat-fill" ></button>
-        <button type="button" class="btn " data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">  <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" >
+        <button type="button" class="btn btn-outline-light  "  data-toggle="modal" data-target="#exampleModalTopic" data-whatever="@mdo"><img src="${assetPath(src: 'chat-fill.svg')}" alt="chat-fill"  style="width: 35px ; height: 35px"></button>
+        <button type="button" class="btn btn-outline-light " data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">  <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="width: 35px ; height: 35px" >
         </button>
-        <button type="button" class="btn" data-toggle="modal" data-target="#exampleModalLinkR" data-whatever="@getbootstrap"> <img src="${assetPath(src: 'link.svg')}" alt="link">
+        <button type="button" class="btn btn-outline-light" data-toggle="modal" data-target="#exampleModalLinkR" data-whatever="@getbootstrap"> <img src="${assetPath(src: 'link.svg')}" alt="link" style="width: 40px ; height: 40px">
         </button>
-        <button type="button" class="btn" data-toggle="modal" data-target="#exampleModalDocumentR" data-whatever="@getbootstrap"> <img src="${assetPath(src: 'file-earmark-fill.svg')}" alt="file-earmark-fill">
+        <button type="button" class="btn btn-outline-light" data-toggle="modal" data-target="#exampleModalDocumentR" data-whatever="@getbootstrap"> <img src="${assetPath(src: 'file-earmark-fill.svg')}" alt="file-earmark-fill" style="width: 35px ; height: 35px">
         </button>
         <div class="modal fade" id="exampleModalTopic" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -79,14 +79,20 @@
                                 <label for="Description">
                                     <h5>Description* :</h5>
                                 </label>
-                                <textarea rows="3" cols="28" name="description">
+                                <textarea rows="3" cols="27" name="description" style="margin-left: 0px">
                                 </textarea>
                             </div>
-                            <div class="share_link">
+                            <div class="share_link topic_select">
                                 <label for="Topic">
                                     <h5>Topic* :</h5>
                                 </label>
-                                <input type="text" id="topicInput" name="topic">
+                                <select name="topic" id="topics1">
+                                    <g:if test="${subscription_Topic.size()}">
+                                        <g:each in="${subscription_Topic}" var="sTopic">
+                                            <option value="${sTopic.topic.name}">${sTopic.topic.name} (${sTopic.user.username})</option>
+                                        </g:each>
+                                    </g:if>
+                                </select>
                             </div>
                             <div class="pop_btn">
                                 <button> Share</button>
@@ -122,7 +128,7 @@
                                 <select name="topic" id="topics1">
                                     <g:if test="${subscription_Topic.size()}">
                                         <g:each in="${subscription_Topic}" var="sTopic">
-                                            <option value="${sTopic.topic.name}">${sTopic.topic.name}</option>
+                                            <option value="${sTopic.topic.name}">${sTopic.topic.name} (${sTopic.user.username})</option>
                                         </g:each>
                                     </g:if>
                                 </select>
@@ -166,6 +172,7 @@
                                             <option value="${sTopic.topic.id}">${sTopic.topic.name} (${sTopic.topic.user.username})</option>
                                         </g:each>
                                     </g:if>
+
                                 </select>
                             </div>
                         </div>
@@ -179,20 +186,22 @@
         </div>
     </div>
     <div class="dprofile">
-        <img src="${assetPath(src: 'person-fill.svg')}" alt="person-fill" style="height: 30px; width: 30px; padding-top: 6px;">
+        <img src="${assetPath(src: 'person-fill.svg')}" alt="person-fill" style="height: 30px; width: 30px;">
         <div class="dropdown">
-            <button class="dropbtn nbtn">${curr_user?.firstName}
-                <img src="${assetPath(src: 'caret-down-fill.svg')}" alt="drop_down logo">
+            <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #007bff; color: white;">
+                ${curr_user?.firstName}
             </button>
-            <div class="dropdown-content">
-                <g:link controller="Profile">Profile</g:link>
-              <g:if test="${session.user.admin}"> <g:link controller="admin">Users</g:link>  </g:if>
-                <g:link controller="topic">Topic</g:link>
-                <g:link controller="post">Post</g:link>
-                <g:link controller="Logout">Logout</g:link>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <g:link controller="Profile"  class="dropdown-item">Profile</g:link>
+                <g:if test="${session.user.admin}"  class="dropdown-item"> <g:link controller="admin" class="dropdown-item">Users</g:link>  </g:if>
+                <g:link controller="topic"  class="dropdown-item">Topic</g:link>
+                <g:link controller="post"  class="dropdown-item">Post</g:link>
+                <g:link controller="Logout"  class="dropdown-item">Logout</g:link>
             </div>
-
         </div>
+
+
+    </div>
     </div>
 </div>
 <g:if test="${flash.message}">

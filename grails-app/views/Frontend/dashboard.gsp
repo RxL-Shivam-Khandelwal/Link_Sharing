@@ -14,8 +14,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>  
+
 
 </head>
 <style> 
@@ -52,16 +53,17 @@
             </div>
             <div class="Dsubscription">
                 <div class="hSub">
-                    <p>Subscription</p>
-                    <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
+                    <p style="margin-top: 1rem ; margin-left: 0.3rem ;font-weight:600" >Subscription</p>
+                    <a class="view_all" href="#" style="padding-top: 13px; padding-right: 12px; ;font-weight:600"> View All</a>
                 </div>
                 <g:render template="/templates/userSubscriptions" model="[subscription_Topic:subscription_Topic,curr_user: curr_user]" />
             </div>
             <div class="Dsubscription">
                 <div class="hSub">
                     <p>Trending Topics</p>
-                    <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
+                    <a href="#" style=""> View All</a>
                 </div>
+
                  <div id="trending_Topics">
                 <g:render template="/templates/trendingTopics" model="[all_Topics:all_Topics,maxPerPage:maxPerPage,currentPage:currentPage,offset:offset,totalRecords:totalRecords,curr_user:curr_user]" />
                  </div>
@@ -70,10 +72,10 @@
         <div class="rightD">
             <div class="topics" style="margin-top: -50px;">
                 <div class="Recent_share">
-                    <h4 style="padding: 4px;">Recent Share</h4>
+                    <h4 style="padding: 4px;">Inbox</h4>
                 </div>
                 <g:hiddenField name="topPostPage" id="topPostPage" value="${currentPageP}"/>
-                <div id="RecentShare">
+                <div id="RecentShare" class="recent_shares">
                 <g:render template="/templates/topPosts" model="[resourceP:resource, currentPageP: currentPageP, totalRecordsP: totalRecordsP, maxPerPageP: maxPerPageP]"/>
             </div>
             </div>

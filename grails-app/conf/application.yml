@@ -9,6 +9,10 @@ grails:
             mail.smtp.auth: true
             mail.smtp.starttls.enable: true
             mail.smtp.ssl.trust: "*"
+    controllers:
+        upload:
+            maxFileSize: 10485760 # 10MB limit in bytes
+            maxRequestSize: 10485760 # 10MB limit in bytes
 
 #    props:
 #        mail.smtp.starttls.enable: true

@@ -30,51 +30,33 @@ class RegisterService {
             eq('isdeleted', false)
         }
 
-//        List<Subscription> sub_topic = Subscription.findAllByUser(user);
         List<Subscription> sub_topic = Subscription.createCriteria().list{
             eq("user" , user)
         }
-        List<Topic> topics = Topic.list();
-        List <Topic> dp = [];
-         topics.each{it->
-             if(it.user.active == true){
-                 dp.add(it);
-             }
-         }
-        topics = dp;
-        println topics.name;
+           sub_topic.sort({ subscription1 , subscription2 ->
+               Long latest1 = 0, latest2 = 0;
+               subscription1.topic.resources.each { it1 ->
+                   if (it1.isdeleted == false) {
+                       latest1 = Math.max(latest1, it1.lastUpdated.time);
+                   }
+               }
+                   subscription2.topic.resources.each{it2->
+                       if(it2.isdeleted == false){
+                           latest2 = Math.max(latest2 , it2.lastUpdated.time);
+                       }
+                   }
+                   (latest2 <=> latest1)
+           })
 
-
-        topics.sort({ t1, t2 ->
-            Long ResourcecountT1 = 0;
-            t1.resources.each{r1->
-                if(r1.isdeleted == false){
-                    ResourcecountT1++;
-                }
-            }
-            Long ResourcecountT2 = 0;
-            t2.resources.each{r2->
-                if(r2.isdeleted == false){
-                    ResourcecountT2++;
-                }
-            }
-            (ResourcecountT2 <=> ResourcecountT1)
-        })
+        List<Topic> dummytopics = Topic.list();
+        List<Topic> topics = SortedTopic(dummytopics);
 
         def all = allPosts(topics, user);
         List<Resources> l = all[0];
         Long totalRecordsP = all[1];
         String user_img = curr_user.photoURL;
         println topics.size();
-        // preparing data for pagination.
-//        Long totalRecords = Topic.createCriteria().get {
-//            eq('isdeleted', false)
-//            createAlias('user', 'u') // Alias for joining User table
-//            eq('u.active', true)
-//            projections {
-//                countDistinct('id') // Count the number of distinct topic IDs
-//            }
-//        }
+
 
         int maxPerPage = 3
         Long maxPerPageP = 3
@@ -110,7 +92,34 @@ class RegisterService {
         ]
         return mp;
     }
+    List<Topic> SortedTopic(List<Topic>topics){
+        List <Topic> dp = [];
+        topics.each{it->
+            if(it.user.active == true){
+                dp.add(it);
+            }
+        }
+        topics = dp;
+        println topics.name;
 
+
+        topics.sort({ t1, t2 ->
+            Long ResourcecountT1 = 0;
+            t1.resources.each{r1->
+                if(r1.isdeleted == false){
+                    ResourcecountT1++;
+                }
+            }
+            Long ResourcecountT2 = 0;
+            t2.resources.each{r2->
+                if(r2.isdeleted == false){
+                    ResourcecountT2++;
+                }
+            }
+            (ResourcecountT2 <=> ResourcecountT1)
+        })
+          return topics;
+    }
     List<Resources> PaginatePosts(List<Resources> l, Long offset, Long maxPerPage) {
         List<Resources> paginatedSubscriptions;
 

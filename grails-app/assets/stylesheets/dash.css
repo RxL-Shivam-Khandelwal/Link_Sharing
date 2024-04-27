@@ -17,7 +17,18 @@
     flex-direction: row;
     margin-right: 10%;
     
-} 
+}
+
+.view_all{
+    text-decoration: none;
+    color: #007bff;
+
+}
+
+
+.topic_select{
+    margin-right: 175px;
+}
 .share_heading{
     background: #a19f9f;
     padding: 0.6%;
@@ -74,6 +85,6 @@ textarea{
   } */
 
   
-  .Recent_share{
+  #Recent_share{
     width: 750px;
   }

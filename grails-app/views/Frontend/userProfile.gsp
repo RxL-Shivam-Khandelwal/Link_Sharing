@@ -1,7 +1,7 @@
 
 <%@ page import="first_grails.Resources" %>
 <%@ page import="first_grails.Subscription" %>
-
+<%@  page import="first_grails.Topic" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,25 +10,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="${assetPath(src: 'Login.css')}" type="text/css">
-    <link rel="stylesheet" href="${assetPath(src: 'dash.css')}" type="text/css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
+<link rel="stylesheet" href="${assetPath(src: 'dash.css')}" type="text/css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+</head>
+<style>
+.hidden{
+    display: none;
+}
+</style>
 <body>
 <asset:javascript src="dashboard.js"/>
-
-<g:render template="/templates/navbar"  model="[subscription_Topic:subscription_Topic, curr_user: curr_user]"/>
+<g:if test="${session.user}">
+    <g:render template="/templates/navbar"  model="[subscription_Topic:subscription_Topic, curr_user: curr_user]"/>
 
     <div class="Dash">
 
         <div class="leftD">
             <div class="userCard">
                 <div class="userImg">
-                    <img src="${assetPath(src: 'person-circle.svg')}" alt="person-circle.svg"  height="90px" width="90px">
+                    <img src="${curr_user.photoURL}" alt="person-circle.svg"  height="90px" width="90px">
                 </div>
                 <div class="userData">
                     <h2 id="userName">Loading Name...</h2>
@@ -36,7 +41,7 @@
                     <div class="userS">
                         <div class="S">
                             <p>Subscription</p>
-                            <p>...${subscriptionCount}</p>
+                            <p>${subscriptionCount}</p>
                         </div>
                         <div class="T">
                             <p>Topics</p>
@@ -72,7 +77,6 @@
                 </div>
             <g:if test="${resource != null && !resource.empty}">
             <g:each in="${resource}"  var ="res">
-%{--            <g:if test="${res.isRead ==false}">--}%
                 <div class="card1 ">
                     <div class="image">
                         <img src="https://louisville.edu/enrollmentmanagement/images/person-icon/image" alt="p1">
@@ -116,7 +120,7 @@
 
         </div>
     </div>
-
+</g:if>
 </body>
 
 <script>

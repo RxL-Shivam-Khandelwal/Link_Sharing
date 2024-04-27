@@ -48,12 +48,33 @@
         </g:if>
     </g:each>
 </g:if>
+<g:else>
+    <p>No Resource present, please create some resource.</p>
+</g:else>
 <div class="pagination">
     <g:if test="${totalRecordsP > maxPerPageP * currentPageP}">
         <a href="javascript:void(0);" onclick="loadNextPageP()">Next</a>
     </g:if>
 
 </div>
+
+
+%{--<script>--}%
+
+%{--    <g:if test="${resourceP != null && !resourceP.empty}">--}%
+%{--    $(document).ready(function() {--}%
+%{--        // If resource has data, apply CSS to another div--}%
+%{--        $('#RecentShare').addClass('recent_shares');--}%
+%{--    });--}%
+%{--    </g:if>--}%
+
+%{--    <g:else>--}%
+%{--    $(document).ready(function() {--}%
+%{--        // If resource is empty or null, apply different CSS to another div--}%
+%{--        $('#anotherDiv').addClass('recent_shares');--}%
+%{--    });--}%
+%{--    </g:else>--}%
+%{--</script>--}%
 
 %{--<script>--}%
 %{--    function loadNextPageP() {--}%

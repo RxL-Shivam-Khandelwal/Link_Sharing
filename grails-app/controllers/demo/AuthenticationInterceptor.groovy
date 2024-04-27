@@ -4,7 +4,7 @@ package demo
 class AuthenticationInterceptor {
 
    public AuthenticationInterceptor(){
-       match(controller: ['Topic', 'Profile', 'UserProfile', 'LinkResource','Post','Mail'])
+       match(controller: ['Topic', 'Profile', 'UserProfile', 'LinkResource','Mail'])
 //       matchAll().excludes(controller: ['login', 'register'])
 
    }

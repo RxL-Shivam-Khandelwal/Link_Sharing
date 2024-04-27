@@ -1,7 +1,7 @@
 package first_grails
 import org.hibernate.criterion.Order
 class LoginController {
-
+    InvitationService invitationService;
     def index() {
             Long maxPerPage = 2
             Long currentPage = 1;
@@ -84,5 +84,64 @@ class LoginController {
         Long totalRecords = Resources.countByIsdeleted(false)
         render(template: '/templates/topPosts', model: [resourceP: resource, currentPageP: currentPage, totalRecordsP: totalRecords,maxPerPageP: maxPerPage]);
 
+    }
+
+
+
+    def forgetPass(){
+        render(view: "../Frontend/forgetPassword" );
+    }
+
+    def sendingEmail(){
+        println params;
+       Users user =  Users.findByEmail(params.email);
+        if(user == null ){
+            flash.error = "Create an account first!!"
+            redirect(controller:"Login");
+        }
+        String authToken = UUID.randomUUID().toString();
+        try {
+            SendInvitation obj = new SendInvitation( receiverEmail: params.email, authToken: authToken , topicId: "noId");
+            obj.save(flush: true, failOnError : true);
+        }
+        catch (Exception e){
+            println(e);
+        }
+        String link = "http://localhost:8181/mail/resetPassword/?receiverEmail=${params.email}&authToken=${authToken}";
+        String body = "Reset Password link :  ${link}";
+        String subject = "Reset Password link!!"
+        Boolean result =  invitationService.sendEmail(params.email, body, subject);
+
+        if(result){
+            flash.message = "Write New Password and Confirm Password!!"
+        }else{
+            flash.error = "You are not authenticated user, please contact admin or try again"
+
+        }
+        redirect(action:"index");
+    }
+
+    def ResetPassword(){
+        println params;
+        String authToken = params.authToken;
+        SendInvitation invitation  = SendInvitation.findByAuthToken(authToken);
+       if(invitation && invitation.isValid == true){
+           invitation.isValid = false;
+           invitation.save(flush:true);
+           flash.message  = "Authentication successfull!!"
+           render(view: "../Frontend/resetPassword");
+       }else{
+           flash.error = "Authentication failed"
+           redirect(action: "index");
+       }
+    }
+
+    def ResetPass(){
+        println params;
+        Users user = Users.findByEmail(params.email);
+        user.password = params.password;
+        user.save(flush : true, failOnError: true);
+        flash.message  =  " Password successfully reset!!"
+        redirect(action: "index");
     }
 }

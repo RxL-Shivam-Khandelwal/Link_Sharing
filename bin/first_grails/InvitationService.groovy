@@ -8,13 +8,13 @@ class InvitationService {
         // Your service logic here
     }
 
-    Boolean sendEmail(String sender_email , String body) {
+    Boolean sendEmail(String sender_email , String body, String value) {
        Boolean flag= true;
         try {
             mailService.sendMail {
                 from "linksharing068@gmail.com"
                 to sender_email
-                subject "Invitation for Subscription of Topic"
+                subject value
                 text body
             }
         }

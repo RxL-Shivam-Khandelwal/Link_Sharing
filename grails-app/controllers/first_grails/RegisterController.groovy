@@ -2,6 +2,7 @@ package first_grails
 import org.hibernate.criterion.Order
 import org.hibernate.criterion.CriteriaSpecification
 import org.hibernate.criterion.*
+import org.springframework.web.multipart.MultipartFile
 
 class RegisterController {
  RegisterService registerService;
@@ -105,8 +106,16 @@ class RegisterController {
             // Set user ID in localStorage
             render(template: '/register/setLocalStorage', model: [userId: userId])
         }catch (Exception e) {
-              println e;
-             render (view: "create", model: [errors: e])
+            String exceptionMessage = e.toString()
+
+            List<String> words = exceptionMessage.split(/\s+/)
+
+            List<String> slicedWords = words.take(50)
+
+            String slicedMessage = slicedWords.join(' ')
+
+            render(template: '/templates/errorHandling', model: [msg: slicedMessage]);
+
         }
     }
 

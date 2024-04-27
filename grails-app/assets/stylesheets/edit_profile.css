@@ -29,15 +29,15 @@
     justify-content: space-between;
 }
 
-input[type=text], select {
-    width: 40%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #9e9c9c;
-    border-radius: 4px;
-    box-sizing: border-box;
-  }
+/*input[type=text], select {*/
+/*    width: 40%;*/
+/*    padding: 12px 20px;*/
+/*    margin: 8px 0;*/
+/*    display: inline-block;*/
+/*    border: 1px solid #9e9c9c;*/
+/*    border-radius: 4px;*/
+/*    box-sizing: border-box;*/
+/*  }*/
   .cProfile{
      padding-left: 4%;
   }

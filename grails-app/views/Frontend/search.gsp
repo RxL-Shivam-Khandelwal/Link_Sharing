@@ -76,7 +76,7 @@
         <div class="rightD">
             <div class="topics" style="margin-top: -50px;">
                 <div class="Recent_share">
-                    <h4 style="padding: 4px;">Recent Share</h4>
+                    <h4 style="padding: 4px;">Search Results</h4>
                 </div>
                 <g:hiddenField name="topPostPage" id="topPostPage" value="${currentPageP}"/>
                 <div id="RecentShare">

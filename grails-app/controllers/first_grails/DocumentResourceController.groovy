@@ -20,15 +20,15 @@ class DocumentResourceController {
           Topic ctopic = Topic.findByName(params.topic);
           Users curr_user = Users.findById(session.user.id);
           Resources new_res = new Resources(description:params.description,user: curr_user,topic : ctopic, documentResource: params.documentResource);
-        new_res.save(flush:true, failOnError:true);
-                      println "hello world";
+             new_res.save(flush:true, failOnError:true);
+                      flash.message = "Document uploaded successfully!"
                       List<Resources> res = Resources.list();
                       List<Topic>topics = Topic.list();
              redirect(controller:"Register", action:"dashboard");
           }
           catch(Exception e){
              println e;
-             render(view: "../register/create", model:[errors:e]);
+             render(template: '/templates/errorHandling', model: [msg:e]);
           }
 
     }

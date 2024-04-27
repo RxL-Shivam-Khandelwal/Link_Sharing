@@ -5,6 +5,8 @@ import javax.servlet.http.HttpServletRequest
 class PostController {
     ResourceRatingService resourceRatingService;
     PostService postService;
+    TopicShowService topicShowService;
+
     def index() { }
 
     def show(Long resId , Float avgRating){
@@ -13,7 +15,11 @@ class PostController {
              }else {
                  Users user = session.user;
                 def result=  postService.show(user,resId)
-                 render(view: "../Frontend/post", model: [resId: result.resId, post_rating: result.rating, avgRating: result.av_rating, all_Topics: result.topics, curr_user: result.curr_user, curr_resource: result.resource,maxPerPage:result.maxPerPage,currentPage:result.currentPage,offset:result.offset,totalRecords:result.totalRecords]);
+                 List<Subscription> sub_topic = Subscription.createCriteria().list{
+                     eq("user" , user)
+                 }
+//                 subscription_Topic:subscription_Topic, curr_user: curr_user
+                 render(view: "../Frontend/post", model: [resId: result.resId, post_rating: result.rating, avgRating: result.av_rating, all_Topics: result.topics, curr_user: result.curr_user, curr_resource: result.resource,maxPerPage:result.maxPerPage,currentPage:result.currentPage,offset:result.offset,totalRecords:result.totalRecords,subscription_Topic : sub_topic]);
              }
     }
 
