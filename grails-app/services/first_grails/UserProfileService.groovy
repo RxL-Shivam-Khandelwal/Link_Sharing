@@ -84,12 +84,14 @@ class UserProfileService {
                 def most_recent_resource_of_s2 = s2.topic.resources.findAll { !it.isdeleted }.max { it.lastUpdated }?.lastUpdated
                 return most_recent_resource_of_s1 <=> most_recent_resource_of_s2
             }.reverse()
-            Long maxPerPage = 2
+            Long maxPerPage = 3;
             Long currentPage = 1;
-            Long offset = (currentPage - 1) * maxPerPage;
+            int offset = (currentPage - 1) * maxPerPage;
+        int endIndex = Math.min(offset + maxPerPage, topics.size());
+        List<Topic> paginatedTopics = topics.subList(offset, endIndex);
             Long totalRecords=topics.size();
         Map mp = [
-                subscriptionCount: subscriptionCount, topicCount: topicCount,topics: topics, l: l, sub_topic: sub_topic,user:user, currentPage: currentPage, totalRecords: totalRecords,maxPerPage: maxPerPage
+                subscriptionCount: subscriptionCount, topicCount: topicCount,topics: paginatedTopics, l: l, sub_topic: sub_topic,user:user, currentPage: currentPage, totalRecords: totalRecords,maxPerPage: maxPerPage
         ]
           return mp;
     }

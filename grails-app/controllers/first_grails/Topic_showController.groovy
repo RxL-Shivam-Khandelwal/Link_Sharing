@@ -22,7 +22,9 @@ TopicShowService topicShowService;
         if(params?.page){
             currentPage= params.page.toLong();
         }
-        Map result = topicShowService.serviceMethod(curr_topic,topic_owner,currentPage);
+
+        Map result = topicShowService.serviceMethod(curr_topic,topic_owner,currentPage,session.user);
+        println "hello world"  +  currentPage;
         render(template: "/templates/subscribedUsers",  model:[topic_Show_Map:result.topic_Show_Map,currentPage: currentPage, totalRecords: result.totalRecords, maxPerPage: result.maxPerPage]);
     }
 

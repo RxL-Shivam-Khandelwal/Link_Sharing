@@ -56,19 +56,11 @@
                         <div style="display: flex; align-items: center;">
                             <h4 style="padding: 4px;">Top shares</h4>
                         </div>
-                        <!-- Example single danger button -->
-                        <div class="dropdown">
-                            <button class="dropbtn">Dropdown</button>
-                            <div class="dropdown-content">
-                                <a href="#">Link 1</a>
-                                <a href="#">Link 2</a>
-                                <a href="#">Link 3</a>
-                            </div>
-                        </div>
+
                     </div>
                     <g:hiddenField name="topPostPage" id="topPostPage" value="${currentPageP}"/>
                     <div id="top_Posts">
-                    <g:render template="/templates/topPosts" model="[resourceP: resource, currentPageP: currentPageP, totalRecordsP: totalRecords, maxPerPageP: maxPerPage]" />
+                    <g:render template="/templates/topPosts" model="[resourceP: paginatedTopics, currentPageP: currentPageP, totalRecordsP: totalRecords, maxPerPageP: maxPerPage,ratingMap:ratingMap]" />
                     </div>
                 </div>
             </div>

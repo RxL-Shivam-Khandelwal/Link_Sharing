@@ -5,6 +5,8 @@ class ResourceRating {
  Users user;
  Integer score;
 
+
+
 // transient Float avgRating
     static constraints = {
                 // resource(unique:['user'], nullable:false)

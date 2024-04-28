@@ -6,7 +6,7 @@ class PostController {
     ResourceRatingService resourceRatingService;
     PostService postService;
     TopicShowService topicShowService;
-
+   RegisterService registerService
     def index() { }
 
     def show(Long resId , Float avgRating){
@@ -18,8 +18,13 @@ class PostController {
                  List<Subscription> sub_topic = Subscription.createCriteria().list{
                      eq("user" , user)
                  }
-//                 subscription_Topic:subscription_Topic, curr_user: curr_user
-                 render(view: "../Frontend/post", model: [resId: result.resId, post_rating: result.rating, avgRating: result.av_rating, all_Topics: result.topics, curr_user: result.curr_user, curr_resource: result.resource,maxPerPage:result.maxPerPage,currentPage:result.currentPage,offset:result.offset,totalRecords:result.totalRecords,subscription_Topic : sub_topic]);
+                 List<Topic> dummyTopic   = Topic.list();
+                 List<Topic>modalTopic  = registerService.SortedTopic(dummyTopic);
+                int maxPerPage = 3;
+                 int offset  = 0;
+                 int endIndex = Math.min(offset + maxPerPage, modalTopic.size());
+                 List<Topic> paginatedTopics = modalTopic.subList(offset, endIndex);
+                 render(view: "../Frontend/post", model: [resId: result.resId, post_rating: result.rating, avgRating: result.av_rating, all_Topics: paginatedTopics, curr_user: result.curr_user, curr_resource: result.resource,maxPerPage:result.maxPerPage,currentPage:result.currentPage,offset:result.offset,totalRecords:result.totalRecords,subscription_Topic : sub_topic]);
              }
     }
 

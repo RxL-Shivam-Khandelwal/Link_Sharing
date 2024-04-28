@@ -74,7 +74,7 @@
             </div>
         </div>
         <div class="rightD">
-            <div class="topics" style="margin-top: -50px;">
+            <div class="topics" style="margin-top: -50px; width: 750px">
                 <div class="Recent_share">
                     <h4 style="padding: 4px;">Search Results</h4>
                 </div>

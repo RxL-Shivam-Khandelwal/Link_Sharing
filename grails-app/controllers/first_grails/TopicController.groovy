@@ -1,9 +1,8 @@
 package first_grails
 
-
 class TopicController {
-
-    def index() { 
+    ErrorHandlingService errorHandlingService;
+    def index() {
 
     }
 
@@ -28,8 +27,13 @@ class TopicController {
             flash.message = "Save successful!"
             redirect(controller:"Register", action:"dashboard", params:[userId: userId] )
 
-        }catch(Exception e){
-            render "Topic not created + ${e}";
+        } catch (Exception e) {
+            String exceptionMessage = e.toString()
+            List<String> words = exceptionMessage.split(/\s+/)
+            List<String> slicedWords = words.take(50)
+            String slicedMessage = slicedWords.join(' ')
+            session.invalidate();
+            render(template: '/templates/errorHandling', model: [msg: slicedMessage]);
         }
     }
 }

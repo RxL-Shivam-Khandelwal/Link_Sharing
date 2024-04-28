@@ -20,10 +20,17 @@ class LinkResourceController {
                 Long userId= curr_user.id;
                 redirect(controller: "Register", action:"dashboard", params:[userId:userId]);
           }
-          catch(Exception e){
+          catch (Exception e) {
+              String exceptionMessage = e.toString()
 
-             println e;
-             render(view: "../register/create", model:[errors:e]);
+              List<String> words = exceptionMessage.split(/\s+/)
+
+              List<String> slicedWords = words.take(50)
+
+              String slicedMessage = slicedWords.join(' ')
+
+              render(template: '/templates/errorHandling', model: [msg: slicedMessage]);
+
           }
 
 

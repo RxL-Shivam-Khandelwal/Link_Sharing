@@ -83,10 +83,49 @@
                 </div>
             </div>
             </div>
-            <div class="Dsubscription">
+        <div class="modal fade" id="exampleModalViewAllSubscription" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabelS">All Subscription</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <table>
+                            <tr>
+                                <th>Subscription Name</th>
+                                <th>Subscriber Topic Owner</th>
+                                <th>Total Posts in the Resource</th>
+                                <th>Subscribed Time</th>
+                            </tr>
+                            <g:if test="${subscriptions.size()}">
+                                <g:each in="${subscriptions}" var="subscription">
+                                    <tr>
+                                        <td>${subscription.topic.name}</td>
+                                        <td>${subscription.topic.user.firstName}</td>
+                                        <td>${subscription.topic.resources.size()}</td>
+                                        <td>${subscription.lastUpdated}</td>
+                                    </tr>
+                                </g:each>
+                            </g:if>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                <div class="Dsubscription">
                 <div class="hSub">
-                    <p>Topics</p>
-                    <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
+                    <p style="margin-top: 1rem ; margin-left: 0.3rem ;font-weight:600">Trending Topics</p>
+                    <button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalViewAllSubscription" >
+                        View All
+                    </button>
                 </div>
                 <g:render template="/templates/userSubscriptions" model="[subscription_Topic:subscriptions,curr_user: user]" />
 

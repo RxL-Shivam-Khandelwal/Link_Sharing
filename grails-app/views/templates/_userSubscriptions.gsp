@@ -95,7 +95,17 @@
     <p>No subscriptions</p>
 </g:else>
 
-
+%{--<g:if test="${flash.message || flash.error}">--}%
+%{--    <div id="alertMessage" class="alert ${flash.error ? 'alert-danger' : 'alert-success'}">--}%
+%{--        ${flash.message ?: flash.error}--}%
+%{--    </div>--}%
+%{--    <script>--}%
+%{--        // Automatically hide the alert after 3 seconds--}%
+%{--        setTimeout(function() {--}%
+%{--            $('#alertMessage').fadeOut('slow');--}%
+%{--        }, 3000);--}%
+%{--    </script>--}%
+%{--</g:if>--}%
 
 
 <script>

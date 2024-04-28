@@ -2,7 +2,7 @@
     <g:each in="${topic_Show_MapP.topic_posts}" var="posts">
         <div class="card1">
             <div class="image">
-                <img src="https://louisville.edu/enrollmentmanagement/images/person-icon/image" alt="p1">
+                <img src="${posts.user.photoURL}" alt="p1">
             </div>
             <div class="content ">
                 <div class="poster_info mrgn">

@@ -2,18 +2,33 @@ package first_grails
 import org.hibernate.criterion.Order
 class LoginController {
     InvitationService invitationService;
+    ResourceRatingService resourceRatingService;
     def index() {
-            Long maxPerPage = 2
-            Long currentPage = 1;
+            int maxPerPage = 2;
+            int currentPage = 1;
             Long currentPageP = 1;
-            Long offset = (currentPage - 1) * maxPerPage
+            int offset = (currentPage - 1) * maxPerPage;
             List<Resources> resource = Resources.createCriteria().list(max: maxPerPage, offset: offset) {
                 eq("isdeleted", false)
                 order("lastUpdated", "desc")
             }
             Long totalRecords = Resources.countByIsdeleted(false)
             List<Resources> res_shares = resource;
-            render(view: "../Frontend/login", model: [resource: resource, currentPage: currentPage, totalRecords: totalRecords, res_shares: res_shares, maxPerPage: maxPerPage, currentPageP: currentPageP]);
+            List<Resources> new_list = Resources.list();
+            Map ratingMap = [:];
+             new_list.sort({ r1,r2 ->
+                 Float rating1 = resourceRatingService.calculateAverageRatingForResource(r1);
+                 Float rating2 = resourceRatingService.calculateAverageRatingForResource(r2);
+                   ratingMap[r1] = rating1;
+                   ratingMap[r2] = rating2;
+                    (rating2 <=>rating1)
+             })
+        Boolean loginP = 1;
+        println ratingMap;
+             int endIndex = Math.min(offset + maxPerPage, new_list.size());
+             List<Topic> paginatedTopics = new_list.subList(offset, endIndex);
+
+            render(view: "../Frontend/login", model: [resource: resource, currentPage: currentPage, totalRecords: totalRecords, res_shares: res_shares, maxPerPage: maxPerPage, currentPageP: currentPageP, paginatedTopics: paginatedTopics,ratingMap: ratingMap,loginP: loginP]);
 
     }
 
@@ -32,8 +47,6 @@ class LoginController {
                   Long topicCount = Topic.where {
                       user.id == userId
                   }.count()
-                //   def topics= Topic.list();
-                // def sub_topic = Subscription.findAllByUser(user);
                   session.user= user;
                   session.user_id = userId;
             render(template: '/register/setLocalStorage', model: [userId: userId])
@@ -68,20 +81,33 @@ class LoginController {
 
 
     def topPosts(){
-        Long maxPerPage = 2
-        Long currentPage = 1;
+        int maxPerPage = 2
+        int currentPage = 1;
         if(params?.page){
             currentPage= params.page.toLong();
         }
         println "value of current page is :" + currentPage;
-        Long offset = (currentPage - 1) * maxPerPage
+        int offset = (currentPage - 1) * maxPerPage
         List<Resources> resource = Resources.createCriteria().list(max: maxPerPage, offset: offset){
             eq("isdeleted", false)
             order("lastUpdated","desc")
         }
         println "value of currentPGE IS :" + currentPage + "resources are:" + resource;
         Long totalRecords = Resources.countByIsdeleted(false)
-        render(template: '/templates/topPosts', model: [resourceP: resource, currentPageP: currentPage, totalRecordsP: totalRecords,maxPerPageP: maxPerPage]);
+        List<Resources> new_list = Resources.list();
+        Map ratingMap = [:];
+        new_list.sort({ r1,r2 ->
+            Float rating1 = resourceRatingService.calculateAverageRatingForResource(r1);
+            Float rating2 = resourceRatingService.calculateAverageRatingForResource(r2);
+            ratingMap[r1] = rating1;
+            ratingMap[r2] = rating2;
+            (rating2 <=>rating1)
+        })
+        Boolean loginP = 1;
+        println ratingMap;
+        int endIndex = Math.min(offset + maxPerPage, new_list.size());
+        List<Topic> paginatedTopics = new_list.subList(offset, endIndex);
+        render(template: '/templates/topPosts', model: [resourceP: resource, currentPageP: currentPage, totalRecordsP: totalRecords,maxPerPageP: maxPerPage,paginatedTopics: paginatedTopics, ratingMap: ratingMap]);
 
     }
 

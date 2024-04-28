@@ -18,11 +18,15 @@
                     </div>
                     <div class="post_content">Description : ${res.description}
                     </div>
+                    <g:if test="${ratingMap}">
+                        <div class="post_content" style="margin-top: 2px"> Average Rating : ${ratingMap[res]}</div>
+                    </g:if>
                     <div class="poster_info setting_margin">
                         <div class="clogo">
-                            <img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
-                            <img src="${assetPath(src: 'twitter.svg')}" alt="twitter">
-                            <img src="${assetPath(src: 'instagram.svg')}" alt="instagram">
+                            <a href="https://www.facebook.com/" target="_blank"><img src="${assetPath(src: 'facebook.svg')}" alt="facebook">
+                            </a>
+                            <a href="https://www.instagram.com/" target="_blank"><img src="${assetPath(src: 'instagram.svg')}" alt="instagram"></a>
+                            <a href="https://www.twitter.com/" target="_blank"><img src="${assetPath(src: 'twitter.svg')}" alt="twitter"></a>
                         </div>
                         <span class="topic">
                             <g:if test="${session.user != null}">

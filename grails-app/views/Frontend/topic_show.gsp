@@ -32,8 +32,7 @@
         <div class="leftside">
             <div class="Dsubscription">
                 <div class="hSub">
-                    <p>Topics: "${topic_Show_Map?.curr_topic?.name}"</p>
-                    <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
+                    <p style="margin-top: 1rem ; margin-left: 0.3rem ;font-weight:600">Topics: "${topic_Show_Map?.curr_topic?.name}"</p>
                 </div>
                 <div class="Border1" style="border: 2px solid black;">
                     <g:set var="num" value="${1}" />
@@ -119,8 +118,7 @@
 
             <div class="Dsubscription">
                 <div class="hSub">
-                    <p>Users: "${topic_Show_Map?.curr_topic?.name}"</p>
-                    <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
+                    <p style="margin-top: 1rem ; margin-left: 0.3rem ;font-weight:600">Users: "${topic_Show_Map?.curr_topic?.name}"</p>
                 </div>
                 <div id="subscribersListing"> 
 <g:render template="/templates/subscribedUsers" model="[topic_Show_Map: topic_Show_Map, currentPage: currentPage, totalRecords: totalRecords, maxPerPage: maxPerPage]" />
@@ -197,8 +195,52 @@
     }
 
 
+    %{--$(document).ready(function() {--}%
+    %{--    $('#searchButton').click(function() {--}%
+    %{--        // Get form data--}%
+    %{--        var formData = {--}%
+    %{--            search: $('#searchInput').val(),--}%
+    %{--            curr_topicId: ${topic_Show_Map?.curr_topic.id}--}%
+    %{--        };--}%
+
+    %{--        // Send AJAX request--}%
+    %{--        $.ajax({--}%
+    %{--            type: 'POST',--}%
+    %{--            url: '/search/ajaxSearch', // Replace with your controller and action URL--}%
+    %{--            data: formData,--}%
+    %{--            success: function(response) {--}%
+    %{--                // Handle successful response--}%
+    %{--                $('#23topicPosts').html(response);--}%
+    %{--                // Optionally, do something with the response--}%
+    %{--            },--}%
+    %{--            error: function(xhr, status, error) {--}%
+    %{--                // Handle errors--}%
+    %{--                console.error(xhr.responseText);--}%
+    %{--            }--}%
+    %{--        });--}%
+    %{--    });--}%
+    %{--});--}%
+
+
+
     $(document).ready(function() {
+        // Event handler for clicking the search button
         $('#searchButton').click(function() {
+            // Call the search function
+            search();
+        });
+
+        // Event handler for pressing Enter in the search input field
+        $('#searchInput').keypress(function(event) {
+            // Check if the pressed key is Enter
+            if (event.which === 13) {
+                // Call the search function
+                search();
+            }
+        });
+
+        // Function to perform the search AJAX request
+        function search() {
             // Get form data
             var formData = {
                 search: $('#searchInput').val(),
@@ -220,6 +262,7 @@
                     console.error(xhr.responseText);
                 }
             });
-        });
+        }
     });
+
 </script>

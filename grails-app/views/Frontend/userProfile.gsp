@@ -52,8 +52,8 @@
             </div>
             <div class="Dsubscription">
                 <div class="hSub">
-                    <p>Subscription</p>
-                    <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
+                    <p style="margin-top: 1rem ; margin-left: 0.3rem ;font-weight:600">Subscriptions</p>
+
                 </div>
                 <g:render template="/templates/userSubscriptions" model="[subscription_Topic:subscription_Topic,curr_user: curr_user]" />
 
@@ -64,8 +64,8 @@
 
             <div class="Dsubscription">
                 <div class="hSub">
-                    <p>Trending Topics</p>
-                    <a href="#" style="padding-top: 13px; padding-right: 12px;"> View All</a>
+                    <p style="margin-top: 1rem ; margin-left: 0.3rem ;font-weight:600">Trending Topics</p>
+
                 </div>
                 <g:render template="/templates/trendingTopics" model="[all_Topics:all_Topics, currentPage: currentPage, totalRecords: totalRecords,maxPerPage: maxPerPage]" />
             </div>
@@ -79,7 +79,7 @@
             <g:each in="${resource}"  var ="res">
                 <div class="card1 ">
                     <div class="image">
-                        <img src="https://louisville.edu/enrollmentmanagement/images/person-icon/image" alt="p1">
+                        <img src="${res.topic.user.photoURL}" alt="p1" height="90px" width="90px">
                     </div>
                     <div class="content">
                         <div class="poster_info">

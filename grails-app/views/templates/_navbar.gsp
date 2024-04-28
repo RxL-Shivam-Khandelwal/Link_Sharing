@@ -31,12 +31,13 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <g:form controller="Topic" action="create_Topic">
+                    <g:form controller="Topic" action="create_Topic" id="topicForm">
                         <g:hiddenField name="userId" value="${session.userId}"/>
                         <div class="modal-body">
                             <div class="form-group">
                                 <label for="recipient-name" class="col-form-label"> Topic Name :</label>
-                                <input type="text" class="form-control" id="recipient-name" name="name">
+                                <input type="text" class="form-control" id="recipient-nameTopic" name="name" maxlength="256">
+                                <div id="name-error" class="error" style="color: red;"></div> <!-- Error message container -->
                             </div>
                             <div class="form-group">
                                 <label for="message-text" class="col-form-label">Visibility:</label>
@@ -48,7 +49,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button class="btn btn-primary" type="submit">Send </button>
+                            <button class="btn btn-primary" type="submit" id="submitButton">Send</button>
                         </div>
                     </g:form>
                 </div>
@@ -194,8 +195,6 @@
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <g:link controller="Profile"  class="dropdown-item">Profile</g:link>
                 <g:if test="${session.user.admin}"  class="dropdown-item"> <g:link controller="admin" class="dropdown-item">Users</g:link>  </g:if>
-                <g:link controller="topic"  class="dropdown-item">Topic</g:link>
-                <g:link controller="post"  class="dropdown-item">Post</g:link>
                 <g:link controller="Logout"  class="dropdown-item">Logout</g:link>
             </div>
         </div>
@@ -216,3 +215,21 @@
     </script>
 </g:if>
 
+
+
+<script>
+
+
+    $(document).ready(function() {
+        $('#recipient-nameTopic').on('input', function() {
+            var inputLength = $(this).val().length;
+            if (inputLength > 256) {
+                $('#name-error').text('Character length must be less than 256.');
+                $('#submitButton').prop('disabled', true); // Disable the submit button
+            } else {
+                $('#name-error').text('');
+                $('#submitButton').prop('disabled', false); // Enable the submit button
+            }
+        });
+    });
+</script>

@@ -26,10 +26,14 @@ class DocumentResourceController {
                       List<Topic>topics = Topic.list();
              redirect(controller:"Register", action:"dashboard");
           }
-          catch(Exception e){
-             println e;
-             render(template: '/templates/errorHandling', model: [msg:e]);
-          }
+                  catch (Exception e) {
+                      String exceptionMessage = e.toString()
+                      List<String> words = exceptionMessage.split(/\s+/)
+                      List<String> slicedWords = words.take(50)
+                      String slicedMessage = slicedWords.join(' ')
+                      session.invalidate();
+                      render(template: '/templates/errorHandling', model: [msg: slicedMessage]);
+                  }
 
     }
 

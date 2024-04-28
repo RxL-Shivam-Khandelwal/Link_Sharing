@@ -54,14 +54,90 @@
             <div class="Dsubscription">
                 <div class="hSub">
                     <p style="margin-top: 1rem ; margin-left: 0.3rem ;font-weight:600" >Subscription</p>
-                    <a class="view_all" href="#" style="padding-top: 13px; padding-right: 12px; ;font-weight:600"> View All</a>
+                    <button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalViewAllSubscription">
+                        View All
+                    </button>
                 </div>
                 <g:render template="/templates/userSubscriptions" model="[subscription_Topic:subscription_Topic,curr_user: curr_user]" />
             </div>
+            <div class="modal fade" id="exampleModalViewAllSubscription" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabelS">All Subscription</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                            <table>
+                                <tr>
+                                    <th>Subscription Name</th>
+                                    <th>Subscriber Topic Owner</th>
+                                    <th>Total Posts in the Resource</th>
+                                    <th>Subscribed Time</th>
+                                </tr>
+                                <g:if test="${subscription_Topic.size()}">
+                                    <g:each in="${subscription_Topic}" var="subscription">
+                                        <tr>
+                                            <td>${subscription.topic.name}</td>
+                                            <td>${subscription.topic.user.firstName}</td>
+                                            <td>${subscription.topic.resources.size()}</td>
+                                            <td>${subscription.lastUpdated}</td>
+                                        </tr>
+                                    </g:each>
+                                </g:if>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="exampleModalViewAll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">All Topics</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                            <table>
+                                <tr>
+                                    <th>Topic Name</th>
+                                    <th>Topic Creator</th>
+                                    <th>Total Posts in the Resource</th>
+                                    <th>Last Updated</th>
+                                </tr>
+                                <g:if test="${modalTopic.size()}">
+                                    <g:each in="${modalTopic}" var="topic">
+                                        <tr>
+                                            <td>${topic.name}</td>
+                                            <td>${topic.user.firstName}</td>
+                                            <td>${topic.resources.size()}</td>
+                                            <td>${topic.lastUpdated}</td>
+                                        </tr>
+                                    </g:each>
+                                </g:if>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="Dsubscription">
                 <div class="hSub">
-                    <p>Trending Topics</p>
-                    <a href="#" style=""> View All</a>
+                    <p style="margin-top: 1rem ; margin-left: 0.3rem ;font-weight:600">Trending Topics</p>
+                    <button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalViewAll" >
+                        View All
+                    </button>
                 </div>
 
                  <div id="trending_Topics">
@@ -69,9 +145,9 @@
                  </div>
             </div>
         </div>
-        <div class="rightD">
-            <div class="topics" style="margin-top: -50px;">
-                <div class="Recent_share">
+        <div class="rightD"  class="recent_shares">
+            <div class="topics" style="margin-top: -50px; width: 750px;">
+                <div class="Recent_share" class="recent_shares">
                     <h4 style="padding: 4px;">Inbox</h4>
                 </div>
                 <g:hiddenField name="topPostPage" id="topPostPage" value="${currentPageP}"/>
