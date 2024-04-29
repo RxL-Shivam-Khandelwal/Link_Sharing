@@ -7,6 +7,13 @@
 .hidden_form{
     display: flex;
 }
+.SubInfo{
+    display: flex;
+    justify-content: space-between;
+}
+.SubInfoRight{
+    margin-right: 5px;
+}
 </style>
 <g:if test="${all_Topics!= null}">
     <g:set var="num" value="${1}" />
@@ -29,7 +36,7 @@
                                 <g:if test="${(topicData.user.id == curr_user.id ) || (curr_user.admin == true)}">
                                     <div class="hidden_form">
                                    <input type="text" placeholder="${topicData.name}" name="${topicData.name}" style="width: 150px;">
-                                        <button type="submit" class="btn">Save</button>
+                                        <button type="submit" class="btn mr-1">Save</button>
                                     <button id="cancelBtn" type="button" class="btn" onclick="showForm('myForm${num - 1}')">Cancel</button>
                                     </div>
                                 </g:if>
@@ -66,7 +73,7 @@
                 </div>
                 <div class="SubInfo">
                     <g:set var="Subscriber" value="${Subscription.findByUserAndTopic(curr_user,topicData)}" />
-
+                    <div class="SubInfoLeft">
                     <g:if test="${Subscriber != null}">
                         <g:select id="seriournessSub_${topicData.id}" from="['Serious', 'Casual','Very_serious']" name="selectedSeriousness"
                                   value="${Subscriber.seriousness}"
@@ -79,9 +86,13 @@
                                   onchange="sendDataToController(this.value, ${topicData.id})"
                                   style="height: 30px; width: 140px;" />
                     </g:if>
+                </div>
+                    <div class="SubInfoRight">
                     <g:if test="${(topicData.user.id == curr_user.id)|| (curr_user.admin == true)  }">
-                        <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" style="margin-left: 40px;">
-                        <div class="modal fade" id="exampleModalDelete${topicData.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <button type="button" class="btn" data-toggle="modal" data-target="#exampleModalLabelForMail${topicData.id}" style="padding: 0px;width: 24px">
+                          <img src="${assetPath(src: 'envelope.svg')}" alt="envelope" >
+                        </button>
+                           <div class="modal fade" id="exampleModalDelete${topicData.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -102,11 +113,46 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="modal fade" id="exampleModalLabelForMail${topicData.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabelMail">Modal title</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <g:form controller="Mail" action="SendMail">
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="col-form-label">Email* :</label>
+                                                    <input type="email" class="form-control" id="recipient-name" name="to">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="message-text" class="col-form-label">Topic:</label>
+                                                    %{--                        <input type="text" class="form-control" id="recipient-name" name="topic">--}%
+                                                    <select name="topic" id="topics">
+
+                                                    <option value="${topicData.id}" >${topicData.name} (${topicData.user.username})</option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button class="btn btn-primary" type="submit">Send message</button>
+                                            </div>
+                                        </g:form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <button id="showFormBtn" type="button" class="btn" onclick="showForm('myForm${num - 1}')" style="padding: 0px"> <img src="${assetPath(src: 'pencil-square.svg')}" alt="edit" >   </button>
                         <button type="button" class="btn" data-toggle="modal" data-target="#exampleModalDelete${topicData.id}" style="padding: 0px">
                             <img src="${assetPath(src: 'trash-fill.svg')}" alt="trash-fill">    </button>
                     </g:if>
-
+                    </div>
                 </div>
             </div>
         </g:if>
@@ -122,6 +168,9 @@
     <g:if test="${totalRecords > maxPerPage * currentPage}">
         <a href="javascript:void(0);" onclick="loadNextPage()">Next</a>
     </g:if>
+
+
+
 
 </div>
 

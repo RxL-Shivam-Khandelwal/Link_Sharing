@@ -82,7 +82,7 @@
                 <div class="form-group">
                     <g:link controller="login" action="forgetPass">Forget Password?</g:link>
                     <h6>Don't have account?</h6>
-                    <g:link controller="Register" action="dashboard">  Register Now!!</g:link>
+                    <g:link controller="Register" action="registerPage">  Register Now!!</g:link>
                 </div>
                 </g:form>
             </div>

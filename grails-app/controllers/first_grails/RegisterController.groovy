@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile
 
 class RegisterController {
  RegisterService registerService;
+    Common_operationsService common_operationsService;
     def index() {
     }
 
@@ -14,17 +15,19 @@ class RegisterController {
     }
  def dashboard(Long userId) {
    if(session.user_id == null){
-       Long maxPerPage = 2
-       Long currentPage = 1;
-       Long currentPageP = 1;
-       Long offset = (currentPage - 1) * maxPerPage
+       int maxPerPage = 2
+       int currentPage = 1;
+       int currentPageP = 1;
+       int offset = (currentPage - 1) * maxPerPage
        List<Resources> resource = Resources.createCriteria().list(max: maxPerPage, offset: offset){
            eq("isdeleted", false)
            order("lastUpdated","desc")
        }
        Long totalRecords = Resources.countByIsdeleted(false)
        List<Resources>  res_shares = resource;
-       render (view : "../Frontend/login", model:[resource: resource, currentPage: currentPage, totalRecords: totalRecords,res_shares:res_shares, maxPerPage: maxPerPage,currentPageP: currentPageP]);
+       List<Resources> new_list = Resources.list();
+       def res = common_operationsService.SortedResourceBasedOnRating(new_list,maxPerPage,currentPage,offset);
+       render(view: "../Frontend/login", model: [resource: resource, currentPage: currentPage, totalRecords: totalRecords, res_shares: res_shares, maxPerPage: maxPerPage, currentPageP: currentPageP, paginatedTopics: res[0],ratingMap: res[1]]);
    }else{
        userId = session.user_id;
       Users user = Users.findById(userId)
@@ -38,7 +41,10 @@ class RegisterController {
        render(view: "../Frontend/dashboard", model: [subscriptionCount: result.subscriptionCount, topicCount: result.topicCount,all_Topics:result.topics,resource: result.paginatedSubscriptions,subscription_Topic: result.sub_topic, curr_user:result.user,user_img: result.user_img,maxPerPage:result.maxPerPage,currentPage:result.currentPage,offset:result.offset,totalRecords:result.totalRecords,currentPageP: currentPageP,totalRecordsP:result.totalRecordsP,maxPerPageP:result.maxPerPageP,modalTopic: modalTopic])
        }
 }
+     def registerPage(){
 
+         render (view: "/Frontend/register");
+     }
     def nextPage() {
         Long currentPage = 1;
         Long totalRecords = params.totalRecords.toLong();

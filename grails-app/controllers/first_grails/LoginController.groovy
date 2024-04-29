@@ -3,6 +3,7 @@ import org.hibernate.criterion.Order
 class LoginController {
     InvitationService invitationService;
     ResourceRatingService resourceRatingService;
+    Common_operationsService common_operationsService;
     def index() {
             int maxPerPage = 2;
             int currentPage = 1;
@@ -15,21 +16,8 @@ class LoginController {
             Long totalRecords = Resources.countByIsdeleted(false)
             List<Resources> res_shares = resource;
             List<Resources> new_list = Resources.list();
-            Map ratingMap = [:];
-             new_list.sort({ r1,r2 ->
-                 Float rating1 = resourceRatingService.calculateAverageRatingForResource(r1);
-                 Float rating2 = resourceRatingService.calculateAverageRatingForResource(r2);
-                   ratingMap[r1] = rating1;
-                   ratingMap[r2] = rating2;
-                    (rating2 <=>rating1)
-             })
-        Boolean loginP = 1;
-        println ratingMap;
-             int endIndex = Math.min(offset + maxPerPage, new_list.size());
-             List<Topic> paginatedTopics = new_list.subList(offset, endIndex);
-
-            render(view: "../Frontend/login", model: [resource: resource, currentPage: currentPage, totalRecords: totalRecords, res_shares: res_shares, maxPerPage: maxPerPage, currentPageP: currentPageP, paginatedTopics: paginatedTopics,ratingMap: ratingMap,loginP: loginP]);
-
+             def res = common_operationsService.SortedResourceBasedOnRating(new_list,maxPerPage,currentPage,offset);
+            render(view: "../Frontend/login", model: [resource: resource, currentPage: currentPage, totalRecords: totalRecords, res_shares: res_shares, maxPerPage: maxPerPage, currentPageP: currentPageP, paginatedTopics: res[0],ratingMap: res[1]]);
     }
 
     def loginUser(){
@@ -95,19 +83,8 @@ class LoginController {
         println "value of currentPGE IS :" + currentPage + "resources are:" + resource;
         Long totalRecords = Resources.countByIsdeleted(false)
         List<Resources> new_list = Resources.list();
-        Map ratingMap = [:];
-        new_list.sort({ r1,r2 ->
-            Float rating1 = resourceRatingService.calculateAverageRatingForResource(r1);
-            Float rating2 = resourceRatingService.calculateAverageRatingForResource(r2);
-            ratingMap[r1] = rating1;
-            ratingMap[r2] = rating2;
-            (rating2 <=>rating1)
-        })
-        Boolean loginP = 1;
-        println ratingMap;
-        int endIndex = Math.min(offset + maxPerPage, new_list.size());
-        List<Topic> paginatedTopics = new_list.subList(offset, endIndex);
-        render(template: '/templates/topPosts', model: [resourceP: resource, currentPageP: currentPage, totalRecordsP: totalRecords,maxPerPageP: maxPerPage,paginatedTopics: paginatedTopics, ratingMap: ratingMap]);
+        def res = common_operationsService.SortedResourceBasedOnRating(new_list,maxPerPage,currentPage,offset);
+        render(template: '/templates/topPosts', model: [resourceP: res[0], currentPageP: currentPage, totalRecordsP: totalRecords,maxPerPageP: maxPerPage, ratingMap: res[1]]);
 
     }
 
